@@ -55,10 +55,9 @@
             this.deleteROIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.label_CurrentSteelKind = new System.Windows.Forms.ToolStrip();
             this.새로만들기ToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.열기ToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.도움말ToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.PreviousRecord_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.NextRecord_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -71,6 +70,8 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.LogStart_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.LogStop_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.도움말ToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.split_ViewToInfo = new System.Windows.Forms.SplitContainer();
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
@@ -90,9 +91,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
             this.split_ViewToInfo.Panel1.SuspendLayout();
             this.split_ViewToInfo.SuspendLayout();
@@ -122,21 +122,21 @@
             // 
             // OPC_textBox1
             // 
-            this.OPC_textBox1.Location = new System.Drawing.Point(316, 0);
+            this.OPC_textBox1.Location = new System.Drawing.Point(1370, 12);
             this.OPC_textBox1.Name = "OPC_textBox1";
             this.OPC_textBox1.Size = new System.Drawing.Size(100, 21);
             this.OPC_textBox1.TabIndex = 0;
             // 
             // OPC_textBox2
             // 
-            this.OPC_textBox2.Location = new System.Drawing.Point(514, 0);
+            this.OPC_textBox2.Location = new System.Drawing.Point(1568, 12);
             this.OPC_textBox2.Name = "OPC_textBox2";
             this.OPC_textBox2.Size = new System.Drawing.Size(100, 21);
             this.OPC_textBox2.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(422, 0);
+            this.button1.Location = new System.Drawing.Point(1476, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -146,7 +146,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(629, 1);
+            this.button2.Location = new System.Drawing.Point(1683, 13);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
@@ -226,14 +226,14 @@
             // 
             this.startToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("startToolStripMenuItem.Image")));
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.startToolStripMenuItem.Text = "Start";
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("stopToolStripMenuItem.Image")));
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             // 
             // dataRecordToolStripMenuItem
@@ -295,21 +295,21 @@
             // 
             this.drawROIToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("drawROIToolStripMenuItem.Image")));
             this.drawROIToolStripMenuItem.Name = "drawROIToolStripMenuItem";
-            this.drawROIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.drawROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.drawROIToolStripMenuItem.Text = "Draw ROI";
             // 
             // moveROIToolStripMenuItem
             // 
             this.moveROIToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveROIToolStripMenuItem.Image")));
             this.moveROIToolStripMenuItem.Name = "moveROIToolStripMenuItem";
-            this.moveROIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.moveROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.moveROIToolStripMenuItem.Text = "Move ROI";
             // 
             // deleteROIToolStripMenuItem
             // 
             this.deleteROIToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteROIToolStripMenuItem.Image")));
             this.deleteROIToolStripMenuItem.Name = "deleteROIToolStripMenuItem";
-            this.deleteROIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.deleteROIToolStripMenuItem.Text = "Delete ROI";
             // 
             // helpToolStripMenuItem
@@ -324,12 +324,12 @@
             // 
             this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             // 
-            // toolStrip1
+            // label_CurrentSteelKind
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.label_CurrentSteelKind.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.새로만들기ToolStripButton,
             this.열기ToolStripButton,
             this.toolStripSeparator3,
@@ -346,11 +346,11 @@
             this.LogStop_toolStripButton,
             this.toolStripSeparator6,
             this.도움말ToolStripButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1904, 25);
-            this.toolStrip1.TabIndex = 5;
-            this.toolStrip1.Text = "toolStrip1";
+            this.label_CurrentSteelKind.Location = new System.Drawing.Point(0, 24);
+            this.label_CurrentSteelKind.Name = "label_CurrentSteelKind";
+            this.label_CurrentSteelKind.Size = new System.Drawing.Size(1904, 25);
+            this.label_CurrentSteelKind.TabIndex = 5;
+            this.label_CurrentSteelKind.Text = "toolStrip1";
             // 
             // 새로만들기ToolStripButton
             // 
@@ -371,16 +371,6 @@
             this.열기ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.열기ToolStripButton.Text = "열기";
             this.열기ToolStripButton.Click += new System.EventHandler(this.열기ToolStripButton_Click);
-            // 
-            // 도움말ToolStripButton
-            // 
-            this.도움말ToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.도움말ToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("도움말ToolStripButton.Image")));
-            this.도움말ToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.도움말ToolStripButton.Name = "도움말ToolStripButton";
-            this.도움말ToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.도움말ToolStripButton.Text = "도움말";
-            this.도움말ToolStripButton.Click += new System.EventHandler(this.도움말ToolStripButton_Click);
             // 
             // toolStripSeparator3
             // 
@@ -487,6 +477,21 @@
             this.LogStop_toolStripButton.Text = "toolStripButton9";
             this.LogStop_toolStripButton.Click += new System.EventHandler(this.LogStop_toolStripButton_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // 도움말ToolStripButton
+            // 
+            this.도움말ToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.도움말ToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("도움말ToolStripButton.Image")));
+            this.도움말ToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.도움말ToolStripButton.Name = "도움말ToolStripButton";
+            this.도움말ToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.도움말ToolStripButton.Text = "도움말";
+            this.도움말ToolStripButton.Click += new System.EventHandler(this.도움말ToolStripButton_Click);
+            // 
             // propertyGrid1
             // 
             this.propertyGrid1.Location = new System.Drawing.Point(0, 51);
@@ -567,17 +572,25 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(576, 26);
+            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox3.Enabled = false;
+            this.textBox3.Font = new System.Drawing.Font("맑은 고딕", 22F);
+            this.textBox3.Location = new System.Drawing.Point(580, 13);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 21);
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(100, 40);
             this.textBox3.TabIndex = 7;
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(343, 26);
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Enabled = false;
+            this.textBox1.Font = new System.Drawing.Font("맑은 고딕", 22F);
+            this.textBox1.Location = new System.Drawing.Point(343, 13);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(95, 21);
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(95, 40);
             this.textBox1.TabIndex = 5;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -662,17 +675,25 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(565, 26);
+            this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox4.Enabled = false;
+            this.textBox4.Font = new System.Drawing.Font("맑은 고딕", 22F);
+            this.textBox4.Location = new System.Drawing.Point(567, 13);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 21);
+            this.textBox4.ReadOnly = true;
+            this.textBox4.Size = new System.Drawing.Size(100, 40);
             this.textBox4.TabIndex = 8;
             this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(327, 26);
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Enabled = false;
+            this.textBox2.Font = new System.Drawing.Font("맑은 고딕", 22F);
+            this.textBox2.Location = new System.Drawing.Point(329, 13);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(100, 40);
             this.textBox2.TabIndex = 6;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -717,11 +738,6 @@
             this.split_CAM2ChartGrid.SplitterDistance = 234;
             this.split_CAM2ChartGrid.TabIndex = 0;
             // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -729,7 +745,7 @@
             this.ClientSize = new System.Drawing.Size(1904, 1041);
             this.Controls.Add(this.split_ViewToInfo);
             this.Controls.Add(this.propertyGrid1);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.label_CurrentSteelKind);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.OPC_textBox2);
@@ -744,8 +760,8 @@
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.label_CurrentSteelKind.ResumeLayout(false);
+            this.label_CurrentSteelKind.PerformLayout();
             this.split_ViewToInfo.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).EndInit();
             this.split_ViewToInfo.ResumeLayout(false);
@@ -787,7 +803,7 @@
         public System.Windows.Forms.MenuStrip menuStrip1;
         public System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem newOnlineToolStripMenuItem;
-        public System.Windows.Forms.ToolStrip toolStrip1;
+        public System.Windows.Forms.ToolStrip label_CurrentSteelKind;
         public System.Windows.Forms.ToolStripMenuItem newSimulationToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem openIRDXToolStripMenuItem;
         public System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

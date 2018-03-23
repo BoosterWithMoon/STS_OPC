@@ -91,6 +91,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
         public OpenMode currentOpenMode = OpenMode.IRDX;
 
+        public bool OPCActivated = false;
+
         // OPC AREA ===================================================================
         //DaServerMgt DAServer = new DaServerMgt();
         //Kepware.ClientAce.OpcDaClient.ConnectInfo connectInfo = new Kepware.ClientAce.OpcDaClient.ConnectInfo();
@@ -333,6 +335,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             InitPropertyGrid();
 
+            OPC_textBox1.Visible = false;
+            OPC_textBox2.Visible = false;
+            button1.Visible = false;
+            button2.Visible = false;
+
             label1.Visible = false;
             label2.Visible = false;
             label3.Visible = false;
@@ -344,6 +351,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox2.Visible = false;
             textBox3.Visible = false;
             textBox4.Visible = false;
+
+            //label_CurrentSteelKind.Visible = false;
+            //textBox_CurrentSteelKind.Visible = false;
 
             PreviousRecord_toolStripButton.Enabled = false;     // Previous Record
             previousRecordToolStripMenuItem.Enabled = false;
@@ -503,6 +513,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             SaveConfiguration();
 
             //DisconnectOPCServer();
+            if (OPCActivated)
+            {
+                OPCTimer.Stop();
+                OPCActivated = false;
+            }
+
             opc.ServerDisconnection();
 
             isClosing = true;
@@ -629,7 +645,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     ////result.DetectTempThreshold();
                     result.CAM2_DetectTempThreshold();
 
-                    //CAM2_CompareMaxTemperature(imageView.CAM2_TemperatureArr);
+                    CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
                     VerifyOPC();
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
@@ -764,12 +780,21 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             LogStop_toolStripButton.Enabled = false;
         }
 
+        public float FloatMaxTemp = 0.0f;
         public void CompareMaxTemperature(float[] TemperatureArray)
         {
-            float FloatMaxTemp = 0.0f;
+            FloatMaxTemp = 0.0f;
             string MaxTemp = "";
             //if (imageView.CAM1_TemperatureArr)
             //for(int i=0; i<TemperatureArray.Length-1; i++)
+            if (imgView.CAM1_POICount == 0)
+            {
+                FloatMaxTemp = 0.0f;
+                MaxTemp = FloatMaxTemp.ToString("N1") + "℃";
+                textBox3.Text = MaxTemp;
+                return;
+            }
+
             for (int i = 0; i < imgView.CAM1_POICount; i++)
             {
                 if (FloatMaxTemp < TemperatureArray[i])
@@ -781,11 +806,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox3.Text = MaxTemp;
         }
 
+        public float c2_FloatMaxTemp = 0.0f;
         public void CAM2_CompareMaxTemperature(float[] TemperatureArray)
         {
-            float c2_FloatMaxTemp = 0.0f;
+            c2_FloatMaxTemp = 0.0f;
             string MaxTemp = "";
             //if (imageView.CAM1_TemperatureArr)
+            if (imgView.CAM2_POICount == 0)
+            {
+                c2_FloatMaxTemp = 0.0f;
+                MaxTemp = c2_FloatMaxTemp.ToString("N1") + "℃";
+                textBox4.Text = MaxTemp;
+                return;
+            }
+
             for (int i = 0; i < imgView.CAM2_POICount; i++)
             {
                 if (c2_FloatMaxTemp < TemperatureArray[i])
@@ -1135,6 +1169,28 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        System.Windows.Forms.Timer OPCTimer = new System.Windows.Forms.Timer();
+        private void OPC_DataSending(object sender, EventArgs e)
+        {
+            if (OPCActivated)
+            {
+                opc.OPC_Read();
+                opc.OPC_Write();
+            }
+            else
+            {
+                InitOPCTimer();
+            }
+            
+        }
+
+        public void InitOPCTimer()
+        {
+            OPCTimer.Interval = 1000;
+            OPCTimer.Tick += new EventHandler(OPC_DataSending);
+            OPCTimer.Start();
         }
 
     }

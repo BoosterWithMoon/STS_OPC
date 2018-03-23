@@ -194,6 +194,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 thr2 = (Thread)main.Thread2_forPublicRef();
                 thr2.Start();
             }
+
+            // OPC 데이터 송수신 활성화
+            main.OPCActivated = true;
+            main.InitOPCTimer();
+
             this.Close();
         }
 
