@@ -416,18 +416,18 @@
   <data name="LogStart_toolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACkSURBVDhPYxhc4DcDw92/DAzT/zEwCEGFSAP/gQiEfzEw
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACkSURBVDhPYxhc4DcDw92/DAzT/zEwCEGFSAP/gQiEfzIw
         vAYakgpkM0GliAMwA2D4DwPDKaBBplBpwgDdABAGuuYv0FuzgAYJQ5XhBtgMgGGgQW+BhmQC2bi9ha4J
         Gwa6ZhtUOSbApgEdk20A1AvpQDZpXoAG4gyyAhEYjceBtDFUmjCAaQTa+hJoYyKQzQiVIg4Ak/IdoHMn
-        ATUKQIUGPWBgAABT3pg91jEjuQAAAABJRU5ErkJggg==
+        ATUKQIUGPWBgAABHqZg3smAZ5QAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="LogStop_toolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPzZKxCcAwAMP8/7kds6QUBAYT6kKHRKDN2qxz
-        GNI1pfnFZ0tmVsM3yUwOmmQmB00yk4MmmclBk8zkoElmctAkMzlokpkcNMlMDppk5veVNyHdSxoeqBBX
-        9YQAAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPzZKxCcAwAMP8/7ndMqUUBAYT6kKHRKDN2qxz
+        GNI1pfnFZ0tmVsM3yUwOmmQmB00yk4MmmclBk8zkoElmctAkMzlokpkcNMlMDppk5veVNyHdQvQepGL6
+        F/sAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="도움말ToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

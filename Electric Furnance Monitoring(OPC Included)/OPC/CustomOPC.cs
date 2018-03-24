@@ -95,6 +95,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Write_CurrentAngle = 20,
         Write_CAM1_MaxTemp=21,
         Write_CAM2_MaxTemp=22,
+
         Write_CAM1_Threshold1=211,
         Write_CAM1_Threshold2 = 212,
         Write_CAM1_Threshold3 = 213,
@@ -546,68 +547,38 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
         {
-            // 현재 강번을 OPC에서 읽어온 결과
-            #region CurrentSteelNo
-            //int itemIndex = (int)itemValues[(int)ReadingArrayNo.CurrentSteelNo].ClientHandle;
-            if (itemValues[(int)ReadingArrayNo.CurrentSteelNo].ResultID.Succeeded)
-            {
-                if (itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value == null)
-                {
-                    main.textBox1.Text = "Unknown";
-                }
-                else
-                {
-                    main.textBox1.Text = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value.ToString();
-                    main.textBox2.Text = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value.ToString();
-                }
-            }
-            #endregion
-
-            // 현재 각도값을 OPC에서 읽어온 결과
-            #region CurrentAngle
-            //itemIndex = (int)itemValues[(int)ReadingArrayNo.CurrentAngle].ClientHandle;
-            if (itemValues[(int)ReadingArrayNo.CurrentAngle].ResultID.Succeeded)
-            {
-                if (itemValues[(int)ReadingArrayNo.CurrentAngle].Value == null)
-                {
-                    CurrentAngle = 0;
-                }
-                else
-                {
-                    //CurrentAngle = Convert.ToInt32(itemValues[(int)ReadingArrayNo.CurrentAngle].Value);
-                    string test = itemValues[(int)ReadingArrayNo.CurrentAngle].Value.ToString();
-                }
-            }
-            #endregion
-
-            // 현재 강종을 OPC에서 읽어온 결과
-            #region CurrentSteelKind
-            //itemIndex = (int)itemValues[(int)ReadingArrayNo.CurrentSteelKind].ClientHandle;
-            if (itemValues[(int)ReadingArrayNo.CurrentSteelKind].ResultID.Succeeded)
-            {
-                if (itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value == null)
-                {
-                    main.OPC_textBox1.Text = "Unknown";
-                }
-                else
-                {
-                    //main.textBox4.Text = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value.ToString();
-                    //main.OPC_textBox1.Text = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value.ToString();
-                    result.textBox_CurrentSteelKind.Text = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value.ToString();
-                }
-            }
-            #endregion
             object[] ReadingResult = new object[itemValues.Length];
 
-            object a1 = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
-            object a2 = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
-            object a3 = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
-
-            string b1 = a1.GetType().ToString();
-            string b2 = a2.GetType().ToString();
-            string b3 = a3.GetType().ToString();
+            ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
+            ReadingResult[1] = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
+            ReadingResult[2] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
 
             // integer형은 System.UInt16, string형은 System.String으로 받아와진다.
+            //string b1 = ReadingResult[0].GetType().ToString();
+            //string b2 = ReadingResult[1].GetType().ToString();
+            //string b3 = ReadingResult[2].GetType().ToString();
+
+            // DataType을 비교해서
+            for(int i=0; i<itemValues.Length; i++)
+            {
+                if(ReadingResult[i].GetType().ToString() == "System.String")    // string형이면 강종이고
+                {
+                    result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString();
+                }
+                else if(ReadingResult[i].GetType().ToString() == "System.UInt16" &&     // ushort형인데 90보다 값이 작으면 현재 각도
+                    Convert.ToUInt16(ReadingResult[i]) <= 90)
+                {
+                    CurrentAngle = Convert.ToUInt16(ReadingResult[i]);
+                }
+                else if(ReadingResult[i].GetType().ToString() == "System.UInt16" &&     // ushort형인데 나머지 숫자값이면 강번으로 처리
+                    Convert.ToUInt16(ReadingResult[i]) > 90)
+                {
+                    main.textBox1.Text = ReadingResult[i].ToString();
+                    main.textBox2.Text = ReadingResult[i].ToString();
+                }
+            }
+
+
         }
 
         private int RandomNumber(int MaxNumber, int MinNumber)

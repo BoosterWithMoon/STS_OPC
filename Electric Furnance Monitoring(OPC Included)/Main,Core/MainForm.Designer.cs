@@ -193,6 +193,7 @@
             this.newSimulationToolStripMenuItem.Name = "newSimulationToolStripMenuItem";
             this.newSimulationToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.newSimulationToolStripMenuItem.Text = "New: Simulation";
+            this.newSimulationToolStripMenuItem.Click += new System.EventHandler(this.newSimulationToolStripMenuItem_Click);
             // 
             // openIRDXToolStripMenuItem
             // 
@@ -597,30 +598,30 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("나눔바른고딕", 22F);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
             this.label5.Location = new System.Drawing.Point(444, 20);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(130, 34);
+            this.label5.Size = new System.Drawing.Size(123, 36);
             this.label5.TabIndex = 4;
             this.label5.Text = "최고 온도";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("나눔바른고딕", 22F);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
             this.label3.Location = new System.Drawing.Point(224, 20);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 34);
+            this.label3.Size = new System.Drawing.Size(120, 36);
             this.label3.TabIndex = 2;
             this.label3.Text = "강번 No.";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 24F);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
             this.label1.Location = new System.Drawing.Point(3, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(199, 36);
+            this.label1.Size = new System.Drawing.Size(196, 37);
             this.label1.TabIndex = 0;
             this.label1.Text = "CAMERA #1";
             // 
@@ -700,30 +701,30 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("나눔바른고딕", 22F);
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
             this.label6.Location = new System.Drawing.Point(433, 22);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(130, 34);
+            this.label6.Size = new System.Drawing.Size(123, 36);
             this.label6.TabIndex = 5;
             this.label6.Text = "최고 온도";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("나눔바른고딕", 22F);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
             this.label4.Location = new System.Drawing.Point(200, 20);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(123, 34);
+            this.label4.Size = new System.Drawing.Size(120, 36);
             this.label4.TabIndex = 3;
             this.label4.Text = "강번 No.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 24F);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
             this.label2.Location = new System.Drawing.Point(3, 20);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(199, 36);
+            this.label2.Size = new System.Drawing.Size(198, 37);
             this.label2.TabIndex = 1;
             this.label2.Text = "CAMERA #2";
             // 

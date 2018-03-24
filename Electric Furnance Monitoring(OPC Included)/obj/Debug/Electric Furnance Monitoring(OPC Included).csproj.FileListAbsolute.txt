@@ -27,3 +27,33 @@ E:\Documents\Visual Studio 2015\Projects\Electric Furnance Monitoring(OPC Includ
 E:\Documents\Visual Studio 2015\Projects\Electric Furnance Monitoring(OPC Included)\Electric Furnance Monitoring(OPC Included)\bin\Debug\Interop.TeeChart.dll
 E:\Documents\Visual Studio 2015\Projects\Electric Furnance Monitoring(OPC Included)\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.ResultView.resources
 E:\Documents\Visual Studio 2015\Projects\Electric Furnance Monitoring(OPC Included)\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.SetThreshold.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Electric Furnance Monitoring(OPC Included).exe.config
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Interop.TeeChart.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\AxInterop.TeeChart.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric Furnance Monitoring(OPC Included).csproj.ResolveComReference.cache
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric Furnance Monitoring(OPC Included).exe
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric Furnance Monitoring(OPC Included).pdb
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Electric Furnance Monitoring(OPC Included).exe
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Electric Furnance Monitoring(OPC Included).pdb
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.BrowseControls.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.DA_Junction.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.KEPServerExControls.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.OpcClient.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.BrowseControls.xml
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.DA_Junction.xml
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Kepware.ClientAce.OpcClient.xml
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\Interop.TeeChart.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Debug\AxInterop.TeeChart.dll
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric Furnance Monitoring(OPC Included).csprojResolveAssemblyReference.cache
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM1_ChartView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM2_ChartView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM1_DataGridView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM2_DataGridView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM1_ImageView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.CAM2_ImageView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.MainForm.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.NewDeviceForm.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.Properties.Resources.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.ResultView.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric_Furnance_Monitoring_OPC_Included_.SetThreshold.resources
+C:\Users\Chocolate\Desktop\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Debug\Electric Furnance Monitoring(OPC Included).csproj.GenerateResource.Cache

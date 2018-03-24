@@ -73,6 +73,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         CustomOPC opc;
 
+        OpenFileDialog openDlg;
+        public string fileFullName = "";
+        public ushort sizeX = 0;
+        public ushort sizeY = 0;
+        public ushort sizeX_2 = 0;
+        public ushort sizeY_2 = 0;
+        public float min = 0.0f, max = 0.0f;
+
         public bool Activate_DrawPOI = false;
 
         string NewIRDXFileName = "";
@@ -132,6 +140,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             result = new ResultView(this);
 
             opc = new CustomOPC(this);
+
+            openDlg = new OpenFileDialog();
         }
 
         #region Publicize_AllocatedClass
@@ -714,7 +724,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void 열기ToolStripButton_Click(object sender, EventArgs e)
         {
-
+            OpenIRDX();
         }
 
         private void 도움말ToolStripButton_Click(object sender, EventArgs e)
@@ -1193,5 +1203,190 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             OPCTimer.Start();
         }
 
+        #region OpenIRDX
+        private void OpenIRDX()
+        {
+            // OpenFileDialog setting
+            openDlg.Title = "Open Simulation";
+            openDlg.Filter = "IRDX Files(*.irdx)|*.irdx";
+            DialogResult dr = openDlg.ShowDialog();
+
+            // dialog에서 파일을 열었을 때
+            if (dr == DialogResult.OK)
+            {
+                // GET FULL FILE PATH
+                fileFullName = openDlg.FileName;
+            }
+            // 파일을 열지 않고 닫으려고 할 때
+            else if (dr == DialogResult.Cancel)
+            {
+                return;
+            }
+            //MessageBox.Show(fileFullName);
+
+            // IRDX handle 받아오기
+            DIASDAQ.DDAQ_IRDX_FILE_OPEN_READ(fileFullName, true, ref pIRDX_Array[0]);
+
+            ushort tempX = 0, tempY = 0;
+            DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[0], ref tempX, ref tempY);
+
+            sizeX = tempX; sizeY = tempY;
+
+            //OnlyOne_InitImageView();
+            //imageView.DrawImage(pIRDX_Array[0], onlyone_img.pictureBox1);
+            currentOpenMode = OpenMode.IRDX;
+
+            InitImageView();
+            InitChart();
+            InitGridView();
+            InitResultView();
+
+            label1.Visible = true;
+            label2.Visible = true;
+            label3.Visible = true;
+            label4.Visible = true;
+            label5.Visible = true;
+            label6.Visible = true;
+
+            textBox1.Visible = true;
+            textBox2.Visible = true;
+            textBox3.Visible = true;
+            textBox4.Visible = true;
+
+            //toolStripButton4.Enabled = true;
+            //toolStripButton5.Enabled = true;
+            //toolStripButton8.Enabled = true;
+            DrawPOI_toolStripButton.Enabled = true;
+            MovePOI_toolStripButton.Enabled = true;
+            DeletePOI_toolStripButton.Enabled = true;
+
+            imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+            imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+
+            customGrid.GetAttributesInfo(pIRDX_Array[0]);
+            propertyGrid1.Refresh();
+        }
+
+
+        #endregion
+
+        #region OpenSimulation
+
+        private void OpenSimulation()
+        {
+            // OpenFileDialog setting
+            openDlg.Title = "Open Simulation";
+            openDlg.Filter = "IRD Files(*.ird)|*.ird";
+            DialogResult dr = openDlg.ShowDialog();
+
+            // dialog에서 파일을 열었을 때
+            if (dr == DialogResult.OK)
+            {
+                // GET FULL FILE PATH
+                fileFullName = openDlg.FileName;
+            }
+            // 파일을 열지 않고 닫으려고 할 때
+            else if (dr == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            DetectedDevices = 2;
+
+            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(1, fileFullName);     // DevNo1: 512N
+            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(2, fileFullName);     // DevNo2: 320L
+
+            // IRDX handle 받아오기
+            DIASDAQ.DDAQ_DEVICE_GET_IRDX(1, ref pIRDX_Array[0]); // 512
+            DIASDAQ.DDAQ_DEVICE_GET_IRDX(2, ref pIRDX_Array[1]); // 320
+
+            if (DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[0], ref sizeX, ref sizeY) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+                return;
+            if (DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[1], ref sizeX_2, ref sizeY_2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+                return;
+
+            DIASDAQ.COLORREF color = new DIASDAQ.COLORREF();
+            color.Red = 0; color.Blue = 0; color.Green = 0;
+            //-----------------------------------------
+            DIASDAQ.DDAQ_SET_TEMPPRECISION(0);
+            ushort avg = 0;
+            DIASDAQ.DDAQ_IRDX_OBJECT_SET_EMISSIVITY(pIRDX_Array[0], currentEmissivity);                          /// 두번째 카메라 핵심 프로퍼티 설정
+            DIASDAQ.DDAQ_IRDX_OBJECT_SET_TRANSMISSION(pIRDX_Array[0], currentTransmittance);
+            DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(pIRDX_Array[0], 0, 256);
+            DIASDAQ.DDAQ_IRDX_SCALE_GET_MINMAX(pIRDX_Array[0], ref min, ref max);
+            DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(pIRDX_Array[0], min, max);
+            DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(pIRDX_Array[0], ref avg);
+
+            DIASDAQ.DDAQ_IRDX_OBJECT_SET_EMISSIVITY(pIRDX_Array[1], currentEmissivity);                          /// 두번째 카메라 핵심 프로퍼티 설정
+            DIASDAQ.DDAQ_IRDX_OBJECT_SET_TRANSMISSION(pIRDX_Array[1], currentTransmittance);
+            DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(pIRDX_Array[1], 0, 256);
+            DIASDAQ.DDAQ_IRDX_SCALE_GET_MINMAX(pIRDX_Array[1], ref min, ref max);
+            DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(pIRDX_Array[1], min, max);
+            DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(pIRDX_Array[1], ref avg);
+
+            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;                        /// 기본 Thread ID Value get
+            uint nThreadID2 = (uint)Thread.CurrentThread.ManagedThreadId;
+
+            // THROW THREADS ID
+            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(1, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)   /// 스레드 ID 등록
+                return;
+            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(2, nThreadID2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+                return;
+
+            // SET ACQUISITION FREQUENCY
+            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[0], 2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)               /// Default ACQ_Frequency 8 으로 설정
+                return;
+            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[1], 2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+                return;
+
+            if (DIASDAQ.DDAQ_DEVICE_DO_START(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                   /// 각 카메라 Do Start!!
+                return;
+            if (DIASDAQ.DDAQ_DEVICE_DO_START(2) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
+
+            DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1);
+            DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(2);
+
+            //customGrid.GetAttributesInfo();
+            //propertyGrid1.Refresh();
+
+            InitImageView();
+            InitChart();
+            InitGridView();
+
+            label1.Visible = true;
+            label2.Visible = true;
+            label3.Visible = true;
+            label4.Visible = true;
+            label5.Visible = true;
+            label6.Visible = true;
+
+            textBox1.Visible = true;
+            textBox2.Visible = true;
+            textBox3.Visible = true;
+            textBox4.Visible = true;
+
+            DrawPOI_toolStripButton.Enabled = true;
+            MovePOI_toolStripButton.Enabled = true;
+            DeletePOI_toolStripButton.Enabled = true;
+
+            customGrid.GetAttributesInfo(pIRDX_Array[0]);
+
+            mThread.Start();
+            mThread_two.Start();
+
+            InitResultView();
+
+            OPCActivated = true;
+            InitOPCTimer();
+        }
+
+
+
+        #endregion
+
+        private void newSimulationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenSimulation();
+        }
     }
 }
