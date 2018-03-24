@@ -101,6 +101,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public bool OPCActivated = false;
 
+        private uint position = 0;
+        private uint numDataSet = 0;
+
+        System.Windows.Forms.Timer dataplayerTimer = new System.Windows.Forms.Timer();
+        bool isTimerRunning = false;
+
+        private int IRDXFileCount = 0;
+
         // OPC AREA ===================================================================
         //DaServerMgt DAServer = new DaServerMgt();
         //Kepware.ClientAce.OpcDaClient.ConnectInfo connectInfo = new Kepware.ClientAce.OpcDaClient.ConnectInfo();
@@ -734,22 +742,102 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void PreviousRecord_toolStripButton_Click(object sender, EventArgs e)
         {
+            DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
 
+            if (position == 0)
+            {
+                // position이 이미 시작점에 있다면 아무것도 하지 않음
+            }
+            else
+            {
+                DIASDAQ.DDAQ_IRDX_FILE_SET_CURDATASET(pIRDX_Array[0], position - 1);
+                position--;
+            }
+            CurDataRecord = position;
+
+            float pData = 0;
+            uint bufferSize = 0;
+            DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
+
+            //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+            imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+
+            customGrid.GetAttributesInfo(pIRDX_Array[0]);
         }
 
         private void NextRecord_toolStripButton_Click(object sender, EventArgs e)
         {
+            DIASDAQ.DDAQ_IRDX_FILE_GET_NUMDATASETS(pIRDX_Array[0], ref numDataSet);
 
+            DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
+
+            if (position + 1 == numDataSet)
+            {
+                // position이 DataSet의 끝까지 갔다면 제일 첫 프레임으로 보냄
+                position = 0;
+                dataplayerTimer.Stop();
+
+                float pData = 0;
+                uint bufferSize = 0;
+                DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
+
+                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+                imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+
+                imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+                c1_chartView.UpdateData();
+                c1_gridView.RefreshGrid();
+                result.CAM1_DetectTempThreshold();
+
+                customGrid.GetAttributesInfo(pIRDX_Array[0]);
+            }
+            else
+            {
+                DIASDAQ.DDAQ_IRDX_FILE_SET_CURDATASET(pIRDX_Array[0], position + 1);
+                position++;
+
+                CurDataRecord = position;
+
+                float pData = 0;
+                uint bufferSize = 0;
+                DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
+
+                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+                imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+
+                imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+                c1_chartView.UpdateData();
+                c1_gridView.RefreshGrid();
+                result.CAM1_DetectTempThreshold();
+
+                for (int i = 0; i < imgView.CAM1_POICount; i++)
+                {
+                    //imageView.CAM1_ClickedPosition[i] = imageView.CAM2_ClickedPosition[i];
+                    imgView.CAM2_ClickedPosition[i] = imgView.CAM1_ClickedPosition[i];
+                }
+                //imgView.CAM2_POICount = imgView.CAM1_POICount;
+                //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
+                //c2_chartView.UpdateData();
+                //c2_gridView.CAM2_RefreshGrid();
+                //result.CAM2_DetectTempThreshold();
+
+                customGrid.GetAttributesInfo(pIRDX_Array[0]);
+            }
         }
 
         private void KeepMoving_toolStripButton_Click(object sender, EventArgs e)
         {
-
+            if (isTimerRunning == true) { }
+            else
+            {
+                InitTimerForPlayer();
+            }
         }
 
         private void Pause_toolStripButton_Click(object sender, EventArgs e)
         {
-
+            dataplayerTimer.Stop();
+            isTimerRunning = false;
         }
 
         private void DrawPOI_toolStripButton_Click(object sender, EventArgs e)
@@ -1206,6 +1294,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #region OpenIRDX
         private void OpenIRDX()
         {
+            IRDXFileCount++;
+
             // OpenFileDialog setting
             openDlg.Title = "Open Simulation";
             openDlg.Filter = "IRDX Files(*.irdx)|*.irdx";
@@ -1224,47 +1314,71 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             //MessageBox.Show(fileFullName);
 
-            // IRDX handle 받아오기
-            DIASDAQ.DDAQ_IRDX_FILE_OPEN_READ(fileFullName, true, ref pIRDX_Array[0]);
+            // 첫 번째 IRDX 파일을 open할때
+            if (IRDXFileCount < 2)
+            { 
+                // IRDX handle 받아오기
+                DIASDAQ.DDAQ_IRDX_FILE_OPEN_READ(fileFullName, true, ref pIRDX_Array[0]);
 
-            ushort tempX = 0, tempY = 0;
-            DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[0], ref tempX, ref tempY);
+                ushort tempX = 0, tempY = 0;
+                DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[0], ref tempX, ref tempY);
 
-            sizeX = tempX; sizeY = tempY;
+                sizeX = tempX; sizeY = tempY;
 
-            //OnlyOne_InitImageView();
-            //imageView.DrawImage(pIRDX_Array[0], onlyone_img.pictureBox1);
-            currentOpenMode = OpenMode.IRDX;
+                //OnlyOne_InitImageView();
+                //imageView.DrawImage(pIRDX_Array[0], onlyone_img.pictureBox1);
+                currentOpenMode = OpenMode.IRDX;
 
-            InitImageView();
-            InitChart();
-            InitGridView();
-            InitResultView();
+                InitImageView();
+                InitChart();
+                InitGridView();
+                InitResultView();
 
-            label1.Visible = true;
-            label2.Visible = true;
-            label3.Visible = true;
-            label4.Visible = true;
-            label5.Visible = true;
-            label6.Visible = true;
+                label1.Text = "IRDX Mode";
+                label1.Visible = true;
+                //label2.Visible = true;
+                //label3.Visible = true;
+                //label4.Visible = true;
+                //label5.Visible = true;
+                //label6.Visible = true;
 
-            textBox1.Visible = true;
-            textBox2.Visible = true;
-            textBox3.Visible = true;
-            textBox4.Visible = true;
+                textBox1.Visible = true;
+                textBox2.Visible = true;
+                textBox3.Visible = true;
+                textBox4.Visible = true;
 
-            //toolStripButton4.Enabled = true;
-            //toolStripButton5.Enabled = true;
-            //toolStripButton8.Enabled = true;
-            DrawPOI_toolStripButton.Enabled = true;
-            MovePOI_toolStripButton.Enabled = true;
-            DeletePOI_toolStripButton.Enabled = true;
+                //toolStripButton4.Enabled = true;
+                //toolStripButton5.Enabled = true;
+                //toolStripButton8.Enabled = true;
+                PreviousRecord_toolStripButton.Enabled = true;
+                NextRecord_toolStripButton.Enabled = true;
+                KeepMoving_toolStripButton.Enabled = true;
+                Pause_toolStripButton.Enabled = true;
 
-            imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
-            imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+                DrawPOI_toolStripButton.Enabled = true;
+                MovePOI_toolStripButton.Enabled = true;
+                DeletePOI_toolStripButton.Enabled = true;
 
-            customGrid.GetAttributesInfo(pIRDX_Array[0]);
-            propertyGrid1.Refresh();
+                imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
+
+                customGrid.GetAttributesInfo(pIRDX_Array[0]);
+                propertyGrid1.Refresh();
+
+            }
+            else if (IRDXFileCount == 2)
+            {
+                // IRDX handle 받아오기
+                DIASDAQ.DDAQ_IRDX_FILE_OPEN_READ(fileFullName, true, ref pIRDX_Array[1]);
+
+                ushort tempX_2 = 0, tempY_2 = 0;
+                DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[1], ref tempX_2, ref tempY_2);
+
+                sizeX_2 = tempX_2; sizeY_2 = tempY_2;
+
+                imgView.DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
+            }
+
         }
 
 
@@ -1376,6 +1490,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             InitResultView();
 
+            // 테스트용 코드 부분이니까 나중에 안까먹고 지워야됨
             OPCActivated = true;
             InitOPCTimer();
         }
@@ -1387,6 +1502,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void newSimulationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenSimulation();
+        }
+
+
+        private void InitTimerForPlayer()
+        {
+            dataplayerTimer.Interval = 10;  // ms
+            dataplayerTimer.Tick += new EventHandler(NextRecord_toolStripButton_Click);
+
+            dataplayerTimer.Start();
+            isTimerRunning = true;
         }
     }
 }
