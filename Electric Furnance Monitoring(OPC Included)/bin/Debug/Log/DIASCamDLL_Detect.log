@@ -1,5 +1,5 @@
 
-#DIASCAM.DLL: Call Device Detection (Fri Mar 23 18:52:37.513 2018)
+#DIASCAM.DLL: Call Device Detection (Tue Mar 27 19:15:46.460 2018)
 > Detect at Ethernet from 0.0.0.0 to 255.255.255.255
 > Ethernet.FindCameras: 2
 .. Camera[1]: C1118828@192.168.1.115

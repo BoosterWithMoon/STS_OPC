@@ -8,8 +8,22 @@ using System.Runtime.InteropServices;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
-    class SystemPropertyGrid
+    class SystemPropertyGrid : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string args)
+        {
+            PropertyChangedEventHandler handle = PropertyChanged;
+            if (handle != null)
+            {
+                handle(this, new PropertyChangedEventArgs(args));
+            }
+            //if(PropertyChanged != null)
+            //{
+            //    PropertyChanged(this, new PropertyChangedEventArgs(args));
+            //}
+        }
+
         MainForm main;
 
         public SystemPropertyGrid(MainForm _main)
@@ -134,10 +148,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #endregion
 
         #region DefineAttribute_DataAcquisition
-
-        [CategoryAttribute("\t\t\t\tData Acquisition"),
-        ReadOnlyAttribute(true)]
-        //[RefreshProperties(RefreshProperties.Repaint)]
+        
+        
+        [Category("\t\t\t\tData Acquisition"),
+        ReadOnly(true),
+        RefreshProperties(RefreshProperties.All)            ]
+        //[RefreshProperties(RefreshProperties.All)]
         //[NotifyParentProperty(true)]
         public string Date
         {
@@ -163,7 +179,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 return tmpStr;
             }
-            set { value = DataAcq_Date; }
+            set
+            {
+                value = DataAcq_Date;
+            }
         }
 
         [CategoryAttribute("\t\t\t\tData Acquisition"),
@@ -190,10 +209,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             set { }
         }
+   
+
 
         [CategoryAttribute("\t\t\t\tData Acquisition"),
-        DefaultValueAttribute("0"),
-        ReadOnlyAttribute(true)]
+        //DefaultValueAttribute("0"),
+        ReadOnlyAttribute(true),
+            RefreshProperties(RefreshProperties.All)]
         public uint Index
         {
             get
@@ -207,7 +229,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 return tmpUint;
             }
-            set { }
+            set { main.acq_index = value;  }
         }
 
         [CategoryAttribute("\t\t\t\tData Acquisition"),
@@ -421,7 +443,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     tmpstr = Scale_ColorBar;
                 else
                 {
-                    if (main.DetectedDevices != 0)
+                    if (main.DetectedDevices != 0 || main.currentOpenMode == MainForm.OpenMode.IRDX)
                     {
                         ColorBarData._datas = colorBar_list.Split(',');
                         Scale_ColorBar = ColorBarData._datas[0];
@@ -448,6 +470,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 //ushort.TryParse(NumberOfColors, )
                 Scale_DNumberofColor = Convert.ToUInt16(NumberOfColors);
+                if (main.currentOpenMode == MainForm.OpenMode.IRDX)
+                {
+                    for (int i = 0; i < main.IRDXFileCount; i++)
+                    {
+                        DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
+                    }
+                }
                 for (int i = 0; i < main.DetectedDevices; i++)
                     DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
                 //DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, (ushort)NumberOfColors);
@@ -455,6 +484,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
 
         private string NumofColor_list = "256,128,63,31,21,15,11,5";      // constant_values
+
+        
 
         [Category("\t\tScaling"), Browsable(true), TypeConverter(typeof(NumofColorConverter))]
         public string NumberOfColors
@@ -467,7 +498,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     tmpstr = Scale_NumberOfColor;
                 else
                 {
-                    if (main.DetectedDevices != 0)
+                    if (main.DetectedDevices != 0 || main.currentOpenMode == MainForm.OpenMode.IRDX)
                     {
                         NumofColorData._datas = NumofColor_list.Split(',');
                         Scale_NumberOfColor = NumofColorData._datas[0];
@@ -484,6 +515,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 Scale_NumberOfColor = value;
 
                 ushort.TryParse(Scale_NumberOfColor, out Scale_DNumberofColor);
+
+                if(main.currentOpenMode == MainForm.OpenMode.IRDX)
+                {
+                    for(int i=0; i<main.IRDXFileCount; i++)
+                    {
+                        DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
+                    }
+                }
 
                 for (int i = 0; i < main.DetectedDevices; i++)
                     DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);

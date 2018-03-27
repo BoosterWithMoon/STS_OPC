@@ -218,6 +218,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         [DllImport(dllName)]
         public static extern DDAQ_ERROR DDAQ_DEVICE_DO_DELETEIMAGES(UInt32 nDevNo);
 
+
+        [DllImport(dllName)]
+        public static extern DDAQ_ERROR DDAQ_DEVICE_DO_MOTORFOCUS(UInt32 nDAQDevNo, ushort Cmd);
         #endregion
 
 
@@ -2224,6 +2227,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             IN2_ALREADY_USED = 1211,
             IN3_ALREADY_USED = 1212,
             INVALID_IMAGE_NO = 1250,
+            NO_MOTORFOCUS = 1214,
 
             //from DIASIRDX.dll
             INVALID_IRDX_HANDLE = 2001,

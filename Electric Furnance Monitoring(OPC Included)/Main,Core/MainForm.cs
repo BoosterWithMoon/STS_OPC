@@ -59,6 +59,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         Thread mThread;
         Thread mThread_two;
+
+        Thread CAM1_DataView;
+        Thread CAM2_DataView;
+
+        private bool isDrawnCAM1Image = false;
+        private bool isDrawnCAM2Image = false;
+
         public uint acq_index = 0;
 
         
@@ -107,7 +114,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         System.Windows.Forms.Timer dataplayerTimer = new System.Windows.Forms.Timer();
         bool isTimerRunning = false;
 
-        private int IRDXFileCount = 0;
+        public int IRDXFileCount = 0;
 
         // OPC AREA ===================================================================
         //DaServerMgt DAServer = new DaServerMgt();
@@ -115,6 +122,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //ServerIdentifier[] availableOPCServers;
         //bool connectFailed;
         // =================================================================== OPC AREA
+
+        
+
+        private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
+        private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
+        private static ushort DDAQ_MOTORFOCUS_CMD_NEAR = 2;     //< move focus to near
+        private static ushort DDAQ_MOTORFOCUS_CMD_FAR = 3;      //< move focus to far
+        private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP = 4; //< move focus one step to near
+        private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP = 5; //< move focus one step to far
+        private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP_BIG = 6; //< move focus one big step to near
+        private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP_BIG = 7;   //< move focus one big step to far
+
 
         public MainForm()
         {
@@ -138,6 +157,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             mThread = new Thread(new ThreadStart(run));
             mThread_two = new Thread(new ThreadStart(run_two));
+            CAM1_DataView = new Thread(new ThreadStart(CAM1_AllView));
+            CAM2_DataView = new Thread(new ThreadStart(CAM2_AllView));
 
             c1_chartView = new CAM1_ChartView(this);
             c2_chartView = new CAM2_ChartView(this);
@@ -178,6 +199,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public object CustomOPC_forPublicRef() { return opc; }
 
+        public object Support_Thread1_forPublicRef() { return CAM1_DataView; }
+
         #endregion
 
         public void InitPropertyGrid()
@@ -186,6 +209,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             propertyGrid1.ToolbarVisible = false;
             propertyGrid1.SelectedObject = customGrid;
         }
+
 
         public void InitImageView()
         {
@@ -397,140 +421,23 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             ViewAdjust();
 
             opc.ServerDetection();
-            opc.ServerConnection();
-            // OPC AREA ===================================================================================
-            //OpcServerEnum serverEnum = new OpcServerEnum();
-            //string nodeName = "localhost";
-            //bool returnAllServers = false;
-            //bool detected = false;
-            //int detectedIndex = 0;
-            //ServerCategory[] serverCategories = { ServerCategory.OPCDA };
-
-            //// Kepware 서버탐지
-            //try
-            //{
-            //    serverEnum.EnumComServer(nodeName, returnAllServers, serverCategories, out availableOPCServers);
-            //    if (availableOPCServers.GetLength(0) > 0)
-            //    {
-            //        for (int i = 0; i < availableOPCServers.GetLength(0); i++)
-            //        {
-            //            // detect된 서버 list 중에서 kepware가 있는지 탐색
-            //            if (availableOPCServers[i].ProgID == "Kepware.KEPServerEX.V6")
-            //            {
-            //                detected = true;
-            //                detectedIndex = i;
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    else // kepware가 없으면 메세지박스
-            //    {
-            //        MessageBox.Show("No OPC servers found at " + nodeName);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //    //throw;
-            //}
-
-            //// 서버 탐지에 성공하면 바로 연결
-            //string url = availableOPCServers[detectedIndex].Url;
-            //int clientHandle = 1;
-            //ConnectInfo connectInfo = new ConnectInfo();
-            //connectInfo.LocalId = "en";
-            //connectInfo.KeepAliveTime = 1000; // ms
-            //connectInfo.RetryAfterConnectionError = true;
-            //connectInfo.RetryInitialConnection = false;
-
-            //try
-            //{
-            //    DAServer.Connect(url, clientHandle, ref connectInfo, out connectFailed);
-            //    MessageBox.Show("Connect succeed");
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Handled Connect exception. Reason: " + ex.Message);
-
-            //    // Make sure following code knows connection failed:
-            //    connectFailed = true;
-            //}
-
-            //// Handle result:
-            //if (connectFailed)
-            //{
-            //    // Tell user connection attempt failed:
-            //    MessageBox.Show("Connect failed");
-            //}
-
-            //DAServer.ReadCompleted += new DaServerMgt.ReadCompletedEventHandler(daServerMgt_ReadCompleted);
-        
+            opc.ServerConnection();     
     }
 
         private void button2_Click(object sender, EventArgs e)
         {
             opc.OPC_Write();
-            //if (OPC_textBox2.Text == "")
-            //{
-            //    MessageBox.Show("write할 데이터가 없음");
-            //    return;
-            //}
-            //ReturnCode returnCode;
-
-            //ItemIdentifier[] itemIdentifiers = new ItemIdentifier[1];
-            //itemIdentifiers[0] = new ItemIdentifier();
-            //itemIdentifiers[0].ItemName = "Channel2.TestDevice.No2";
-            //itemIdentifiers[0].ClientHandle = 0;
-
-            //// The itemValues array contains the values we wish to write to the items.
-            //ItemValue[] itemValues = new ItemValue[1];
-            //itemValues[0] = new ItemValue();
-            //itemValues[0].Value = System.Convert.ToInt32(OPC_textBox2.Text);
-
-            //int TransID = RandomNumber(65535, 1);
-
-            //// Call the Write API method:
-            //returnCode = DAServer.WriteAsync(TransID, ref itemIdentifiers, itemValues);
-
-            //// Handle result:
-            //if (returnCode != ReturnCode.SUCCEEDED)
-            //{
-            //    MessageBox.Show("Async Write failed with a result of " + returnCode.ToString()/*System.Convert.ToString(itemIdentifiers[0].ResultID.Code) + "\r\n" + "Description: " + itemIdentifiers[0].ResultID.Description*/);
-            //}
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             opc.OPC_Read();
-            //ReturnCode returnCode;
-
-            //int maxAge = 0;
-            //int TransID = RandomNumber(65535, 1);
-
-            //ItemIdentifier[] itemIdentifiers = new ItemIdentifier[1];
-            //itemIdentifiers[0] = new ItemIdentifier();
-            //itemIdentifiers[0].ItemName = "Channel2.TestDevice.No2";
-            //itemIdentifiers[0].ClientHandle = 0;
-
-            //// Call the Read API method:
-            //returnCode = DAServer.ReadAsync(TransID, maxAge, ref itemIdentifiers);
-
-            //// Handle result:
-            //// Check result
-            //if (returnCode != ReturnCode.SUCCEEDED)
-            //{
-            //    MessageBox.Show("ReadAsync failed with error: " + System.Convert.ToString(itemIdentifiers[0].ResultID.Code, 16) + "\r\n" + "Description: " + itemIdentifiers[0].ResultID.Description);
-            //}
         }
-
-        // =================================================================================== OPC AREA
-
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveConfiguration();
 
-            //DisconnectOPCServer();
             if (OPCActivated)
             {
                 OPCTimer.Stop();
@@ -544,10 +451,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Thread.Sleep(3);
 
             // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
-            if (mThread.IsAlive || mThread_two.IsAlive)
+            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive)
             {
                 mThread.Abort();
                 mThread_two.Abort();
+                CAM1_DataView.Abort();
             }
 
             DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
@@ -579,7 +487,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             bool newDataReady = false;
 
             while (true)
-            //while(thr1_waitHandle.WaitOne())
             {
                 Thread.Sleep(10);
 
@@ -597,29 +504,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
-                    c1_chartView.UpdateData();
-                    ////c1_gridView.ShowTemperatureOnGrid();
+
+                    //c1_gridView.RefreshGrid();
+                    //result.CAM1_DetectTempThreshold();
+
+                    //CompareMaxTemperature(imgView.CAM1_TemperatureArr);
+
                     c1_gridView.RefreshGrid();
                     result.CAM1_DetectTempThreshold();
-                    ////customGrid.SafeRefresh_PropertyGrid();
-                    //customGrid.SafeRefresh_Time();
-                    //if (!CAM1_UpdateThr.IsAlive)
-                    //{
-                    //    CAM1_UpdateThr.Start();
-                    //}
-                    //else if (CAM1_UpdateThr.IsAlive)
-                    //{
-                    //    Resume();
-                    //}
-
-                    //c1_chartView.UpdateData();
-                    //c1_gridView.RefreshGrid();
-                    ////result.DetectTempThreshold();
-                    //result.CAM1_DetectTempThreshold();
 
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);
 
                     acq_index++;
+
+                    //propertyGrid1.Refresh();
+                    propertyGrid1.Invalidate();
+                    
+
+                    isDrawnCAM1Image = true;
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)             /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
@@ -628,6 +530,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
 
         }
+
         private void run_two()  // Current: 512N
         {
             bool newDataReady = false;
@@ -670,6 +573,43 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         return;
                 }
 
+            }
+        }
+
+        private void CAM1_AllView()
+        {
+            while (true)
+            {
+                if (!isDrawnCAM1Image)
+                {
+                    continue;
+                }
+
+                else if (isDrawnCAM1Image)
+                {
+                    //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+                    //c1_chartView.CheckCurrentCount(imgView.CAM1_compPOICount, imgView.CAM1_POICount);
+                    lock (this)
+                    {
+                        c1_chartView.UpdateData();
+                    }
+                    isDrawnCAM1Image = false;
+                }
+            }
+        }
+
+        private void CAM2_AllView()
+        {
+            while (true)
+            {
+                if (!isDrawnCAM2Image)
+                {
+                    continue;
+                }
+                else if (isDrawnCAM2Image)
+                {
+                    isDrawnCAM2Image = false;
+                }
             }
         }
 
@@ -743,7 +683,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void PreviousRecord_toolStripButton_Click(object sender, EventArgs e)
         {
             DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
-
+            //MessageBox.Show(position.ToString());
             if (position == 0)
             {
                 // position이 이미 시작점에 있다면 아무것도 하지 않음
@@ -770,6 +710,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DIASDAQ.DDAQ_IRDX_FILE_GET_NUMDATASETS(pIRDX_Array[0], ref numDataSet);
 
             DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
+            MessageBox.Show(position.ToString());
 
             if (position + 1 == numDataSet)
             {
@@ -1316,7 +1257,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             // 첫 번째 IRDX 파일을 open할때
             if (IRDXFileCount < 2)
-            { 
+            {
+                currentOpenMode = OpenMode.IRDX;
+
                 // IRDX handle 받아오기
                 DIASDAQ.DDAQ_IRDX_FILE_OPEN_READ(fileFullName, true, ref pIRDX_Array[0]);
 
@@ -1325,10 +1268,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 sizeX = tempX; sizeY = tempY;
 
-                //OnlyOne_InitImageView();
-                //imageView.DrawImage(pIRDX_Array[0], onlyone_img.pictureBox1);
-                currentOpenMode = OpenMode.IRDX;
-
                 InitImageView();
                 InitChart();
                 InitGridView();
@@ -1336,20 +1275,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 label1.Text = "IRDX Mode";
                 label1.Visible = true;
-                //label2.Visible = true;
-                //label3.Visible = true;
-                //label4.Visible = true;
-                //label5.Visible = true;
-                //label6.Visible = true;
 
                 textBox1.Visible = true;
                 textBox2.Visible = true;
                 textBox3.Visible = true;
                 textBox4.Visible = true;
 
-                //toolStripButton4.Enabled = true;
-                //toolStripButton5.Enabled = true;
-                //toolStripButton8.Enabled = true;
                 PreviousRecord_toolStripButton.Enabled = true;
                 NextRecord_toolStripButton.Enabled = true;
                 KeepMoving_toolStripButton.Enabled = true;
@@ -1360,7 +1291,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DeletePOI_toolStripButton.Enabled = true;
 
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
-                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
 
                 customGrid.GetAttributesInfo(pIRDX_Array[0]);
                 propertyGrid1.Refresh();
@@ -1504,6 +1434,53 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             OpenSimulation();
         }
 
+        private void MoveToNearStep()
+        {
+            uint tempDeviceNo = 0;
+            if (imgView.isCAM1Focused && !imgView.isCAM2Focused)
+            {
+                tempDeviceNo = DetectedDevices;     // 현재 뒤쪽 IP인 320L
+            }
+            else if (!imgView.isCAM1Focused && imgView.isCAM2Focused)
+            {
+                tempDeviceNo = 1;                          // 현재 앞쪽 IP인 512N
+            }
+
+            if (DIASDAQ.DDAQ_DEVICE_DO_MOTORFOCUS(tempDeviceNo, DDAQ_MOTORFOCUS_CMD_NEAR_STEP) == DIASDAQ.DDAQ_ERROR.NO_MOTORFOCUS)
+            {
+                MessageBox.Show("Device가 Motorfocus를 지원하지 않습니다.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+        }
+
+        private void MoveToFarStep()
+        {
+            uint tempDeviceNo = 0;
+            if (imgView.isCAM1Focused && !imgView.isCAM2Focused)
+            {
+                tempDeviceNo = DetectedDevices;     // 현재 뒤쪽 IP인 320L
+            }
+            else if (!imgView.isCAM1Focused && imgView.isCAM2Focused)
+            {
+                tempDeviceNo = 1;                          // 현재 앞쪽 IP인 512N
+            }
+
+            if (DIASDAQ.DDAQ_DEVICE_DO_MOTORFOCUS(tempDeviceNo, DDAQ_MOTORFOCUS_CMD_FAR_STEP) == DIASDAQ.DDAQ_ERROR.NO_MOTORFOCUS)
+            {
+                MessageBox.Show("Device가 Motorfocus를 지원하지 않습니다.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+        }
+
+        private void NearStep_toolStripButtonClick(object sender, EventArgs e)
+        {
+            MoveToNearStep();
+        }
+
+        private void FarStep_toolStripButtonClick(object sender, EventArgs e)
+        {
+            MoveToFarStep();
+        }
 
         private void InitTimerForPlayer()
         {

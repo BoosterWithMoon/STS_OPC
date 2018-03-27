@@ -72,6 +72,8 @@
             this.LogStop_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.도움말ToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.MoveFocus_NearStep = new System.Windows.Forms.ToolStripButton();
+            this.MoveFocus_FarStep = new System.Windows.Forms.ToolStripButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.split_ViewToInfo = new System.Windows.Forms.SplitContainer();
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
@@ -91,6 +93,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
+            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToNearStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToFarStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -159,6 +164,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.dataLoggingToolStripMenuItem,
+            this.focusToolStripMenuItem,
             this.dataRecordToolStripMenuItem,
             this.rOIToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -346,7 +352,9 @@
             this.LogStart_toolStripButton,
             this.LogStop_toolStripButton,
             this.toolStripSeparator6,
-            this.도움말ToolStripButton});
+            this.도움말ToolStripButton,
+            this.MoveFocus_NearStep,
+            this.MoveFocus_FarStep});
             this.label_CurrentSteelKind.Location = new System.Drawing.Point(0, 24);
             this.label_CurrentSteelKind.Name = "label_CurrentSteelKind";
             this.label_CurrentSteelKind.Size = new System.Drawing.Size(1904, 25);
@@ -492,6 +500,24 @@
             this.도움말ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.도움말ToolStripButton.Text = "도움말";
             this.도움말ToolStripButton.Click += new System.EventHandler(this.도움말ToolStripButton_Click);
+            // 
+            // MoveFocus_NearStep
+            // 
+            this.MoveFocus_NearStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_NearStep.Image")));
+            this.MoveFocus_NearStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MoveFocus_NearStep.Name = "MoveFocus_NearStep";
+            this.MoveFocus_NearStep.Size = new System.Drawing.Size(76, 22);
+            this.MoveFocus_NearStep.Text = "NearStep";
+            this.MoveFocus_NearStep.Click += new System.EventHandler(this.NearStep_toolStripButtonClick);
+            // 
+            // MoveFocus_FarStep
+            // 
+            this.MoveFocus_FarStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_FarStep.Image")));
+            this.MoveFocus_FarStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MoveFocus_FarStep.Name = "MoveFocus_FarStep";
+            this.MoveFocus_FarStep.Size = new System.Drawing.Size(67, 22);
+            this.MoveFocus_FarStep.Text = "FarStep";
+            this.MoveFocus_FarStep.Click += new System.EventHandler(this.FarStep_toolStripButtonClick);
             // 
             // propertyGrid1
             // 
@@ -739,6 +765,27 @@
             this.split_CAM2ChartGrid.SplitterDistance = 234;
             this.split_CAM2ChartGrid.TabIndex = 0;
             // 
+            // focusToolStripMenuItem
+            // 
+            this.focusToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.moveToNearStepToolStripMenuItem,
+            this.moveToFarStepToolStripMenuItem});
+            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            this.focusToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.focusToolStripMenuItem.Text = "Focus";
+            // 
+            // moveToNearStepToolStripMenuItem
+            // 
+            this.moveToNearStepToolStripMenuItem.Name = "moveToNearStepToolStripMenuItem";
+            this.moveToNearStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.moveToNearStepToolStripMenuItem.Text = "Move to near step";
+            // 
+            // moveToFarStepToolStripMenuItem
+            // 
+            this.moveToFarStepToolStripMenuItem.Name = "moveToFarStepToolStripMenuItem";
+            this.moveToFarStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.moveToFarStepToolStripMenuItem.Text = "Move to far step";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -752,6 +799,7 @@
             this.Controls.Add(this.OPC_textBox2);
             this.Controls.Add(this.OPC_textBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -859,6 +907,11 @@
         public System.Windows.Forms.TextBox textBox4;
         public System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripButton MoveFocus_NearStep;
+        private System.Windows.Forms.ToolStripButton MoveFocus_FarStep;
+        private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
     }
 }
 

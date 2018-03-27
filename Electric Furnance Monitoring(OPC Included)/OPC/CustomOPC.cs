@@ -8,25 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
-   /* struct OPCData
-    {
-        #region ReadFromOPC
-        public string Read_CurrentSteelNo;
-        public string Read_CurrentAngle;
-        public string Read_CurrentSteelKind;
-        #endregion
-
-        #region WriteToOPC
-        public string CurrentAngle;
-        public string[] CAM1_Threshold;
-        public string[] CAM1_CurrentTemp;
-        public string[] CAM2_Threshold;
-        public string[] CAM2_CurrentTemp;
-        public string CAM1_MaxTemp;
-        public string CAM2_MaxTemp;
-        #endregion
-    }; */
-
     public enum ReadingArrayNo
     {
         CurrentSteelNo = 0,
@@ -225,7 +206,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             if (detected == false)
             {
-                System.Windows.Forms.MessageBox.Show("OPC 서버에 연결할 수 없습니다.");
+                System.Windows.Forms.MessageBox.Show("OPC 서버 연결에 실패하였습니다.", "OPC Connection", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 return;
             }
             else if (detected == true)
@@ -251,7 +232,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 if (connectFailed == true)
                 {
-                    System.Windows.Forms.MessageBox.Show("OPC 서버 연결에 실패하였습니다.", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                    System.Windows.Forms.MessageBox.Show("OPC 서버 연결에 실패하였습니다.", "OPC Connection", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 }
                 else
                 {
