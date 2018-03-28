@@ -43,6 +43,9 @@
             this.dataLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToNearStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToFarStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previousRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nextRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,9 +96,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
-            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveToNearStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveToFarStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -243,6 +244,29 @@
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             // 
+            // focusToolStripMenuItem
+            // 
+            this.focusToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.moveToNearStepToolStripMenuItem,
+            this.moveToFarStepToolStripMenuItem});
+            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            this.focusToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.focusToolStripMenuItem.Text = "Focus";
+            // 
+            // moveToNearStepToolStripMenuItem
+            // 
+            this.moveToNearStepToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveToNearStepToolStripMenuItem.Image")));
+            this.moveToNearStepToolStripMenuItem.Name = "moveToNearStepToolStripMenuItem";
+            this.moveToNearStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.moveToNearStepToolStripMenuItem.Text = "Move to near step";
+            // 
+            // moveToFarStepToolStripMenuItem
+            // 
+            this.moveToFarStepToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveToFarStepToolStripMenuItem.Image")));
+            this.moveToFarStepToolStripMenuItem.Name = "moveToFarStepToolStripMenuItem";
+            this.moveToFarStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.moveToFarStepToolStripMenuItem.Text = "Move to far step";
+            // 
             // dataRecordToolStripMenuItem
             // 
             this.dataRecordToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -344,6 +368,8 @@
             this.NextRecord_toolStripButton,
             this.KeepMoving_toolStripButton,
             this.Pause_toolStripButton,
+            this.MoveFocus_NearStep,
+            this.MoveFocus_FarStep,
             this.toolStripSeparator4,
             this.DrawPOI_toolStripButton,
             this.MovePOI_toolStripButton,
@@ -353,8 +379,7 @@
             this.LogStop_toolStripButton,
             this.toolStripSeparator6,
             this.도움말ToolStripButton,
-            this.MoveFocus_NearStep,
-            this.MoveFocus_FarStep});
+            this.toolStripButton1});
             this.label_CurrentSteelKind.Location = new System.Drawing.Point(0, 24);
             this.label_CurrentSteelKind.Name = "label_CurrentSteelKind";
             this.label_CurrentSteelKind.Size = new System.Drawing.Size(1904, 25);
@@ -602,7 +627,7 @@
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Enabled = false;
             this.textBox3.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox3.Location = new System.Drawing.Point(580, 13);
+            this.textBox3.Location = new System.Drawing.Point(580, 15);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(100, 40);
@@ -614,7 +639,7 @@
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox1.Location = new System.Drawing.Point(343, 13);
+            this.textBox1.Location = new System.Drawing.Point(343, 15);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(95, 40);
@@ -624,20 +649,20 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
+            this.label5.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(444, 20);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(123, 36);
+            this.label5.Size = new System.Drawing.Size(126, 34);
             this.label5.TabIndex = 4;
             this.label5.Text = "최고 온도";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
+            this.label3.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label3.Location = new System.Drawing.Point(224, 20);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(120, 36);
+            this.label3.Size = new System.Drawing.Size(121, 34);
             this.label3.TabIndex = 2;
             this.label3.Text = "강번 No.";
             // 
@@ -727,20 +752,20 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
+            this.label6.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label6.Location = new System.Drawing.Point(433, 22);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(123, 36);
+            this.label6.Size = new System.Drawing.Size(126, 34);
             this.label6.TabIndex = 5;
             this.label6.Text = "최고 온도";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F);
+            this.label4.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(200, 20);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 36);
+            this.label4.Size = new System.Drawing.Size(121, 34);
             this.label4.TabIndex = 3;
             this.label4.Text = "강번 No.";
             // 
@@ -765,26 +790,14 @@
             this.split_CAM2ChartGrid.SplitterDistance = 234;
             this.split_CAM2ChartGrid.TabIndex = 0;
             // 
-            // focusToolStripMenuItem
+            // toolStripButton1
             // 
-            this.focusToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.moveToNearStepToolStripMenuItem,
-            this.moveToFarStepToolStripMenuItem});
-            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            this.focusToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
-            this.focusToolStripMenuItem.Text = "Focus";
-            // 
-            // moveToNearStepToolStripMenuItem
-            // 
-            this.moveToNearStepToolStripMenuItem.Name = "moveToNearStepToolStripMenuItem";
-            this.moveToNearStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.moveToNearStepToolStripMenuItem.Text = "Move to near step";
-            // 
-            // moveToFarStepToolStripMenuItem
-            // 
-            this.moveToFarStepToolStripMenuItem.Name = "moveToFarStepToolStripMenuItem";
-            this.moveToFarStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.moveToFarStepToolStripMenuItem.Text = "Move to far step";
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
             // 
             // MainForm
             // 
@@ -912,6 +925,7 @@
         private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

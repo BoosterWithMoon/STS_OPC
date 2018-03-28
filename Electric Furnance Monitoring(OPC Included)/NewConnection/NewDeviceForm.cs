@@ -17,6 +17,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         Thread thr1, thr2;
         Thread support_thr1;
+        Thread support_thr2;
+        Thread updateProperty;
 
         public bool isDetected = true;
         public string[] DeviceID;
@@ -188,6 +190,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             support_thr1 = (Thread)main.Support_Thread1_forPublicRef();
             support_thr1.Start();
 
+            //updateProperty = (Thread)main.UpdatePropertyGrid_Thread_forPublicRef();
+            //updateProperty.Start();
+
             if (NDF_DetectedDevices != 1)
             {
                 main.label2.Visible = true;
@@ -197,6 +202,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 main.textBox4.Visible = true;
                 thr2 = (Thread)main.Thread2_forPublicRef();
                 thr2.Start();
+
+                support_thr2 = (Thread)main.Support_Thread2_forPublicRef();
+                support_thr2.Start();
             }
 
             // OPC 데이터 송수신 활성화

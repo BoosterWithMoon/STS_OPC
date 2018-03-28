@@ -43,10 +43,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public float Scale_MaxTemp = 0;
         public float cMinTemp = 0;
         public float Scale_MinTemp = 0;
-        public uint NumOfDataRecord=0;
+        public uint NumOfDataRecord = 0;
         public uint CurDataRecord = 0;
-        public float m_fps=0;
-        public ushort m_avg=0;
+        public float m_fps = 0;
+        public ushort m_avg = 0;
 
         private bool isClosing = false;
 
@@ -63,12 +63,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread CAM1_DataView;
         Thread CAM2_DataView;
 
+        Thread propertyGridUpdate;
+
         private bool isDrawnCAM1Image = false;
         private bool isDrawnCAM2Image = false;
 
         public uint acq_index = 0;
 
-        
+
 
         CAM1_ChartView c1_chartView;
         CAM2_ChartView c2_chartView;
@@ -98,11 +100,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         string CAM2_newResultDataFileName = "";
         public bool isLoggingRunning = false;
 
-        public enum OpenMode :int
+        public enum OpenMode : int
         {
-            Online=1,
-            Simulation=2,
-            IRDX=3
+            Online = 1,
+            Simulation = 2,
+            IRDX = 3
         }
         public OpenMode currentOpenMode = OpenMode.IRDX;
 
@@ -123,7 +125,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //bool connectFailed;
         // =================================================================== OPC AREA
 
-        
+
 
         private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
         private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
@@ -134,10 +136,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP_BIG = 6; //< move focus one big step to near
         private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP_BIG = 7;   //< move focus one big step to far
 
+        [DllImport("kernel32.dll")]
+        public static extern void Beep(int frequency, int duration);
 
         public MainForm()
         {
-            
+
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
 
@@ -159,6 +163,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             mThread_two = new Thread(new ThreadStart(run_two));
             CAM1_DataView = new Thread(new ThreadStart(CAM1_AllView));
             CAM2_DataView = new Thread(new ThreadStart(CAM2_AllView));
+            propertyGridUpdate = new Thread(new ThreadStart(UpdateProperty));
 
             c1_chartView = new CAM1_ChartView(this);
             c2_chartView = new CAM2_ChartView(this);
@@ -172,6 +177,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             openDlg = new OpenFileDialog();
         }
+
+
 
         #region Publicize_AllocatedClass
 
@@ -200,6 +207,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public object CustomOPC_forPublicRef() { return opc; }
 
         public object Support_Thread1_forPublicRef() { return CAM1_DataView; }
+
+        public object Support_Thread2_forPublicRef() { return CAM2_DataView; }
+
+        public object UpdatePropertyGrid_Thread_forPublicRef() { return propertyGridUpdate; }
 
         #endregion
 
@@ -337,7 +348,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void AsyncRead_Click(object sender, EventArgs e)
         {
-            
+
 
 
         }
@@ -421,8 +432,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             ViewAdjust();
 
             opc.ServerDetection();
-            opc.ServerConnection();     
-    }
+            opc.ServerConnection();
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -451,11 +462,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Thread.Sleep(3);
 
             // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
-            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive)
+            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive || propertyGridUpdate.IsAlive)
             {
                 mThread.Abort();
                 mThread_two.Abort();
                 CAM1_DataView.Abort();
+                CAM2_DataView.Abort();
+                propertyGridUpdate.Abort();
             }
 
             DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
@@ -505,21 +518,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
 
-                    //c1_gridView.RefreshGrid();
-                    //result.CAM1_DetectTempThreshold();
-
-                    //CompareMaxTemperature(imgView.CAM1_TemperatureArr);
-
-                    c1_gridView.RefreshGrid();
-                    result.CAM1_DetectTempThreshold();
-
+                    acq_index++;
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);
 
-                    acq_index++;
+                    //propertyGrid1.Invalidate();
+                    //propertyGrid1.SelectedObject = customGrid;
 
-                    //propertyGrid1.Refresh();
-                    propertyGrid1.Invalidate();
-                    
 
                     isDrawnCAM1Image = true;
 
@@ -549,25 +553,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                        /// 새로운 데이터가 있으며 종료의 명령이 없을 시
                         return;                                                                                     /// UpDate Data !!
 
-                    //Bitmap bmp = GET_BITMAP(pIRDX_Array[1]);// GET_BITMAP_TOW(hIRDX_two);                                                         /// 카메라의 핸들값을 넘겨 화면에 뿌려줌
-                    //bmp = new Bitmap((Image)bmp, new Size(c2_img.pictureBox1.Width, c2_img.pictureBox1.Height));
-                    //Image img = c2_img.pictureBox1.Image;
-                    //c2_img.pictureBox1.Image = (Image)bmp;
-
                     //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
 
                     imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
-                    //imageView.CAM2_DrawImage(pIRDX_Array[1], c2_img.pictureBox1, imageView.CAM2_ClickedPosition, imageView.CAM2_POICount);
-                    //imageView.Test_DrawImage(pIRDX_Array[1], c2_img.pictureBox1, imageView.CAM2_ClickedPosition, imageView.CAM2_POICount);
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
 
-                    c2_chartView.UpdateData();
-                    c2_gridView.CAM2_RefreshGrid();
-                    ////result.DetectTempThreshold();
-                    result.CAM2_DetectTempThreshold();
-
                     CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
+
                     VerifyOPC();
+
+                    isDrawnCAM2Image = true;
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
@@ -587,12 +582,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 else if (isDrawnCAM1Image)
                 {
-                    //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
-                    //c1_chartView.CheckCurrentCount(imgView.CAM1_compPOICount, imgView.CAM1_POICount);
-                    lock (this)
-                    {
-                        c1_chartView.UpdateData();
-                    }
+                    c1_gridView.RefreshGrid();
+                    result.CAM1_DetectTempThreshold();
                     isDrawnCAM1Image = false;
                 }
             }
@@ -608,55 +599,53 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
                 else if (isDrawnCAM2Image)
                 {
+                    c2_gridView.CAM2_RefreshGrid();
+                    result.CAM2_DetectTempThreshold();
                     isDrawnCAM2Image = false;
                 }
             }
         }
 
-        private static Bitmap GET_BITMAP(IntPtr hIRDX)
+        StringBuilder s = new StringBuilder(64);
+
+        private void UpdateProperty()
         {
-            IntPtr pbitsImage = new IntPtr();
-            IntPtr bmiImage = new IntPtr();
-            ushort width = 0, height = 0;
-            if (DIASDAQ.DDAQ_IRDX_IMAGE_GET_BITMAP(hIRDX, ref width, ref height, out pbitsImage, out bmiImage) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            while (true)
             {
-                return null; // failure
-            }
+                if (mThread.IsAlive)
+                {
+                    s.Clear();
 
-            MethodInfo mi = typeof(Bitmap).GetMethod("FromGDIplus", BindingFlags.Static | BindingFlags.NonPublic);
+                    #region GetDeviceTemperature
+                    float temp = 0.0f; bool ok = false;
+                    DIASDAQ.DDAQ_IRDX_DEVICE_GET_DETECTORTEMP(pIRDX_Array[0], ref temp, ref ok);
+                    s.Clear();
+                    s.Append(temp + " ℃");
+                    customGrid.DetectorTemperature = s.ToString();
+                    
+                    DIASDAQ.DDAQ_IRDX_DEVICE_GET_CAMERATEMP(pIRDX_Array[0], ref temp, ref ok);
+                    s.Clear();
+                    s.Append(temp + " ℃");
+                    customGrid.CameraTemperature = s.ToString();
+                    #endregion
 
-            if (mi == null)
-            {
-                return null; // permission problem 
-            }
+                    #region GetDeviceTimestamp
+                    int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0, msec = 0;
+                    if ((DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_TIMESTAMP(pIRDX_Array[0], ref year, ref month, ref day, ref hour, ref min, ref sec, ref msec) !=
+                        DIASDAQ.DDAQ_ERROR.NO_ERROR)) return;
 
-            IntPtr pBmp = IntPtr.Zero;
-            int status = DIASDAQ.GDIPLUS_GdipCreateBitmapFromGdiDib(bmiImage, pbitsImage, out pBmp);
+                    s.Clear();
+                    s.Append(year + "-" + month + "-" + day);
+                    customGrid.Date = s.ToString();
+                    s.Clear();
+                    s.Append(hour + ":" + min + ":" + sec + ":" + msec);
+                    customGrid.Time = s.ToString();
+                    #endregion
 
-            if ((status == 0) && (pBmp != IntPtr.Zero))
-            {
-                return (Bitmap)mi.Invoke(null, new object[] { pBmp }); // success 
-            }
-            else
-            {
-                return null; // failure
+                    
+                }
             }
         }
-
-        //private void run_update()
-        //{
-        //    while (_pauseEvent.WaitOne())
-        //    {
-        //        c1_chartView.UpdateData();
-        //        c1_gridView.RefreshGrid();
-        //        result.CAM1_DetectTempThreshold();
-        //        Pause();
-        //        Thread.Sleep(100);
-        //        _pauseEvent.WaitOne();
-        //    }
-        //}
-
-
 
         #endregion
 
@@ -1203,6 +1192,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 result.OPCConnectAlarm.ForeColor = Color.Red;
             }
+
+            if (OPCTimerActivated) result.OPCActiveAlarm.ForeColor = Color.Green;
+            else result.OPCActiveAlarm.ForeColor = Color.Red;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1217,6 +1209,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 opc.OPC_Read();
                 opc.OPC_Write();
+                if (mThread.IsAlive)
+                {
+                    c1_chartView.UpdateData();
+                }
+                if (mThread_two.IsAlive)
+                {
+                    c2_chartView.UpdateData();
+                }
             }
             else
             {
@@ -1225,10 +1225,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             
         }
 
+        private bool OPCTimerActivated = false;
         public void InitOPCTimer()
         {
             OPCTimer.Interval = 1000;
             OPCTimer.Tick += new EventHandler(OPC_DataSending);
+            OPCTimerActivated = true;
             OPCTimer.Start();
         }
 
@@ -1490,5 +1492,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             dataplayerTimer.Start();
             isTimerRunning = true;
         }
+
     }
 }

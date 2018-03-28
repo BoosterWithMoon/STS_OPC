@@ -112,5 +112,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Close();
         }
 
+        private void SetThreshold_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                AcceptButton_Click(sender, e);
+            }
+        }
+
     }
 }

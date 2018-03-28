@@ -18,10 +18,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 handle(this, new PropertyChangedEventArgs(args));
             }
-            //if(PropertyChanged != null)
-            //{
-            //    PropertyChanged(this, new PropertyChangedEventArgs(args));
-            //}
         }
 
         MainForm main;
@@ -85,17 +81,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         #endregion
 
+
+        
+
         #region DefineAttribute_File
 
-        [Category("\t\t\t\t\t\t\tFile"), DefaultValue("0"), ReadOnly(true)]
-
+        [Category("\t\t\t\t\t\t\tFile"), DefaultValue("0"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         public uint NumberOfDataRecord
         {
             get { return File_numberOfDataRecord; }
             set { File_numberOfDataRecord = value; }
         }
 
-        [Category("\t\t\t\t\t\t\tFile"), DefaultValue("0"), ReadOnly(true)]
+        [Category("\t\t\t\t\t\t\tFile"), DefaultValue("0"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         public uint CurrentDataRecord
         {
             get { return File_currentDataRecord; }
@@ -120,18 +118,35 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             set { Camera_SerialNumber = value; }
         }
 
-        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true)]
+        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         public string DetectorTemperature
         {
             get { return Camera_DetectorTemperature; }
-            set { Camera_DetectorTemperature = value; }
+            set
+            {
+                Camera_DetectorTemperature = value;
+                if (PropertyChanged != null)
+                {
+                    //PropertyChanged(this, null);
+                    OnPropertyChanged("DetectorTemperature");
+                }
+            }
         }
 
-        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true)]
+        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         public string CameraTemperature
         {
             get { return Camera_CameraTemperature; }
-            set { Camera_CameraTemperature = value; }
+            set
+            {
+                Camera_CameraTemperature = value;
+                if (PropertyChanged != null)
+                {
+                    //PropertyChanged(this, null);
+                    OnPropertyChanged("DetectorTemperature");
+
+                }
+            }
         }
 
         #endregion
@@ -150,55 +165,30 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #region DefineAttribute_DataAcquisition
         
         
-        [Category("\t\t\t\tData Acquisition"),
-        ReadOnly(true),
-        RefreshProperties(RefreshProperties.All)            ]
+        [Category("\t\t\t\tData Acquisition"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         //[RefreshProperties(RefreshProperties.All)]
         //[NotifyParentProperty(true)]
         public string Date
         {
-            get
-            {
-                //string tmpStr = string.Empty;
-                string tmpStr = DataAcq_Date;
-                //string strDate = string.Empty;
-
-                //if (main.device_running == true)
-                //{
-                //    int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0, msec = 0;
-
-                //    if ((DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_TIMESTAMP(main.pIRDX_Array[0], ref year, ref month, ref day, ref hour, ref min, ref sec, ref msec) !=
-                //        DIASDAQ.DDAQ_ERROR.NO_ERROR)) return "";
-
-                //    strDate = "" + year + "-" + month + "-" + day;
-
-                //    tmpStr = strDate;
-                //}
-                //else
-                //    tmpStr = "";
-
-                return tmpStr;
-            }
+            get { return DataAcq_Date; }
             set
             {
-                value = DataAcq_Date;
+                DataAcq_Date = value;
+                if (PropertyChanged != null)
+                {
+                    //PropertyChanged(this, null);
+                    OnPropertyChanged("DetectorTemperature");
+
+                }
             }
         }
 
-        [CategoryAttribute("\t\t\t\tData Acquisition"),
-        ReadOnlyAttribute(true)]
+        [CategoryAttribute("\t\t\t\tData Acquisition"), ReadOnlyAttribute(true), RefreshProperties(RefreshProperties.All)]
         public string Time
         {
             get
             {
                 string tmpStr = string.Empty;
-
-
-                //s.Clear();
-                //s.Append(hour + ":" + min + ":" + sec + ":" + msec);
-                //DataAcq_Time = s.ToString();
-
-
 
                 if (main.DetectedDevices != 0)
                     tmpStr = DataAcq_Time;
@@ -207,7 +197,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 return tmpStr;
             }
-            set { }
+            set
+            {
+                DataAcq_Time = value;
+                if (PropertyChanged != null)
+                {
+                    //PropertyChanged(this, null);
+                    OnPropertyChanged("DetectorTemperature");
+
+                }
+            }
         }
    
 
@@ -994,8 +993,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DIASDAQ.DDAQ_ERROR.NO_ERROR)) return;
 
             s.Clear();
-            //s.Append(year + "-" + month + "-" + day);
-            s.Append("1900-01-01");
+            s.Append(year + "-" + month + "-" + day);
+            //s.Append("1900-01-01");
             DataAcq_Date = s.ToString();
 
             s.Clear();
@@ -1202,7 +1201,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 return new StandardValuesCollection(NumofColorData._datas);
             }
         }
-
 
     }
 }

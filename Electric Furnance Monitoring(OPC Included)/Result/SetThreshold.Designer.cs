@@ -491,6 +491,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SetThreshold";
             this.Load += new System.EventHandler(this.SetThreshold_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SetThreshold_KeyDown);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
