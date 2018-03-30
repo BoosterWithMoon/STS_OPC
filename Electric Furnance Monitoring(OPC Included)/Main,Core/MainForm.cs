@@ -311,77 +311,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        private int RandomNumber(int MaxNumber, int MinNumber)
-        {
-            //initialize random number generator
-            Random r = new Random(System.DateTime.Now.Millisecond);
-
-            //if passed incorrect arguments, swap them
-            //can also throw exception or return 0
-
-            if (MinNumber > MaxNumber)
-            {
-                int t = MinNumber;
-                MinNumber = MaxNumber;
-                MaxNumber = t;
-            }
-
-            return r.Next(MinNumber, MaxNumber);
-        }
-
-
-        private void DisconnectOPCServer()
-        {
-            // Call Disconnect API method:
-            //try
-            //{
-            //    if (DAServer.IsConnected)
-            //    {
-            //        DAServer.Disconnect();
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Handled Disconnect exception. Reason: " + e.Message);
-            //}
-        }
-
-        private void AsyncRead_Click(object sender, EventArgs e)
-        {
-
-
-
-        }
-
-        public void daServerMgt_ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
-        {
-            DaServerMgt.ReadCompletedEventHandler RCevHndlr = new DaServerMgt.ReadCompletedEventHandler(ReadCompleted);
-            IAsyncResult returnValue;
-            object[] RCevHndlrArray = new object[4];
-            RCevHndlrArray[0] = transactionHandle;
-            RCevHndlrArray[1] = allQualitiesGood;
-            RCevHndlrArray[2] = noErrors;
-            RCevHndlrArray[3] = itemValues;
-            returnValue = BeginInvoke(RCevHndlr, RCevHndlrArray);
-        }
-
-        public void ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
-        {
-            int itemIndex = (int)itemValues[0].ClientHandle;
-
-            if (itemValues[0].ResultID.Succeeded)
-            {
-                if (itemValues[0].Value == null)
-                {
-                    OPC_textBox1.Text = "Unknown";
-                }
-                else
-                {
-                    OPC_textBox1.Text = itemValues[0].Value.ToString();
-                }
-            }
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadConfiguration();
@@ -520,11 +449,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     acq_index++;
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);
-
+                    result.CAM1_DetectTemp_ForOPC();
                     //propertyGrid1.Invalidate();
                     //propertyGrid1.SelectedObject = customGrid;
-
-
+                    
                     isDrawnCAM1Image = true;
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)             /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
@@ -559,7 +487,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
 
                     CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
-
+                    result.CAM2_DetectTemp_ForOPC();
                     VerifyOPC();
 
                     isDrawnCAM2Image = true;
@@ -699,7 +627,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DIASDAQ.DDAQ_IRDX_FILE_GET_NUMDATASETS(pIRDX_Array[0], ref numDataSet);
 
             DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
-            MessageBox.Show(position.ToString());
+            //MessageBox.Show(position.ToString());
 
             if (position + 1 == numDataSet)
             {

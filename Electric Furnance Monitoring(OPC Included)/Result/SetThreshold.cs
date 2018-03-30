@@ -14,8 +14,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         MainForm main;
         ResultView result;
         ImageView imgView;
-        TextBox[] CAM1_Threshold;
-        TextBox[] CAM2_Threshold;
+        public TextBox[] CAM1_Threshold;
+        public TextBox[] CAM2_Threshold;
 
         public SetThreshold(MainForm _main)
         {
@@ -41,18 +41,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 CAM1_Threshold[i].Enabled = false;
                 CAM2_Threshold[i].Enabled = false;
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (imgView.CAM1_TemperatureArr[i] != 0)
-                {
-                    CAM1_Threshold[i].Enabled = true;
-                }
-                if (imgView.CAM2_TemperatureArr[i] != 0)
-                {
-                    CAM2_Threshold[i].Enabled = true;
-                }
             }
         }
 

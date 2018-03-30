@@ -23,11 +23,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public Color[] CAM1_POIConnected = new Color[10];
         public float[] CAM1_ThresholdTemp = new float[10];
         bool[] CAM1_verify = new bool[10];
+        public bool[] CAM1_isTempPM10 = new bool[10];
+        public bool[] CAM1_isTempUpper10 = new bool[10];
 
         public Label[] CAM2_LabelArray = new Label[10];
         public Color[] CAM2_POIConnected = new Color[10];
         public float[] CAM2_ThresholdTemp = new float[10];
         bool[] CAM2_verify = new bool[10];
+        public bool[] CAM2_isTempPM10 = new bool[10];
+        public bool[] CAM2_isTempUpper10 = new bool[10];
 
         public static Color NotConnected = Color.Yellow;
         public static Color Connected_NoWarning = Color.Green;
@@ -104,6 +108,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 CAM1_LabelArray[i].ForeColor = NotConnected;
                 CAM1_verify[i] = false;
+                CAM1_isTempPM10[i] = false;
+                CAM1_isTempUpper10[i] = false;
+                CAM2_isTempPM10[i] = false;
+                CAM2_isTempUpper10[i] = false;
             }
 
             #endregion
@@ -248,6 +256,59 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
+        public void CAM1_DetectTemp_ForOPC()
+        {
+            for (int i = 0; i < imgView.CAM1_POICount; i++)
+            {
+                if (thresholdForm.CAM1_Threshold[i].Enabled == true)
+                {
+                    // 현재 온도가 Threshold의 +-10도 범위 안에 있으면
+                    if (CAM1_ThresholdTemp[i] - 10 <= imgView.CAM1_TemperatureArr[i]
+                        && imgView.CAM1_TemperatureArr[i] <= CAM1_ThresholdTemp[i] + 10)
+                    {
+                        CAM1_isTempPM10[i] = true;  // true
+                        CAM1_isTempUpper10[i] = false;
+                    }
+                    // 현재 온도가 Threshold의 +10도보다 높으면
+                    else if (CAM1_ThresholdTemp[i] + 10 < imgView.CAM1_TemperatureArr[i])
+                    {
+                        CAM1_isTempPM10[i] = false;
+                        CAM1_isTempUpper10[i] = true;   // true
+                    }
+                    else
+                    {
+                        CAM1_isTempPM10[i] = false;     // 그도저도 아니면 false
+                        CAM1_isTempUpper10[i] = false;
+                    }
+                }
+            }
+        }
+
+        public void CAM2_DetectTemp_ForOPC()
+        {
+            for (int k = 0; k < imgView.CAM2_POICount; k++)
+            {
+                if (thresholdForm.CAM2_Threshold[k].Enabled == true)
+                {
+                    if (CAM2_ThresholdTemp[k] - 10 <= imgView.CAM2_TemperatureArr[k]
+                        && imgView.CAM2_TemperatureArr[k] <= CAM2_ThresholdTemp[k] + 10)
+                    {
+                        CAM2_isTempPM10[k] = true;
+                        CAM2_isTempUpper10[k] = false;
+                    }
+                    else if (CAM2_ThresholdTemp[k] + 10 < imgView.CAM2_TemperatureArr[k])
+                    {
+                        CAM2_isTempPM10[k] = false;
+                        CAM2_isTempUpper10[k] = true;
+                    }
+                    else
+                    {
+                        CAM2_isTempPM10[k] = false;
+                        CAM2_isTempUpper10[k] = false;
+                    }
+                }
+            }
+        }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
