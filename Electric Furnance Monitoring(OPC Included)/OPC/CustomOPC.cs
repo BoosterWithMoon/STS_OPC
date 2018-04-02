@@ -8,6 +8,32 @@ using System.Runtime.InteropServices;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
+    #region StringEnumDefinition
+    public class StringValue : System.Attribute
+    {
+        private string _value;
+
+        public StringValue(string value) { _value = value; }
+        public string Value { get { return _value; } }
+    }
+
+    public static class StringEnum
+    {
+        public static string GetStringValue(ReadItemIDs value)
+        {
+            string output = null;
+
+            Type type = value.GetType();
+
+            _FieldInfo fi = type.GetField(value.ToString());
+            StringValue[] attrs = fi.GetCustomAttributes(typeof(StringValue), false) as StringValue[];
+
+            if (attrs.Length > 0) { output = attrs[0].Value; }
+            return output;
+        }
+    }
+    #endregion
+
     public enum ReadingArrayNo
     {
         CurrentSteelNo = 0,     // DWORD
@@ -15,15 +41,46 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CurrentSteelKind = 2,   // String
 
         // BOOL
-        Charging1_Progress = 3,
-        Melting1_Progress = 4,
-        Charging2_Progress = 5,
-        Melting2_Progress = 6,
-        Charging3_Progress = 7,
-        Melting3_Progress = 8,
-        Stand_Steel_Progress = 9,
-        Tapping_Progress = 10,
-        O2Lance_Blowing = 11
+        //Charging1_Progress = 3,
+        //Melting1_Progress = 4,
+        //Charging2_Progress = 5,
+        //Melting2_Progress = 6,
+        //Charging3_Progress = 7,
+        //Melting3_Progress = 8,
+        //Stand_Steel_Progress = 9,
+        //Tapping_Progress = 10,
+        //O2Lance_Blowing = 11
+        BoolArray=3
+    }
+
+    public enum ReadItemIDs
+    {
+        [StringValue(".R_CurrentSteelNo")]
+        CurrentSteelNo,
+        [StringValue(".R_Slope_Angle")]
+        CurrentAngle,
+        [StringValue(".R_CurrentSteelKind")]
+        CurrentSteelKind,
+        //[StringValue(".R_Charging1_Progress")]
+        //Charging1_Progress,
+        //[StringValue(".R_Melting1_Progress")]
+        //Melting1_Progress,
+        //[StringValue(".R_Charging2_Progress")]
+        //Charging2_Progress,
+        //[StringValue(".R_Melting2_Progress")]
+        //Melting2_Progress,
+        //[StringValue(".R_Charging3_Progress")]
+        //Charging3_Progress,
+        //[StringValue(".R_Melting3_Progress")]
+        //Melting3_Progress,
+        //[StringValue(".R_Stand_Steel_Progress")]
+        //StandSteelProgress,
+        //[StringValue(".R_Tapping_Progress")]
+        //TappingProgress,
+        //[StringValue(".R_O2_Lance_Blowing")]
+        //O2LanceBlowing
+        [StringValue(".R_BoolArray")]
+        BooleanArray
     }
 
     public enum WritingArrayNo
@@ -135,6 +192,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Read_Stand_Steel_Progress = 110,
         Read_Tapping_Progress = 111,
         Read_O2Lance_Blowing = 112,
+
+        Read_BoolArray = 113,
         #endregion
 
         #region WritingHandle
@@ -240,21 +299,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         bool connectFailed;
         OpcServerEnum serverEnum;
 
-        // Kepware가 설치된 컴퓨터의 주소
-        string nodeName = "localhost";
         bool returnAllServers = false;
         public bool detected = false;
         int detectedIndex = 0;
         ServerCategory[] serverCategories = { ServerCategory.OPCDA };
 
-        //ClientHandleValue handleValue;
-
         // 연결시킬 OPC 태그가 존재하는 채널 / Device ID
         private static string Channel = "Channel4";
         private static string Device = ".Device1";
 
+        // Kepware가 설치된 컴퓨터의 주소
+        string nodeName = "localhost";
+
         // Read 또는 Write할 OPC 태그의 개수
-        private static int ReadTagCount = 12;
+        private static int ReadTagCount = 4;
         private static int WriteTagCount = 83;
 
         public int CurrentAngle;
@@ -263,11 +321,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ImageView imgView;
 
         ItemIdentifier[] Read_itemIdentifiers;
-
         ItemIdentifier[] Write_itemIdentifiers;
         ItemValue[] Write_itemValues;
-
-        public System.Threading.Timer DataTransferTimer;
 
         public CustomOPC(MainForm _main)
         {
@@ -669,41 +724,44 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Read_itemIdentifiers[i] = new ItemIdentifier();
             }
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ItemName = Channel + Device + ".R_CurrentSteelNo";
+            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ItemName = Channel + Device + ".R_CurrentSteelNo";
+            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelNo);
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ClientHandle = ClientHandleValue.Read_CurrentSteelNo;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ItemName = Channel + Device + ".R_Slope_Angle";
+            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentAngle);
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ClientHandle = ClientHandleValue.Read_CurrentAngle;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ItemName = Channel + Device + ".R_CurrentSteelKind";
+            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelKind);
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ClientHandle = ClientHandleValue.Read_CurrentSteelKind;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ItemName = Channel + Device + ".R_Charging1_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ClientHandle = ClientHandleValue.Read_Charging1_Progress;
+            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.BooleanArray);
+            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ClientHandle = ClientHandleValue.Read_BoolArray;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Charging1_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ClientHandle = ClientHandleValue.Read_Charging1_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting1_Progress].ItemName = Channel + Device + ".R_Melting1_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting1_Progress].ClientHandle = ClientHandleValue.Read_Melting1_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting1_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Melting1_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting1_Progress].ClientHandle = ClientHandleValue.Read_Melting1_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging2_Progress].ItemName = Channel + Device + ".R_Charging2_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging2_Progress].ClientHandle = ClientHandleValue.Read_Charging2_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging2_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Charging2_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging2_Progress].ClientHandle = ClientHandleValue.Read_Charging2_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting2_Progress].ItemName = Channel + Device + ".R_Melting2_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting2_Progress].ClientHandle = ClientHandleValue.Read_Melting2_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting2_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Melting2_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting2_Progress].ClientHandle = ClientHandleValue.Read_Melting2_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging3_Progress].ItemName = Channel + Device + ".R_Charging3_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Charging3_Progress].ClientHandle = ClientHandleValue.Read_Charging3_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging3_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Charging3_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Charging3_Progress].ClientHandle = ClientHandleValue.Read_Charging3_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting3_Progress].ItemName = Channel + Device + ".R_Melting3_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Melting3_Progress].ClientHandle = ClientHandleValue.Read_Melting3_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting3_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Melting3_Progress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Melting3_Progress].ClientHandle = ClientHandleValue.Read_Melting3_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Stand_Steel_Progress].ItemName = Channel + Device + ".R_Stand_Steel_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Stand_Steel_Progress].ClientHandle = ClientHandleValue.Read_Stand_Steel_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Stand_Steel_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.StandSteelProgress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Stand_Steel_Progress].ClientHandle = ClientHandleValue.Read_Stand_Steel_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.Tapping_Progress].ItemName = Channel + Device + ".R_Tapping_Progress";
-            Read_itemIdentifiers[(int)ReadingArrayNo.Tapping_Progress].ClientHandle = ClientHandleValue.Read_Tapping_Progress;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Tapping_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.TappingProgress);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.Tapping_Progress].ClientHandle = ClientHandleValue.Read_Tapping_Progress;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.O2Lance_Blowing].ItemName = Channel + Device + ".R_O2_Lance_Blowing";
-            Read_itemIdentifiers[(int)ReadingArrayNo.O2Lance_Blowing].ClientHandle = ClientHandleValue.Read_O2Lance_Blowing;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.O2Lance_Blowing].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.O2LanceBlowing);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.O2Lance_Blowing].ClientHandle = ClientHandleValue.Read_O2Lance_Blowing;
         }
 
         public void OPC_Read()
@@ -721,7 +779,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // Check result for called API
             if (returnCode != ReturnCode.SUCCEEDED)
             {
-                System.Windows.Forms.MessageBox.Show("ReadAsync failed with error: " + returnCode.ToString() /*System.Convert.ToString(itemIdentifiers[0].ResultID.Code, 16) + "\r\n" + "Description: " + itemIdentifiers[0].ResultID.Description*/);
+                System.Windows.Forms.MessageBox.Show("ReadAsync failed with error: " + returnCode.ToString());
             }                
         }
 
@@ -740,48 +798,40 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
         {
             object[] ReadingResult = new object[itemValues.Length];
+            bool[] ChargingStatus = new bool[10];
+
+            // DWORD = System.Uint32(uint), WORD = System.UInt16(ushort), 문자형 = System.String, BooleanArray = System.Boolean[]
 
             ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
             ReadingResult[1] = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
             ReadingResult[2] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
-            
-            // BOOL형 변수 처리는 어떻게해야하나 고민해야 함
-            ReadingResult[3] = itemValues[(int)ReadingArrayNo.Charging1_Progress].Value;
-            ReadingResult[4] = itemValues[(int)ReadingArrayNo.Melting1_Progress].Value;
-            ReadingResult[5] = itemValues[(int)ReadingArrayNo.Charging2_Progress].Value;
-            ReadingResult[6] = itemValues[(int)ReadingArrayNo.Melting2_Progress].Value;
-            ReadingResult[7] = itemValues[(int)ReadingArrayNo.Charging3_Progress].Value;
-            ReadingResult[8] = itemValues[(int)ReadingArrayNo.Melting3_Progress].Value;
-            ReadingResult[9] = itemValues[(int)ReadingArrayNo.Stand_Steel_Progress].Value;
-            ReadingResult[10] = itemValues[(int)ReadingArrayNo.Tapping_Progress].Value;
-            ReadingResult[11] = itemValues[(int)ReadingArrayNo.O2Lance_Blowing].Value;
-            
-            // DWORD는 System.Uint32(uint), WORD는 System.UInt16(ushort), 문자형은 System.String으로 받아와진다.
+            ReadingResult[3] = itemValues[(int)ReadingArrayNo.BoolArray].Value;
+
             //string b1 = ReadingResult[0].GetType().ToString();
             //string b2 = ReadingResult[1].GetType().ToString();
             //string b3 = ReadingResult[2].GetType().ToString();
+            //string b4 = ReadingResult[3].GetType().ToString();
 
             // DataType을 비교해서
-            for (int i=0; i<itemValues.Length; i++)
+            for (int i = 0; i < itemValues.Length; i++)
             {
-                if(ReadingResult[i].GetType().ToString() == "System.String")    // string형이면 강종이고
-                {
-                    result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString();
-                }
-                else if(ReadingResult[i].GetType().ToString() == "System.UInt16") /*&&*/     // ushort형이면 현재각도
-                    //Convert.ToUInt16(ReadingResult[i]) <= 90)
-                {
-                    CurrentAngle = Convert.ToUInt16(ReadingResult[i]);
-                }
-                else if(ReadingResult[i].GetType().ToString() == "System.UInt32") /*&&*/     // uint형이면 강번으로 처리
-                    //Convert.ToUInt16(ReadingResult[i]) > 90)
+                if (ReadingResult[i].GetType().ToString() == "System.Boolean[]") { ChargingStatus = (bool[])ReadingResult[i]; }
+                else if (ReadingResult[i].GetType().ToString() == "System.String") { result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString(); }
+                else if (ReadingResult[i].GetType().ToString() == "System.UInt16") { CurrentAngle = Convert.ToUInt16(ReadingResult[i]); }
+                else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
                 {
                     main.textBox1.Text = ReadingResult[i].ToString();
                     main.textBox2.Text = ReadingResult[i].ToString();
                 }
             }
 
-
+            //    StringBuilder s = new StringBuilder(50);
+            //    s.Clear();
+            //    for(int i=0; i<10; i++)
+            //    {
+            //        s.Append(ChargingStatus[i] + " ");
+            //    }
+            //    System.Windows.Forms.MessageBox.Show(s.ToString());
         }
 
         private int RandomNumber(int MaxNumber, int MinNumber)
@@ -801,15 +851,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             return r.Next(MinNumber, MaxNumber);
         }
-
-        //System.Threading.Timer DataTransferTimer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteCallback), null, 0, 1000);
-        public bool isOPCTransferring = false;
-
-        static void WriteCallback(object state)
-        {
-            
-        }
-
 
     }
 }

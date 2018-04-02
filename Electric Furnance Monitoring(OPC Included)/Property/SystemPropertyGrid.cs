@@ -118,35 +118,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             set { Camera_SerialNumber = value; }
         }
 
-        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
+        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public string DetectorTemperature
         {
             get { return Camera_DetectorTemperature; }
-            set
-            {
-                Camera_DetectorTemperature = value;
-                if (PropertyChanged != null)
-                {
-                    //PropertyChanged(this, null);
-                    OnPropertyChanged("DetectorTemperature");
-                }
-            }
+            set { Camera_DetectorTemperature = value; }
         }
 
-        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
+        [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public string CameraTemperature
         {
             get { return Camera_CameraTemperature; }
-            set
-            {
-                Camera_CameraTemperature = value;
-                if (PropertyChanged != null)
-                {
-                    //PropertyChanged(this, null);
-                    OnPropertyChanged("DetectorTemperature");
-
-                }
-            }
+            set { Camera_CameraTemperature = value; }
         }
 
         #endregion
@@ -1090,51 +1075,39 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //main.propertyGrid1.Invalidate();
         }
 
-        /*public void UpdateDataSet()
+        public void UpdateDataSet()
         {
-            //return if document is not ready now
-            if (this == null) return;
-
-            bool ok = false;
-            float temp1 = 0.0f, temp2 = 0.0f;
-            //float IRDX_transmisstion = 0.0f, IRDX_emissivity = 0.0f;
-            //ushort Pos = 0;
-            //ushort Status = 0;
-
-            //string s1 = "", s2 = "";
-            //string strDate = "", strTime = "", strPos = "";
-
-            //uint PG_CurDataRecord = 0;
-
-            #region File
-
-            DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(main.pIRDX, ref File_currentDataRecord);
-            main.CurDataRecord = File_currentDataRecord;
-
-            #endregion
-
-            #region Camera
-
-            DIASDAQ.DDAQ_IRDX_DEVICE_GET_DETECTORTEMP(main.pIRDX, ref temp1, ref ok);
-            DIASDAQ.DDAQ_IRDX_DEVICE_GET_CAMERATEMP(main.pIRDX, ref temp2, ref ok);
-
             StringBuilder s = new StringBuilder(20);
-            s.Append(temp1.ToString() + " ℃");
+
+            float temp = 0.0f;
+            bool ok = false;
+
+            if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_DETECTORTEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
+            s.Clear();
+            s.Append(temp.ToString() + " ℃");
             Camera_DetectorTemperature = s.ToString();
 
+            if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_CAMERATEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
             s.Clear();
-            s.Append(temp2.ToString() + " ℃");
+            s.Append(temp.ToString() + " ℃");
             Camera_CameraTemperature = s.ToString();
 
-            #endregion
+            int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0, msec = 0;
 
-            #region DataAcquisition
+            if ((DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_TIMESTAMP(main.pIRDX_Array[0], ref year, ref month, ref day, ref hour, ref min, ref sec, ref msec) !=
+                DIASDAQ.DDAQ_ERROR.NO_ERROR)) return;
 
-            // date, time, index만 refresh 해주면 됨
+            s.Clear();
+            s.Append(year + "-" + month + "-" + day);
+            //s.Append("1900-01-01");
+            DataAcq_Date = s.ToString();
 
+            s.Clear();
+            s.Append(hour + ":" + min + ":" + sec + ":" + msec);
+            DataAcq_Time = s.ToString();
 
-            #endregion
-        }*/
+            
+        }
 
 
         internal class ComboData

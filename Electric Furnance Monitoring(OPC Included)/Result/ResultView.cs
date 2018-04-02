@@ -58,11 +58,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void ShowingAreaAdjust()
         {
-            //AlertToConnection.SplitterDistance = main.split_CAM1Info.Panel1.Height + main.split_CAM1Info.Panel2.Height + main.split_CAM1ChartGrid.Panel1.Height;
             AlertToConnection.SplitterDistance = 750;
         }
-
-        
 
         System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         private void LoadConfiguration_Temperature()

@@ -18,7 +18,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread thr1, thr2;
         Thread support_thr1;
         Thread support_thr2;
-        Thread updateProperty;
 
         public bool isDetected = true;
         public string[] DeviceID;
@@ -184,14 +183,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             main.LogStart_toolStripButton.Enabled = true;
 
+            main.MoveFocus_FarStep.Enabled = true;
+            main.MoveFocus_NearStep.Enabled = true;
+            main.moveToFarStepToolStripMenuItem.Enabled = true;
+            main.moveToNearStepToolStripMenuItem.Enabled = true;
+
             thr1 = (Thread)main.Thread1_forPublicRef();
             thr1.Start();
 
             support_thr1 = (Thread)main.Support_Thread1_forPublicRef();
             support_thr1.Start();
-
-            //updateProperty = (Thread)main.UpdatePropertyGrid_Thread_forPublicRef();
-            //updateProperty.Start();
 
             if (NDF_DetectedDevices != 1)
             {

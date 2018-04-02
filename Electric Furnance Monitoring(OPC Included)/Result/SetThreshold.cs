@@ -37,11 +37,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_Threshold[i].Text = result.CAM2_ThresholdTemp[i].ToString();
             }
 
-            for (int i = 0; i < 10; i++)
-            {
-                CAM1_Threshold[i].Enabled = false;
-                CAM2_Threshold[i].Enabled = false;
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    CAM1_Threshold[i].Enabled = false;
+            //    CAM2_Threshold[i].Enabled = false;
+            //}
+            for(int i=0; i<imgView.CAM1_POICount; i++) { CAM1_Threshold[i].Enabled = true; }
+            for(int i=0; i<imgView.CAM2_POICount; i++) { CAM2_Threshold[i].Enabled = true; }
         }
 
         private void ConnectionTextbox()
@@ -73,11 +75,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 // TextAlign 지정
                 CAM1_Threshold[k].TextAlign = HorizontalAlignment.Center;
                 CAM2_Threshold[k].TextAlign = HorizontalAlignment.Center;
-
-                // Tempeorary Initialize Value
-                //CAM1_Threshold[k].Text = 20.ToString();
-                //CAM2_Threshold[k].Text = 20.ToString();
-                //CAM1_Threshold[k].Text = result.CAM1_ThresholdTemp[0].ToString();
 
                 CAM1_Threshold[k].Enabled = false;
                 CAM2_Threshold[k].Enabled = false;

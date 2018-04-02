@@ -24,16 +24,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         MainForm main;
         CAM1_ImageView c1_imgView;
         CAM2_ImageView c2_imgView;
-        public Image img;
+        //public Image img;
         public Bitmap bmp;
         public Bitmap CAM2_bmp;
         public string pointTemperatureData = "";
         public string CAM2_pointTemperatureData = "";
         public TemperatureShowLocation TextLocation = TemperatureShowLocation.DEFAULT;
 
-        public Bitmap backbuffer;
+        //public Bitmap backbuffer;
 
-        private Rectangle oldRect, currentRect;
+        //private Rectangle oldRect, currentRect;
 
         public Graphics g;
         public Graphics CAM2_g;

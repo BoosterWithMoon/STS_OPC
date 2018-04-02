@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.OPC_textBox1 = new System.Windows.Forms.TextBox();
             this.OPC_textBox2 = new System.Windows.Forms.TextBox();
@@ -66,6 +67,8 @@
             this.NextRecord_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.KeepMoving_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Pause_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.MoveFocus_NearStep = new System.Windows.Forms.ToolStripButton();
+            this.MoveFocus_FarStep = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.DrawPOI_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.MovePOI_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -75,8 +78,7 @@
             this.LogStop_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.도움말ToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.MoveFocus_NearStep = new System.Windows.Forms.ToolStripButton();
-            this.MoveFocus_FarStep = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.split_ViewToInfo = new System.Windows.Forms.SplitContainer();
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
@@ -96,7 +98,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -124,6 +126,7 @@
             this.split_CAM2Info.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2ChartGrid)).BeginInit();
             this.split_CAM2ChartGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // OPC_textBox1
@@ -208,6 +211,7 @@
             this.openIRDXToolStripMenuItem.Name = "openIRDXToolStripMenuItem";
             this.openIRDXToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.openIRDXToolStripMenuItem.Text = "Open IRDX";
+            this.openIRDXToolStripMenuItem.Click += new System.EventHandler(this.openIRDXToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -236,6 +240,7 @@
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
             this.startToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.startToolStripMenuItem.Text = "Start";
+            this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem
             // 
@@ -243,6 +248,7 @@
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // focusToolStripMenuItem
             // 
@@ -259,6 +265,7 @@
             this.moveToNearStepToolStripMenuItem.Name = "moveToNearStepToolStripMenuItem";
             this.moveToNearStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.moveToNearStepToolStripMenuItem.Text = "Move to near step";
+            this.moveToNearStepToolStripMenuItem.Click += new System.EventHandler(this.moveToNearStepToolStripMenuItem_Click);
             // 
             // moveToFarStepToolStripMenuItem
             // 
@@ -266,6 +273,7 @@
             this.moveToFarStepToolStripMenuItem.Name = "moveToFarStepToolStripMenuItem";
             this.moveToFarStepToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.moveToFarStepToolStripMenuItem.Text = "Move to far step";
+            this.moveToFarStepToolStripMenuItem.Click += new System.EventHandler(this.moveToFarStepToolStripMenuItem_Click);
             // 
             // dataRecordToolStripMenuItem
             // 
@@ -285,6 +293,7 @@
             this.previousRecordToolStripMenuItem.Name = "previousRecordToolStripMenuItem";
             this.previousRecordToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.previousRecordToolStripMenuItem.Text = "Previous Record";
+            this.previousRecordToolStripMenuItem.Click += new System.EventHandler(this.previousRecordToolStripMenuItem_Click);
             // 
             // nextRecordToolStripMenuItem
             // 
@@ -292,6 +301,7 @@
             this.nextRecordToolStripMenuItem.Name = "nextRecordToolStripMenuItem";
             this.nextRecordToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.nextRecordToolStripMenuItem.Text = "Next Record";
+            this.nextRecordToolStripMenuItem.Click += new System.EventHandler(this.nextRecordToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -304,6 +314,7 @@
             this.playToolStripMenuItem.Name = "playToolStripMenuItem";
             this.playToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.playToolStripMenuItem.Text = "Play";
+            this.playToolStripMenuItem.Click += new System.EventHandler(this.playToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem1
             // 
@@ -311,6 +322,7 @@
             this.stopToolStripMenuItem1.Name = "stopToolStripMenuItem1";
             this.stopToolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
             this.stopToolStripMenuItem1.Text = "Stop";
+            this.stopToolStripMenuItem1.Click += new System.EventHandler(this.stopToolStripMenuItem1_Click);
             // 
             // rOIToolStripMenuItem
             // 
@@ -328,6 +340,7 @@
             this.drawROIToolStripMenuItem.Name = "drawROIToolStripMenuItem";
             this.drawROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.drawROIToolStripMenuItem.Text = "Draw ROI";
+            this.drawROIToolStripMenuItem.Click += new System.EventHandler(this.drawROIToolStripMenuItem_Click);
             // 
             // moveROIToolStripMenuItem
             // 
@@ -335,6 +348,7 @@
             this.moveROIToolStripMenuItem.Name = "moveROIToolStripMenuItem";
             this.moveROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.moveROIToolStripMenuItem.Text = "Move ROI";
+            this.moveROIToolStripMenuItem.Click += new System.EventHandler(this.moveROIToolStripMenuItem_Click);
             // 
             // deleteROIToolStripMenuItem
             // 
@@ -342,6 +356,7 @@
             this.deleteROIToolStripMenuItem.Name = "deleteROIToolStripMenuItem";
             this.deleteROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.deleteROIToolStripMenuItem.Text = "Delete ROI";
+            this.deleteROIToolStripMenuItem.Click += new System.EventHandler(this.deleteROIToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -357,6 +372,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // label_CurrentSteelKind
             // 
@@ -451,6 +467,24 @@
             this.Pause_toolStripButton.Text = "toolStripButton4";
             this.Pause_toolStripButton.Click += new System.EventHandler(this.Pause_toolStripButton_Click);
             // 
+            // MoveFocus_NearStep
+            // 
+            this.MoveFocus_NearStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_NearStep.Image")));
+            this.MoveFocus_NearStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MoveFocus_NearStep.Name = "MoveFocus_NearStep";
+            this.MoveFocus_NearStep.Size = new System.Drawing.Size(76, 22);
+            this.MoveFocus_NearStep.Text = "NearStep";
+            this.MoveFocus_NearStep.Click += new System.EventHandler(this.NearStep_toolStripButtonClick);
+            // 
+            // MoveFocus_FarStep
+            // 
+            this.MoveFocus_FarStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_FarStep.Image")));
+            this.MoveFocus_FarStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MoveFocus_FarStep.Name = "MoveFocus_FarStep";
+            this.MoveFocus_FarStep.Size = new System.Drawing.Size(67, 22);
+            this.MoveFocus_FarStep.Text = "FarStep";
+            this.MoveFocus_FarStep.Click += new System.EventHandler(this.FarStep_toolStripButtonClick);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
@@ -526,23 +560,14 @@
             this.도움말ToolStripButton.Text = "도움말";
             this.도움말ToolStripButton.Click += new System.EventHandler(this.도움말ToolStripButton_Click);
             // 
-            // MoveFocus_NearStep
+            // toolStripButton1
             // 
-            this.MoveFocus_NearStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_NearStep.Image")));
-            this.MoveFocus_NearStep.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.MoveFocus_NearStep.Name = "MoveFocus_NearStep";
-            this.MoveFocus_NearStep.Size = new System.Drawing.Size(76, 22);
-            this.MoveFocus_NearStep.Text = "NearStep";
-            this.MoveFocus_NearStep.Click += new System.EventHandler(this.NearStep_toolStripButtonClick);
-            // 
-            // MoveFocus_FarStep
-            // 
-            this.MoveFocus_FarStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_FarStep.Image")));
-            this.MoveFocus_FarStep.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.MoveFocus_FarStep.Name = "MoveFocus_FarStep";
-            this.MoveFocus_FarStep.Size = new System.Drawing.Size(67, 22);
-            this.MoveFocus_FarStep.Text = "FarStep";
-            this.MoveFocus_FarStep.Click += new System.EventHandler(this.FarStep_toolStripButtonClick);
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
             // 
             // propertyGrid1
             // 
@@ -790,14 +815,9 @@
             this.split_CAM2ChartGrid.SplitterDistance = 234;
             this.split_CAM2ChartGrid.TabIndex = 0;
             // 
-            // toolStripButton1
+            // errorProvider1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.errorProvider1.ContainerControl = this;
             // 
             // MainForm
             // 
@@ -851,6 +871,7 @@
             this.split_CAM2Info.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2ChartGrid)).EndInit();
             this.split_CAM2ChartGrid.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -919,13 +940,14 @@
         public System.Windows.Forms.TextBox textBox3;
         public System.Windows.Forms.TextBox textBox4;
         public System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripButton MoveFocus_NearStep;
-        private System.Windows.Forms.ToolStripButton MoveFocus_FarStep;
-        private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        public System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        public System.Windows.Forms.ToolStripButton MoveFocus_NearStep;
+        public System.Windows.Forms.ToolStripButton MoveFocus_FarStep;
+        public System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
+        public System.Windows.Forms.ToolStripButton toolStripButton1;
+        public System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 

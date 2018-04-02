@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.CancelButton = new System.Windows.Forms.Button();
-            this.AcceptButton = new System.Windows.Forms.Button();
+            this.Button_Cancel = new System.Windows.Forms.Button();
+            this.Button_Accept = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox2_10 = new System.Windows.Forms.TextBox();
             this.label2_4 = new System.Windows.Forms.Label();
@@ -76,25 +76,25 @@
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // CancelButton
+            // Button_Cancel
             // 
-            this.CancelButton.Location = new System.Drawing.Point(506, 185);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 7;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.Button_Cancel.Location = new System.Drawing.Point(506, 185);
+            this.Button_Cancel.Name = "Button_Cancel";
+            this.Button_Cancel.Size = new System.Drawing.Size(75, 23);
+            this.Button_Cancel.TabIndex = 7;
+            this.Button_Cancel.Text = "Cancel";
+            this.Button_Cancel.UseVisualStyleBackColor = true;
+            this.Button_Cancel.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // AcceptButton
+            // Button_Accept
             // 
-            this.AcceptButton.Location = new System.Drawing.Point(425, 184);
-            this.AcceptButton.Name = "AcceptButton";
-            this.AcceptButton.Size = new System.Drawing.Size(75, 23);
-            this.AcceptButton.TabIndex = 6;
-            this.AcceptButton.Text = "Accept";
-            this.AcceptButton.UseVisualStyleBackColor = true;
-            this.AcceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            this.Button_Accept.Location = new System.Drawing.Point(425, 184);
+            this.Button_Accept.Name = "Button_Accept";
+            this.Button_Accept.Size = new System.Drawing.Size(75, 23);
+            this.Button_Accept.TabIndex = 6;
+            this.Button_Accept.Text = "Accept";
+            this.Button_Accept.UseVisualStyleBackColor = true;
+            this.Button_Accept.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // groupBox2
             // 
@@ -479,8 +479,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(593, 216);
-            this.Controls.Add(this.CancelButton);
-            this.Controls.Add(this.AcceptButton);
+            this.Controls.Add(this.Button_Cancel);
+            this.Controls.Add(this.Button_Accept);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
@@ -502,8 +502,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button CancelButton;
-        private System.Windows.Forms.Button AcceptButton;
+        private System.Windows.Forms.Button Button_Cancel;
+        private System.Windows.Forms.Button Button_Accept;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox2_10;
         private System.Windows.Forms.Label label2_4;
