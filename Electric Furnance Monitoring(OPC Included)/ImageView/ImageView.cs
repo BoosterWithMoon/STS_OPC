@@ -11,31 +11,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     class ImageView
     {
-        // picturebox 위에서 마우스 온도값을 보여줄 위치 설정
-        public enum TemperatureShowLocation : ushort
-        {
-            DEFAULT = 0,
-            QUADRANT_ONE = 1,
-            QUADRANT_TWO = 2,
-            QUADRANT_THREE = 3,
-            QUADRANT_FOUR = 4
-        }
-
         MainForm main;
         CAM1_ImageView c1_imgView;
         CAM2_ImageView c2_imgView;
-        //public Image img;
+
         public Bitmap bmp;
         public Bitmap Stretched_bmp;
         public Bitmap CAM2_bmp;
         public Bitmap CAM2_Stretched_bmp;
         public string pointTemperatureData = "";
         public string CAM2_pointTemperatureData = "";
-        public TemperatureShowLocation TextLocation = TemperatureShowLocation.DEFAULT;
-
-        //public Bitmap backbuffer;
-
-        //private Rectangle oldRect, currentRect;
 
         public Graphics g;
         public Graphics g_backbuffer;
@@ -49,7 +34,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
 
         #region Variables
-
         public ushort m_bmp_isize_x = 0;    // real bmp image x
         public ushort m_bmp_isize_y = 0;    // real bmp image y
         public ushort c2_m_bmp_isize_x = 0;
@@ -87,10 +71,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public bool isCAM1RectDone = false;
         public bool isCAM2RectDone = false;
-        #endregion
 
         public ushort ux = 0, uy = 0;
         public ushort c2_ux = 0, c2_uy = 0;
+
+        private int POI_XLimit = 280;
+        private int POI_YLimit = 225;
+        #endregion
+
         public void CalculatePoint(IntPtr irdxHandle, Point p)
         {
             if (irdxHandle == main.pIRDX_Array[0])
@@ -166,7 +154,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 #endregion
 
                 bmp = GET_BITMAP(hIRDX);
-                //if (bmp == null) return;
                 g = pb.CreateGraphics();
 
                 Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
@@ -231,17 +218,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // QUADRANT별 처리
             for (int i = 0; i < poiCount; i++)
             {
-                if (position[i].X > 280 && position[i].Y < 225)
+                if (position[i].X > POI_XLimit && position[i].Y < POI_YLimit)
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7-90, (position[i].Y * m_bmp_zoom + 2), 75, 19);
-                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5-90, position[i].Y * m_bmp_zoom);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom);
                 }
-                else if(position[i].X>280 && position[i].Y > 225)
+                else if (position[i].X > POI_XLimit && position[i].Y > POI_YLimit)
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2-30), 75, 19);
-                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom-30);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2 - 30), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom - 30);
                 }
-                else if(position[i].X>0 && position[i].Y>225)
+                else if (position[i].X > 0 && position[i].Y > POI_YLimit)
                 {
                     g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2 - 30), 75, 19);
                     g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5, position[i].Y * m_bmp_zoom - 30);
@@ -366,7 +353,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }*/
 
-        public float MaxTempInRect = 0.0f;
+        //public float MaxTempInRect = 0.0f;
         public void CalculateRectROI(IntPtr irdxHandle)
         {
             //if (bmp == null) return;
@@ -405,7 +392,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //}
         }
 
-        // 현재 온도값을 계산(스레드에 들어가있는데 빠져도 무방할 듯)
+        // 현재 온도값을 계산
         public void CalculateCurrentTemp(IntPtr irdxHandle, int POICount, Point[] clickedPos, float[] tempArray)
         {
             for (int i = 0; i < POICount; i++)
@@ -418,7 +405,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        // POI 삭제 버튼을 눌렀을 때
         public void DeletePOI_InArray()
         {
             if (isCAM1Focused)
@@ -437,20 +423,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        // 깜빡임 현상 제거를 위해 테스트 중인 함수(MainForm의 DllImport (MainForm #129) 참조)
-        /*public void InvalidateTextRect(PictureBox pb, Point p, int x1, int y1, int x2, int y2)
-        {
-            //DLLIMPORT.InvalidateRect(ref oldRect, 0, true);
-            //IntPtr pbHandle = Control.FromHandle(pb.Handle);
-            IntPtr pbHandle = pb.Handle;
-
-            Rectangle invalidateArea = new Rectangle(x1, y1, x2, y2);
-
-            main.PaintWindow(pbHandle);
-        }
-        */
-
-        // (bitmap을 카메라로부터 얻어옴)
         private static Bitmap GET_BITMAP(IntPtr hIRDX)
         {
             IntPtr pbitsImage = new IntPtr();
