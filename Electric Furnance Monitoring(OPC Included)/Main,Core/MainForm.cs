@@ -450,6 +450,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
+                    
 
                     acq_index++;
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);

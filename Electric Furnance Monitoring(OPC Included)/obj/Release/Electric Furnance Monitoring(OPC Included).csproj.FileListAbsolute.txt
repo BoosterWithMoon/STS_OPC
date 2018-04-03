@@ -1,0 +1,31 @@
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Electric Furnance Monitoring(OPC Included).exe.config
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Interop.TeeChart.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\AxInterop.TeeChart.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).csproj.ResolveComReference.cache
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Electric Furnance Monitoring(OPC Included).exe
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Electric Furnance Monitoring(OPC Included).pdb
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.BrowseControls.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.DA_Junction.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.KEPServerExControls.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.OpcClient.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.BrowseControls.xml
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.DA_Junction.xml
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Kepware.ClientAce.OpcClient.xml
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\Interop.TeeChart.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\AxInterop.TeeChart.dll
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM1_ChartView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM2_ChartView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM1_DataGridView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM2_DataGridView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM1_ImageView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.CAM2_ImageView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.MainForm.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.NewDeviceForm.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.Properties.Resources.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.ResultView.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.SetThreshold.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).csproj.GenerateResource.Cache
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).exe
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).pdb
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).csprojResolveAssemblyReference.cache

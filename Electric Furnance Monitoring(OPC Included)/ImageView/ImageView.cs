@@ -26,7 +26,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CAM2_ImageView c2_imgView;
         //public Image img;
         public Bitmap bmp;
+        public Bitmap Stretched_bmp;
         public Bitmap CAM2_bmp;
+        public Bitmap CAM2_Stretched_bmp;
         public string pointTemperatureData = "";
         public string CAM2_pointTemperatureData = "";
         public TemperatureShowLocation TextLocation = TemperatureShowLocation.DEFAULT;
@@ -36,11 +38,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //private Rectangle oldRect, currentRect;
 
         public Graphics g;
+        public Graphics g_backbuffer;
         public Graphics CAM2_g;
+        public Graphics CAM2_g_backbuffer;
 
         public ImageView(MainForm _main)
         {
             this.main = _main;
+            c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
         }
 
         #region Variables
@@ -137,7 +142,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (hIRDX == IntPtr.Zero) return;
             else
             {
-                //CalculateImageZoom(hIRDX, pb);
+                #region Calculate ImageZoom
                 // CalculateImageZoom
                 int wnd_sizex = pb.Width;
                 int wnd_sizey = pb.Height;
@@ -158,22 +163,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 m_bmp_ofs_x = (int)((wnd_sizex - m_bmp_size_x) / 2.0);
                 m_bmp_ofs_y = (int)((wnd_sizey - m_bmp_size_y) / 2.0);
+                #endregion
 
                 bmp = GET_BITMAP(hIRDX);
                 //if (bmp == null) return;
                 g = pb.CreateGraphics();
 
-                Graphics temp = Graphics.FromImage(bmp);
+                Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
 
-                DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref temp);
+                g_backbuffer = Graphics.FromImage(Stretched_bmp);
+                DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref g_backbuffer);
 
-                //Point MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                Point MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X/* / m_bmp_zoom*/) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y /*/ m_bmp_zoom*/) - m_bmp_ofs_y - 20)));
 
-                //temp.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 10), Brushes.Black, new Point((int)((MousePosTemp.X / m_bmp_zoom) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y / m_bmp_zoom) - m_bmp_ofs_y - 20)));
-                ////DrawRectROI(hIRDX, temp, pb);
-                g.DrawImage((Image)bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
+                g.DrawImage((Image)Stretched_bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
 
-                if(bmp != null) bmp.Dispose();
+                if (bmp != null) bmp.Dispose();
+                if (Stretched_bmp != null) Stretched_bmp.Dispose();
+
+                g_backbuffer.Dispose();
+                g.Dispose();
             }
         }
 
@@ -181,48 +191,68 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public void DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, /*float[] temp, */int poiCount, ref Graphics g)
         {
             c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
+
             if (position[0].X <= 0 || position[0].Y <= 0) return;
 
-            //int fShort = 1, fLong = 4;
-            float fShort = 0.5f, fLong = 0.5f;
+            int fShort = 1, fLong = 4;
+            //int fShort = 3, fLong = 3;
+            //float fShort = 1.5f, fLong = 6.0f;
 
             for (int i = 0; i < poiCount; i++)
             {
                 if (position[i].X == 0 && position[i].Y == 0) continue;
 
-                float x1 = position[i].X - (fLong + 2);
-                float y1 = position[i].Y - (fShort + 2);
-                float x2 = position[i].X + (fLong + 2);
-                float y2 = position[i].Y + (fShort + 2);
+                float x1 = (position[i].X * m_bmp_zoom) - (fLong + 2);
+                float y1 = (position[i].Y * m_bmp_zoom) - (fShort + 2);
+                float x2 = (position[i].X * m_bmp_zoom) + (fLong + 2);
+                float y2 = (position[i].Y * m_bmp_zoom) + (fShort + 2);
                 g.FillRectangle(Brushes.White, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X - (fShort + 2);
-                y1 = position[i].Y - (fLong + 2);
-                x2 = position[i].X + (fShort + 2);
-                y2 = position[i].Y + (fLong + 2);
+                x1 = (position[i].X * m_bmp_zoom) - (fShort + 2);
+                y1 = (position[i].Y * m_bmp_zoom) - (fLong + 2);
+                x2 = (position[i].X * m_bmp_zoom) + (fShort + 2);
+                y2 = (position[i].Y * m_bmp_zoom) + (fLong + 2);
                 g.FillRectangle(Brushes.White, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X /** m_bmp_zoom*/ - (fShort + 1);
-                y1 = position[i].Y /** m_bmp_zoom*/ - (fLong + 1);
-                x2 = position[i].X /** m_bmp_zoom*/ + (fShort + 1);
-                y2 = position[i].Y /** m_bmp_zoom*/ + (fLong + 1);
+                x1 = position[i].X * m_bmp_zoom - (fShort + 1);
+                y1 = position[i].Y * m_bmp_zoom - (fLong + 1);
+                x2 = position[i].X * m_bmp_zoom + (fShort + 1);
+                y2 = position[i].Y * m_bmp_zoom + (fLong + 1);
                 g.FillRectangle(Brushes.LightGreen, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X/* * m_bmp_zoom*/ - (fLong + 1);
-                y1 = position[i].Y/* * m_bmp_zoom*/ - (fShort + 1);
-                x2 = position[i].X/* * m_bmp_zoom*/ + (fLong + 1);
-                y2 = position[i].Y/* * m_bmp_zoom*/ + (fShort + 1);
+                x1 = position[i].X * m_bmp_zoom - (fLong + 1);
+                y1 = position[i].Y * m_bmp_zoom - (fShort + 1);
+                x2 = position[i].X * m_bmp_zoom + (fLong + 1);
+                y2 = position[i].Y * m_bmp_zoom + (fShort + 1);
                 g.FillRectangle(Brushes.LightGreen, x1, y1, (x2 - x1), (y2 - y1));
-
-
             }
-            Font f = new Font("맑은 고딕", 6);
-            //CalculateCurrentTemp(irdxHandle, CAM1_POICount, CAM1_ClickedPosition, CAM1_TemperatureArr);
+
+            Font f = new Font("맑은 고딕", 12, FontStyle.Bold);
+            // QUADRANT별 처리
             for (int i = 0; i < poiCount; i++)
             {
-                //g.DrawString(CAM1_TemperatureArr[i].ToString(), f, Brushes.Black, CAM1_ClickedPosition[i].X * m_bmp_zoom, CAM1_ClickedPosition[i].Y * m_bmp_zoom);
-                g.DrawString("POI #" + (i + 1) + " " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, position[i].X /** m_bmp_zoom*/, position[i].Y /** m_bmp_zoom*/);
+                if (position[i].X > 280 && position[i].Y < 225)
+                {
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7-90, (position[i].Y * m_bmp_zoom + 2), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5-90, position[i].Y * m_bmp_zoom);
+                }
+                else if(position[i].X>280 && position[i].Y > 225)
+                {
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2-30), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom-30);
+                }
+                else if(position[i].X>0 && position[i].Y>225)
+                {
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2 - 30), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5, position[i].Y * m_bmp_zoom - 30);
+                }
+                else  // DEFAULT
+                {
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2), 75, 19);
+                    g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5, position[i].Y * m_bmp_zoom);
+                }
             }
+            
         }
 
         public void CAM2_DrawImage(IntPtr irdxHandle, PictureBox pb, Point[] clickedPos, int poiCnt)
@@ -230,6 +260,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (irdxHandle == IntPtr.Zero) return;
             else
             {
+                #region CAM2_Calculate ImageZoom
                 // CalculateImageZoom
                 int wnd_sizex = pb.Width;
                 int wnd_sizey = pb.Height;
@@ -250,70 +281,69 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 c2_m_bmp_ofs_x = (int)((wnd_sizex - c2_m_bmp_size_x) / 2.0);
                 c2_m_bmp_ofs_y = (int)((wnd_sizey - c2_m_bmp_size_y) / 2.0);
+                #endregion
 
-                if (CAM2_bmp != null) CAM2_bmp.Dispose();
                 //if (CAM2_bmp != null) CAM2_bmp.Dispose();
                 CAM2_bmp = GET_BITMAP(irdxHandle);
                 CAM2_g = pb.CreateGraphics();
-                Graphics gTemp = Graphics.FromImage(CAM2_bmp);
-                CAM2_DrawPOI(irdxHandle, pb, clickedPos, poiCnt, ref gTemp);
 
-                //if (c2_imgView.CAM2_isImageInPoint)
-                //{
-                //    Point CAM2_MousePosTemp = c2_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-                //    gTemp.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 10), Brushes.Black, new Point((int)((CAM2_MousePosTemp.X / m_bmp_zoom) - m_bmp_ofs_x + 5), (int)((CAM2_MousePosTemp.Y / m_bmp_zoom) - m_bmp_ofs_y - 20)));
-                //}
-                //else if (!c2_imgView.CAM2_isImageInPoint)
-                //{
-                //    gTemp.DrawString("", new Font("맑은 고딕", 10), Brushes.Black, 0, 0);
-                //}
+                CAM2_Stretched_bmp = new Bitmap(CAM2_bmp, new Size(c2_m_bmp_size_x, c2_m_bmp_size_y));
 
-                CAM2_g.DrawImage(CAM2_bmp, c2_m_bmp_ofs_x, c2_m_bmp_ofs_y, c2_m_bmp_size_x, c2_m_bmp_size_y);
+                CAM2_g_backbuffer = Graphics.FromImage(CAM2_Stretched_bmp);
+                CAM2_DrawPOI(irdxHandle, pb, CAM2_ClickedPosition, CAM2_POICount, ref CAM2_g_backbuffer);
 
+                Point MousePosTemp = c2_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y) - m_bmp_ofs_y - 20)));
+
+                CAM2_g.DrawImage((Image)CAM2_Stretched_bmp, c2_m_bmp_ofs_x, c2_m_bmp_ofs_y, c2_m_bmp_size_x, c2_m_bmp_size_y);
+
+                CAM2_bmp.Dispose();
+                CAM2_Stretched_bmp.Dispose();
+
+                CAM2_g.Dispose();
+                CAM2_g_backbuffer.Dispose();
             }
         }
 
         public void CAM2_DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, /*float[] temp, */int poiCount, ref Graphics g)
         {
-            //c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
             c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
             if (position[0].X <= 0 || position[0].Y <= 0) return;
 
-            //int pWidth = 1, fShort = 1, fLong = 4, xGap = 3, yGap = 5;
-            float fShort = 0.5f, fLong = 0.5f;
+            float fShort = 1.0f, fLong = 4.0f;
 
             for (int i = 0; i < poiCount; i++)
             {
                 if (position[i].X == 0 && position[i].Y == 0) continue;
 
-                float x1 = position[i].X - (fLong + 2);
-                float y1 = position[i].Y - (fShort + 2);
-                float x2 = position[i].X + (fLong + 2);
-                float y2 = position[i].Y + (fShort + 2);
+                float x1 = (position[i].X * c2_m_bmp_zoom) - (fLong + 2);
+                float y1 = (position[i].Y * c2_m_bmp_zoom) - (fShort + 2);
+                float x2 = (position[i].X * c2_m_bmp_zoom) + (fLong + 2);
+                float y2 = (position[i].Y * c2_m_bmp_zoom) + (fShort + 2);
                 g.FillRectangle(Brushes.White, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X - (fShort + 2);
-                y1 = position[i].Y - (fLong + 2);
-                x2 = position[i].X + (fShort + 2);
-                y2 = position[i].Y + (fLong + 2);
+                x1 = (position[i].X * c2_m_bmp_zoom) - (fShort + 2);
+                y1 = (position[i].Y * c2_m_bmp_zoom) - (fLong + 2);
+                x2 = (position[i].X * c2_m_bmp_zoom) + (fShort + 2);
+                y2 = (position[i].Y * c2_m_bmp_zoom) + (fLong + 2);
                 g.FillRectangle(Brushes.White, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X /** m_bmp_zoom*/ - (fShort + 1);
-                y1 = position[i].Y /** m_bmp_zoom*/ - (fLong + 1);
-                x2 = position[i].X /** m_bmp_zoom*/ + (fShort + 1);
-                y2 = position[i].Y /** m_bmp_zoom*/ + (fLong + 1);
+                x1 = (position[i].X * c2_m_bmp_zoom) - (fShort + 1);
+                y1 = (position[i].Y * c2_m_bmp_zoom) - (fLong + 1);
+                x2 = (position[i].X * c2_m_bmp_zoom) + (fShort + 1);
+                y2 = (position[i].Y * c2_m_bmp_zoom) + (fLong + 1);
                 g.FillRectangle(Brushes.LightGreen, x1, y1, (x2 - x1), (y2 - y1));
 
-                x1 = position[i].X/* * m_bmp_zoom*/ - (fLong + 1);
-                y1 = position[i].Y/* * m_bmp_zoom*/ - (fShort + 1);
-                x2 = position[i].X/* * m_bmp_zoom*/ + (fLong + 1);
-                y2 = position[i].Y/* * m_bmp_zoom*/ + (fShort + 1);
+                x1 = (position[i].X * c2_m_bmp_zoom) - (fLong + 1);
+                y1 = (position[i].Y * c2_m_bmp_zoom) - (fShort + 1);
+                x2 = (position[i].X * c2_m_bmp_zoom) + (fLong + 1);
+                y2 = (position[i].Y * c2_m_bmp_zoom) + (fShort + 1);
                 g.FillRectangle(Brushes.LightGreen, x1, y1, (x2 - x1), (y2 - y1));
             }
-            Font f = new Font("맑은 고딕", 6);
+            Font f = new Font("맑은 고딕", 12, FontStyle.Bold);
             for (int i = 0; i < poiCount; i++)
             {
-                g.DrawString("POI #" + (i + 1) + " " + CAM2_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, position[i].X /** m_bmp_zoom*/, position[i].Y /** m_bmp_zoom*/);
+                g.DrawString("#" + (i + 1) + " " + CAM2_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * c2_m_bmp_zoom)+5, position[i].Y *c2_m_bmp_zoom);
             }
         }
 

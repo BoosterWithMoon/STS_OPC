@@ -11,6 +11,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class CAM1_ImageView : Form
     {
+
         MainForm main;
         ImageView imgView;
         //Point[] CAM1_POIArr = new Point[10];
@@ -37,7 +38,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
 
         Point temp;
-
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             float DataPoint = 0.0f;
@@ -204,5 +204,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 clickedPoint.Y = 0;
             }
         }
+
     }
 }

@@ -1,0 +1,8 @@
+
+#DIASCAM.DLL: Call Device Detection (Tue Apr 03 16:35:31.254 2018)
+> Detect at Ethernet from 0.0.0.0 to 255.255.255.255
+> Ethernet.FindCameras: 1
+.. Camera[1]: C1134427@192.168.1.118
+.. TestKamCC05Eth at Ethernet: C1134427@192.168.1.118
+=> Found: PYROVIEW 320L/70HZ/52X40 Device-ID: C1134427
+#DIASCAM.DLL: Number of devices: 1
