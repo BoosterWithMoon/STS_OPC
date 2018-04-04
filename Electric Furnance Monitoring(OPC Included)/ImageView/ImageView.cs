@@ -75,8 +75,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public ushort ux = 0, uy = 0;
         public ushort c2_ux = 0, c2_uy = 0;
 
-        private int POI_XLimit = 280;
-        private int POI_YLimit = 225;
+        private static int POI_XLimit = 280;
+        private static int POI_YLimit = 225;
+
+        private static int POI_TemperatureBox_X = 75;
+        private static int POI_TemperatureBox_Y = 19;
         #endregion
 
         public void CalculatePoint(IntPtr irdxHandle, Point p)
@@ -162,7 +165,22 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref g_backbuffer);
 
                 Point MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-                g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X/* / m_bmp_zoom*/) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y /*/ m_bmp_zoom*/) - m_bmp_ofs_y - 20)));
+                if (MousePosTemp.X > POI_XLimit * m_bmp_zoom && MousePosTemp.Y < POI_YLimit * m_bmp_zoom)
+                {
+                    g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - m_bmp_ofs_x + 5 - 60), (int)(MousePosTemp.Y - m_bmp_ofs_y - 20 + 40)));
+                }
+                else if (MousePosTemp.X > POI_XLimit * m_bmp_zoom && MousePosTemp.Y > 0)
+                {
+                    g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - m_bmp_ofs_x + 5 - 60), (int)(MousePosTemp.Y - m_bmp_ofs_y - 20)));
+                }
+                else if (MousePosTemp.X > 0 && MousePosTemp.Y < (240 - POI_YLimit) * m_bmp_zoom)
+                {
+                    g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - m_bmp_ofs_x + 10), (int)(MousePosTemp.Y - m_bmp_ofs_y - 20 + 35)));
+                }
+                else  // DEFAULT
+                {
+                    g_backbuffer.DrawString(pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X/* / m_bmp_zoom*/) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y /*/ m_bmp_zoom*/) - m_bmp_ofs_y - 20)));
+                }
 
                 g.DrawImage((Image)Stretched_bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
 
@@ -220,22 +238,22 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 if (position[i].X > POI_XLimit && position[i].Y < POI_YLimit)
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2), 75, 19);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2), POI_TemperatureBox_X, POI_TemperatureBox_Y);
                     g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom);
                 }
                 else if (position[i].X > POI_XLimit && position[i].Y > POI_YLimit)
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2 - 30), 75, 19);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7 - 90, (position[i].Y * m_bmp_zoom + 2 - 30), POI_TemperatureBox_X, POI_TemperatureBox_Y);
                     g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5 - 90, position[i].Y * m_bmp_zoom - 30);
                 }
                 else if (position[i].X > 0 && position[i].Y > POI_YLimit)
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2 - 30), 75, 19);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2 - 30), POI_TemperatureBox_X, POI_TemperatureBox_Y);
                     g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5, position[i].Y * m_bmp_zoom - 30);
                 }
                 else  // DEFAULT
                 {
-                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2), 75, 19);
+                    g.FillRectangle(Brushes.White, (position[i].X * m_bmp_zoom) + 7, (position[i].Y * m_bmp_zoom + 2), POI_TemperatureBox_X, POI_TemperatureBox_Y);
                     g.DrawString("[" + (i + 1) + "] " + CAM1_TemperatureArr[i].ToString("N1") + "℃", f, Brushes.Black, (position[i].X * m_bmp_zoom) + 5, position[i].Y * m_bmp_zoom);
                 }
             }
