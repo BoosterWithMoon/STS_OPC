@@ -59,5 +59,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap wwsLogo {
+            get {
+                object obj = ResourceManager.GetObject("wwsLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

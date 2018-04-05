@@ -50,6 +50,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread CAM1_DataView;
         Thread CAM2_DataView;
 
+        AboutForm about;
+
         //Thread propertyGridUpdate;
         #endregion
 
@@ -163,6 +165,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             opc = new CustomOPC(this);
 
             openDlg = new OpenFileDialog();
+
+            about = new AboutForm(this);
         }
 
         #region Publicize_AllocatedClass
@@ -566,7 +570,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void 도움말ToolStripButton_Click(object sender, EventArgs e)
         {
-
+            OpenAbout();
         }
 
         private void PreviousRecord_toolStripButton_Click(object sender, EventArgs e)
@@ -1469,7 +1473,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         #endregion
 
-
+        private void OpenAbout()
+        {
+            about.ShowDialog();
+        }
 
         private void InitTimerForPlayer()
         {

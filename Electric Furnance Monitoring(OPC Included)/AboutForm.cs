@@ -11,9 +11,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class AboutForm : Form
     {
-        public AboutForm()
+        MainForm main;
+        public AboutForm(MainForm _main)
         {
+            this.main = _main;
             InitializeComponent();
+        }
+
+        private void AboutForm_Load(object sender, EventArgs e)
+        {
+            pictureBox1.BackgroundImage = Properties.Resources.wwsLogo;
         }
     }
 }
