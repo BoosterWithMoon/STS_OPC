@@ -177,16 +177,25 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.textBox1.Visible = true;
             main.textBox3.Visible = true;
 
-            main.DrawPOI_toolStripButton.Enabled = true;   // Draw POI
-            main.DeletePOI_toolStripButton.Enabled = true;   // Delete POI
-            main.MovePOI_toolStripButton.Enabled = true;   // Move POI
+            main.DrawPOI_toolStripButton.Visible = true;   // Draw POI
+            main.drawROIToolStripMenuItem.Enabled = true;
+            main.DeletePOI_toolStripButton.Visible = true;   // Delete POI
+            main.deleteROIToolStripMenuItem.Enabled = true;
+            main.MovePOI_toolStripButton.Visible = true;   // Move POI
+            main.moveROIToolStripMenuItem.Enabled = true;
 
-            main.LogStart_toolStripButton.Enabled = true;
+            main.LogStart_toolStripButton.Visible = true;
+            main.startToolStripMenuItem.Enabled = true;
 
-            main.MoveFocus_FarStep.Enabled = true;
-            main.MoveFocus_NearStep.Enabled = true;
+            main.MoveFocus_FarStep.Visible = true;
+            main.MoveFocus_NearStep.Visible = true;
             main.moveToFarStepToolStripMenuItem.Enabled = true;
             main.moveToNearStepToolStripMenuItem.Enabled = true;
+
+            main.toolStripSeparator3.Visible = true;
+            main.toolStripSeparator4.Visible = true;
+            main.toolStripSeparator5.Visible = true;
+            main.toolStripSeparator6.Visible = true;
 
             thr1 = (Thread)main.Thread1_forPublicRef();
             thr1.Start();
@@ -217,6 +226,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void button2_Click(object sender, EventArgs e)
         {
+            DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+            DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
             Close();
         }
 

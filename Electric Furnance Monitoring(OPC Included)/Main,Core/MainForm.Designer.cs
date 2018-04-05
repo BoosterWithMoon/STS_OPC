@@ -78,7 +78,6 @@
             this.LogStop_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.도움말ToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.split_ViewToInfo = new System.Windows.Forms.SplitContainer();
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
@@ -394,8 +393,7 @@
             this.LogStart_toolStripButton,
             this.LogStop_toolStripButton,
             this.toolStripSeparator6,
-            this.도움말ToolStripButton,
-            this.toolStripButton1});
+            this.도움말ToolStripButton});
             this.label_CurrentSteelKind.Location = new System.Drawing.Point(0, 24);
             this.label_CurrentSteelKind.Name = "label_CurrentSteelKind";
             this.label_CurrentSteelKind.Size = new System.Drawing.Size(1904, 25);
@@ -469,19 +467,21 @@
             // 
             // MoveFocus_NearStep
             // 
+            this.MoveFocus_NearStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.MoveFocus_NearStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_NearStep.Image")));
             this.MoveFocus_NearStep.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.MoveFocus_NearStep.Name = "MoveFocus_NearStep";
-            this.MoveFocus_NearStep.Size = new System.Drawing.Size(76, 22);
+            this.MoveFocus_NearStep.Size = new System.Drawing.Size(23, 22);
             this.MoveFocus_NearStep.Text = "NearStep";
             this.MoveFocus_NearStep.Click += new System.EventHandler(this.NearStep_toolStripButtonClick);
             // 
             // MoveFocus_FarStep
             // 
+            this.MoveFocus_FarStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.MoveFocus_FarStep.Image = ((System.Drawing.Image)(resources.GetObject("MoveFocus_FarStep.Image")));
             this.MoveFocus_FarStep.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.MoveFocus_FarStep.Name = "MoveFocus_FarStep";
-            this.MoveFocus_FarStep.Size = new System.Drawing.Size(67, 22);
+            this.MoveFocus_FarStep.Size = new System.Drawing.Size(23, 22);
             this.MoveFocus_FarStep.Text = "FarStep";
             this.MoveFocus_FarStep.Click += new System.EventHandler(this.FarStep_toolStripButtonClick);
             // 
@@ -559,15 +559,6 @@
             this.도움말ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.도움말ToolStripButton.Text = "도움말";
             this.도움말ToolStripButton.Click += new System.EventHandler(this.도움말ToolStripButton_Click);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
             // 
             // propertyGrid1
             // 
@@ -946,7 +937,6 @@
         public System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
-        public System.Windows.Forms.ToolStripButton toolStripButton1;
         public System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

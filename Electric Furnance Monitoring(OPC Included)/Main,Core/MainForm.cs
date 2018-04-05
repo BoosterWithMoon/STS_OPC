@@ -321,6 +321,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             button1.Visible = false;
             button2.Visible = false;
 
+            // CAMERA #1,2 status
             label1.Visible = false;
             label2.Visible = false;
             label3.Visible = false;
@@ -333,32 +334,40 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox3.Visible = false;
             textBox4.Visible = false;
 
-            //label_CurrentSteelKind.Visible = false;
-            //textBox_CurrentSteelKind.Visible = false;
+            toolStripSeparator3.Visible = false;
+            toolStripSeparator4.Visible = false;
+            toolStripSeparator5.Visible = false;
+            toolStripSeparator6.Visible = false;
 
-            PreviousRecord_toolStripButton.Enabled = false;     // Previous Record
+            // program buttons
+            PreviousRecord_toolStripButton.Visible = false;     // Previous Record
+            NextRecord_toolStripButton.Visible = false;     // Next Record
+            KeepMoving_toolStripButton.Visible = false;     // Play Record
+            Pause_toolStripButton.Visible = false;          // Pause Record
+
+            DrawPOI_toolStripButton.Visible = false;   // Draw POI
+            DeletePOI_toolStripButton.Visible = false;   // Delete POI
+            MovePOI_toolStripButton.Visible = false;   // Move POI
+
+            LogStart_toolStripButton.Visible = false;   // Log Start
+            LogStop_toolStripButton.Visible = false;   // Log Stop
+
+            MoveFocus_FarStep.Visible = false;      // Move DeviceFocus
+            MoveFocus_NearStep.Visible = false;
+
+            // menu items
             previousRecordToolStripMenuItem.Enabled = false;
-            NextRecord_toolStripButton.Enabled = false;     // Next Record
             nextRecordToolStripMenuItem.Enabled = false;
-            KeepMoving_toolStripButton.Enabled = false;     // Play Record
             playToolStripMenuItem.Enabled = false;
-            Pause_toolStripButton.Enabled = false;          // Pause Record
             stopToolStripMenuItem1.Enabled = false;
 
-            DrawPOI_toolStripButton.Enabled = false;   // Draw POI
             drawROIToolStripMenuItem.Enabled = false;
-            DeletePOI_toolStripButton.Enabled = false;   // Delete POI
             deleteROIToolStripMenuItem.Enabled = false;
-            MovePOI_toolStripButton.Enabled = false;   // Move POI
             moveROIToolStripMenuItem.Enabled = false;
 
-            LogStart_toolStripButton.Enabled = false;   // Log Start
             startToolStripMenuItem.Enabled = false;
-            LogStop_toolStripButton.Enabled = false;   // Log Stop
             stopToolStripMenuItem.Enabled = false;
 
-            MoveFocus_FarStep.Enabled = false;      // Move DeviceFocus
-            MoveFocus_NearStep.Enabled = false;
             moveToNearStepToolStripMenuItem.Enabled = false;
             moveToFarStepToolStripMenuItem.Enabled = false;
 
@@ -1298,14 +1307,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 textBox3.Visible = true;
                 textBox4.Visible = true;
 
-                PreviousRecord_toolStripButton.Enabled = true;
-                NextRecord_toolStripButton.Enabled = true;
-                KeepMoving_toolStripButton.Enabled = true;
-                Pause_toolStripButton.Enabled = true;
+                toolStripSeparator3.Visible = true;
+                toolStripSeparator4.Visible = true;
+                toolStripSeparator5.Visible = true;
+                toolStripSeparator6.Visible = true;
 
-                DrawPOI_toolStripButton.Enabled = true;
-                MovePOI_toolStripButton.Enabled = true;
-                DeletePOI_toolStripButton.Enabled = true;
+                PreviousRecord_toolStripButton.Visible = true;
+                NextRecord_toolStripButton.Visible = true;
+                KeepMoving_toolStripButton.Visible = true;
+                Pause_toolStripButton.Visible = true;
+
+                previousRecordToolStripMenuItem.Enabled = true;
+                nextRecordToolStripMenuItem.Enabled = true;
+                playToolStripMenuItem.Enabled = true;
+                stopToolStripMenuItem1.Enabled = true;
+
+                DrawPOI_toolStripButton.Visible = true;
+                MovePOI_toolStripButton.Visible = true;
+                DeletePOI_toolStripButton.Visible = true;
+
+                LogStart_toolStripButton.Visible = true;
+                LogStop_toolStripButton.Visible = true;
 
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
@@ -1426,9 +1448,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox3.Visible = true;
             textBox4.Visible = true;
 
-            DrawPOI_toolStripButton.Enabled = true;
-            MovePOI_toolStripButton.Enabled = true;
-            DeletePOI_toolStripButton.Enabled = true;
+            toolStripSeparator3.Visible = true;
+
+            DrawPOI_toolStripButton.Visible = true;
+            MovePOI_toolStripButton.Visible = true;
+            DeletePOI_toolStripButton.Visible = true;
 
             customGrid.GetAttributesInfo(pIRDX_Array[0]);
 
@@ -1437,7 +1461,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             InitResultView();
 
-            // 테스트용 코드 부분이니까 나중에 안까먹고 지워야됨
             OPCActivated = true;
             InitOPCTimer();
         }
@@ -1445,8 +1468,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
 
         #endregion
-
-
 
 
 
