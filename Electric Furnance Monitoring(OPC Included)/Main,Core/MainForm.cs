@@ -348,7 +348,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             NextRecord_toolStripButton.Visible = false;     // Next Record
             KeepMoving_toolStripButton.Visible = false;     // Play Record
             Pause_toolStripButton.Visible = false;          // Pause Record
-
+            
             DrawPOI_toolStripButton.Visible = false;   // Draw POI
             DeletePOI_toolStripButton.Visible = false;   // Delete POI
             MovePOI_toolStripButton.Visible = false;   // Move POI
@@ -504,7 +504,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
 
                     imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
-                    imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
+                    //imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
+                    imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
 
                     CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
                     result.CAM2_DetectTemp_ForOPC();

@@ -30,20 +30,21 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             imgView = (ImageView)main.ImageView_forPublicRef();
         }
 
+        Point temp;
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (main.currentOpenMode == MainForm.OpenMode.IRDX)
-            {
-                return;
-            }
+            //if (main.currentOpenMode == MainForm.OpenMode.IRDX)
+            //{
+            //    return;
+            //}
 
-            CAM2_isImageInPoint = false;
+            //CAM2_isImageInPoint = false;
 
             float DataPoint = 0.0f;
             imgView = (ImageView)main.ImageView_forPublicRef();
 
             if (imgView.c2_m_bmp_zoom == 0) return;
-            Point temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
+            temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
             float currentZoom = imgView.c2_m_bmp_zoom;
 
             float fx = (float)temp.X - (float)imgView.c2_m_bmp_ofs_x;
@@ -74,7 +75,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 if ((ux <= sizex) && (uy <= sizey))
                 {
-                    CAM2_isImageInPoint = true;
                     DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA_POINT(main.pIRDX_Array[1], ux, uy, ref DataPoint);
 
                     if (DataPoint < 0) DataPoint = 0;
@@ -90,8 +90,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         tempX = imgView.CAM2_ClickedPosition[CAM2_pointIdx].X - (CAM2_clickedPoint.X - ux);
                         tempY = imgView.CAM2_ClickedPosition[CAM2_pointIdx].Y - (CAM2_clickedPoint.Y - uy);
 
-                        if (tempX > 0 && tempX <= 320 &&
-                            tempY > 0 && tempY <= 240)
+                        if (tempX > 0 && tempX <= imgView.c2_m_bmp_isize_x &&
+                            tempY > 0 && tempY <= imgView.c2_m_bmp_isize_y)
                         {
                             imgView.CAM2_ClickedPosition[CAM2_pointIdx].X -= (CAM2_clickedPoint.X - ux);
                             imgView.CAM2_ClickedPosition[CAM2_pointIdx].Y -= (CAM2_clickedPoint.Y - uy);
@@ -100,10 +100,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         CAM2_clickedPoint.Y = uy;
                     }
                 }
-                else
-                {
-                    CAM2_isImageInPoint = false;
-                }
+                //else
+                //{
+                //    CAM2_isImageInPoint = false;
+                //}
             }
         }
 
@@ -171,8 +171,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            imgView.isCAM2Focused = true;
             imgView.isCAM1Focused = false;
+            imgView.isCAM2Focused = true;
 
             if (e.X > imgView.c2_m_bmp_ofs_x && e.Y > imgView.c2_m_bmp_ofs_y &&
                 e.X < (imgView.c2_m_bmp_ofs_x + imgView.c2_m_bmp_size_x) && e.Y < (imgView.c2_m_bmp_ofs_y + imgView.c2_m_bmp_size_x))

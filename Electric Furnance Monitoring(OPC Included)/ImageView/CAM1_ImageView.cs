@@ -93,8 +93,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         tempX = imgView.CAM1_ClickedPosition[CAM1_pointIdx].X - (clickedPoint.X - ux);
                         tempY = imgView.CAM1_ClickedPosition[CAM1_pointIdx].Y - (clickedPoint.Y - uy);
 
-                        if (tempX > 0 && tempX <= 320 &&
-                            tempY > 0 && tempY <= 240)
+                        if (tempX > 0 && tempX <= imgView.m_bmp_isize_x &&
+                            tempY > 0 && tempY <= imgView.m_bmp_isize_y)
                         {
                             imgView.CAM1_ClickedPosition[CAM1_pointIdx].X -= (clickedPoint.X - ux);
                             imgView.CAM1_ClickedPosition[CAM1_pointIdx].Y -= (clickedPoint.Y - uy);
@@ -137,10 +137,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 imgView.CAM1_POICount++;
 
                 imgView.CAM1_POICheckFlag = true;
-                if (main.currentOpenMode == MainForm.OpenMode.IRDX)
-                {
-                    imgView.CAM2_POICheckFlag = true;
-                }
+                //if (main.currentOpenMode == MainForm.OpenMode.IRDX)
+                //{
+                //    imgView.CAM2_POICheckFlag = true;
+                //}
 
                 CAM1_isMouseButtonDown = true;
                 CAM1_PointMoveFlag = true;
@@ -205,5 +205,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
+        //private void pictureBox1_Click(object sender, EventArgs e)
+        //{
+        //    Point temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
+        //    MessageBox.Show(temp.X + ", " + temp.Y /*+ "\n"+imgView.MousePosTemp.X+", "+imgView.MousePosTemp.Y*/);
+        //}
     }
 }

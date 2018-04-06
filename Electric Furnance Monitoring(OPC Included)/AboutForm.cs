@@ -22,5 +22,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             pictureBox1.BackgroundImage = Properties.Resources.wwsLogo;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
