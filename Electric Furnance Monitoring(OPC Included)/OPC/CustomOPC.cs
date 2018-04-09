@@ -309,7 +309,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private static string Device = ".Device1";
 
         // Kepware가 설치된 컴퓨터의 주소
-        string nodeName = "localhost";
+        string nodeName = "192.168.1.101";
 
         // Read 또는 Write할 OPC 태그의 개수
         private static int ReadTagCount = 4;

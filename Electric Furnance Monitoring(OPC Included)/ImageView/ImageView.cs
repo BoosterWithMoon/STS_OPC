@@ -305,7 +305,28 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_DrawPOI(irdxHandle, pb, CAM2_ClickedPosition, CAM2_POICount, ref CAM2_g_backbuffer);
 
                 Point MousePosTemp = c2_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-                CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y) - m_bmp_ofs_y - 20)));
+                //CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y) - m_bmp_ofs_y - 20)));
+                if (MousePosTemp.X > POI_XLimit * c2_m_bmp_zoom && MousePosTemp.Y < POI_YLimit * c2_m_bmp_zoom)
+                {
+                    CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - c2_m_bmp_ofs_x + 5 - 60), (int)(MousePosTemp.Y - c2_m_bmp_ofs_y - 20 + 40)));
+                }
+                else if (MousePosTemp.X > POI_XLimit * c2_m_bmp_zoom && MousePosTemp.Y > 0)
+                {
+                    CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - c2_m_bmp_ofs_x + 5 - 60), (int)(MousePosTemp.Y - c2_m_bmp_ofs_y - 20)));
+                }
+                else if (MousePosTemp.X > 0 && MousePosTemp.Y < (/*240*/c2_m_bmp_isize_y - POI_YLimit) * c2_m_bmp_zoom)
+                {
+                    CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)(MousePosTemp.X - c2_m_bmp_ofs_x + 10), (int)(MousePosTemp.Y - c2_m_bmp_ofs_y - 20 + 35)));
+                }
+                else if (MousePosTemp.X < 0 || MousePosTemp.X > (/*320*/c2_m_bmp_isize_x + c2_m_bmp_ofs_x) * c2_m_bmp_zoom ||
+                    MousePosTemp.Y <= c2_m_bmp_ofs_y || MousePosTemp.Y > (c2_m_bmp_size_y + c2_m_bmp_ofs_y))
+                {
+
+                }
+                else  // DEFAULT
+                {
+                    CAM2_g_backbuffer.DrawString(CAM2_pointTemperatureData + "℃", new Font("맑은 고딕", 12, FontStyle.Bold), Brushes.Black, new Point((int)((MousePosTemp.X/* / m_bmp_zoom*/) - m_bmp_ofs_x + 5), (int)((MousePosTemp.Y /*/ m_bmp_zoom*/) - m_bmp_ofs_y - 20)));
+                }
 
                 CAM2_g.DrawImage((Image)CAM2_Stretched_bmp, c2_m_bmp_ofs_x, c2_m_bmp_ofs_y, c2_m_bmp_size_x, c2_m_bmp_size_y);
 
