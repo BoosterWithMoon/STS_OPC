@@ -57,6 +57,8 @@
             this.drawROIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveROIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteROIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OPCSettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label_CurrentSteelKind = new System.Windows.Forms.ToolStrip();
@@ -170,6 +172,7 @@
             this.focusToolStripMenuItem,
             this.dataRecordToolStripMenuItem,
             this.rOIToolStripMenuItem,
+            this.settingsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -356,6 +359,21 @@
             this.deleteROIToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.deleteROIToolStripMenuItem.Text = "Delete ROI";
             this.deleteROIToolStripMenuItem.Click += new System.EventHandler(this.deleteROIToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OPCSettingToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // OPCSettingToolStripMenuItem
+            // 
+            this.OPCSettingToolStripMenuItem.Name = "OPCSettingToolStripMenuItem";
+            this.OPCSettingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.OPCSettingToolStripMenuItem.Text = "OPC Setting";
+            this.OPCSettingToolStripMenuItem.Click += new System.EventHandler(this.oPCSettingToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -938,6 +956,8 @@
         public System.Windows.Forms.ToolStripMenuItem moveToNearStepToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem moveToFarStepToolStripMenuItem;
         public System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem OPCSettingToolStripMenuItem;
     }
 }
 

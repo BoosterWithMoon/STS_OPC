@@ -41,6 +41,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ResultView result;
 
         CustomOPC opc;
+        OPCSetting opcSet;
 
         OpenFileDialog openDlg;
 
@@ -97,7 +98,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         string CAM2_newResultDataFileName = "";
         public bool isLoggingRunning = false;
 
-        System.Windows.Forms.Timer OPCTimer = new System.Windows.Forms.Timer();
+        public System.Windows.Forms.Timer OPCTimer = new System.Windows.Forms.Timer();
 
         public enum OpenMode : int
         {
@@ -163,6 +164,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             result = new ResultView(this);
 
             opc = new CustomOPC(this);
+            opcSet = new OPCSetting(this);
 
             openDlg = new OpenFileDialog();
 
@@ -375,6 +377,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             moveToNearStepToolStripMenuItem.Enabled = false;
             moveToFarStepToolStripMenuItem.Enabled = false;
 
+            OPCSettingToolStripMenuItem.Enabled = false;
+
             ViewAdjust();
 
             opc.ServerDetection();
@@ -524,6 +528,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             while (true)
             {
+                Thread.Sleep(10);
+
                 if (!isDrawnCAM1Image)
                 {
                     continue;
@@ -542,6 +548,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             while (true)
             {
+                Thread.Sleep(10);
+
                 if (!isDrawnCAM2Image)
                 {
                     continue;
@@ -1156,6 +1164,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 config.AppSettings.Settings[appSettingValue].Value = result.CAM2_ThresholdTemp[i].ToString();
             }
 
+            config.AppSettings.Settings["OPC_Channel"].Value = opc.Channel;
+            config.AppSettings.Settings["OPC_Device"].Value = opc.Device;
+            config.AppSettings.Settings["OPC_Endpoint"].Value = opc.nodeName;
+
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
         }
@@ -1167,16 +1179,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void VerifyOPC()
         {
             if (opc.detected)
-            {
                 result.OPCConnectAlarm.ForeColor = Color.Green;
-            }
             else
-            {
                 result.OPCConnectAlarm.ForeColor = Color.Red;
-            }
 
-            if (OPCTimerActivated) result.OPCActiveAlarm.ForeColor = Color.Green;
-            else result.OPCActiveAlarm.ForeColor = Color.Red;
+            if (OPCTimerActivated && OPCActivated)
+                result.OPCActiveAlarm.ForeColor = Color.Green;
+            else
+                result.OPCActiveAlarm.ForeColor = Color.Red;
+
+
         }
 
         public float FloatMaxTemp = 0.0f;
@@ -1233,34 +1245,36 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void OPC_DataSending(object sender, EventArgs e)
         {
-            if (OPCActivated)
+            if (OPCActivated && opc.connectFailed == false)
             {
                 opc.OPC_Read();
                 opc.OPC_Write();
-
-                if (mThread.IsAlive)
-                {
-                    c1_chartView.UpdateData();
-                }
-                if (mThread_two.IsAlive)
-                {
-                    c2_chartView.UpdateData();
-                }
             }
             else
             {
                 InitOPCTimer();
             }
-            
+
+            if (mThread.IsAlive)
+            {
+                c1_chartView.UpdateData();
+            }
+            if (mThread_two.IsAlive)
+            {
+                c2_chartView.UpdateData();
+            }
         }
 
-        private bool OPCTimerActivated = false;
+        public bool OPCTimerActivated = false;
         public void InitOPCTimer()
         {
-            OPCTimer.Interval = 1000;
-            OPCTimer.Tick += new EventHandler(OPC_DataSending);
-            OPCTimerActivated = true;
-            OPCTimer.Start();
+            if (OPCTimerActivated == false)
+            {
+                OPCTimer.Interval = 1000;
+                OPCTimer.Tick += new EventHandler(OPC_DataSending);
+                OPCTimerActivated = true;
+                OPCTimer.Start();
+            }
         }
 
         #region OpenIRDX
@@ -1477,6 +1491,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void OpenAbout()
         {
             about.ShowDialog();
+        }
+
+        private void oPCSettingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            opcSet.ShowDialog();
         }
 
         private void InitTimerForPlayer()

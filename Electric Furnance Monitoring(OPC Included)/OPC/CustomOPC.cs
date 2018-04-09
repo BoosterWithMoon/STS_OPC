@@ -5,6 +5,7 @@ using System.Text;
 using Kepware.ClientAce.OpcDaClient;
 using Kepware.ClientAce.OpcCmn;
 using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
@@ -293,11 +294,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
 
+        Configuration config;
+
         DaServerMgt DAServer;
         ConnectInfo opcConnectInfo;
         ServerIdentifier[] availableOPCServers;
-        bool connectFailed;
+        public bool connectFailed = true;
         OpcServerEnum serverEnum;
+        public bool exceptionOccured = false;
 
         bool returnAllServers = false;
         public bool detected = false;
@@ -305,15 +309,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ServerCategory[] serverCategories = { ServerCategory.OPCDA };
 
         // 연결시킬 OPC 태그가 존재하는 채널 / Device ID
-        private static string Channel = "Channel4";
-        private static string Device = ".Device1";
+        public string Channel/* = "Channel4"*/;
+        public string Device /*= ".Device1"*/;
 
         // Kepware가 설치된 컴퓨터의 주소
-        string nodeName = "192.168.1.101";
+        public string nodeName /*= "192.168.1.100"*/;
 
         // Read 또는 Write할 OPC 태그의 개수
-        private static int ReadTagCount = 4;
-        private static int WriteTagCount = 83;
+        //private static int ReadTagCount = 4;
+        //private static int WriteTagCount = 83;
+
+        private static int ReadTagCount = 1;
+        private static int WriteTagCount = 1;
 
         public int CurrentAngle;
 
@@ -338,6 +345,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             Write_itemIdentifiers = new ItemIdentifier[WriteTagCount];
             Write_itemValues = new ItemValue[WriteTagCount];
+
+            //config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            string value = "";
+            value = ConfigurationManager.AppSettings["OPC_Channel"];
+            Channel = value;
+            value = ConfigurationManager.AppSettings["OPC_Device"];
+            Device = value;
+            value = ConfigurationManager.AppSettings["OPC_Endpoint"];
+            nodeName = value;
         }
 
         public void ServerDetection()
@@ -365,12 +381,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message);
+                //exceptionOccured = true;
             }
         }
 
         public void ServerConnection()
         {
-            if (detected == false)
+            if (detected == false /*&& exceptionOccured == false*/)
             {
                 System.Windows.Forms.MessageBox.Show("OPC 서버 연결에 실패하였습니다.", "OPC Connection", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 return;
@@ -382,7 +399,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 opcConnectInfo.LocalId = "en";
                 opcConnectInfo.KeepAliveTime = 1000;
                 // Connection 성공 이후에 연결 Error가 발생 하면 서버 연결 재시도를 할 것인가?
-                opcConnectInfo.RetryAfterConnectionError = true;
+                opcConnectInfo.RetryAfterConnectionError = false;
                 // 초기 Connection에 실패했을 경우에 연결 재시도를 할 것인가?
                 opcConnectInfo.RetryInitialConnection = false;
 
@@ -432,177 +449,177 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             Write_itemIdentifiers[(int)WritingArrayNo.CurrentAngle].ItemName = Channel + Device + ".Slope_Angle";
             Write_itemIdentifiers[(int)WritingArrayNo.CurrentAngle].ClientHandle = ClientHandleValue.Write_CurrentAngle;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_MaxTemp].ItemName = Channel + Device + ".CAM1_MaxTemp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_MaxTemp].ClientHandle = ClientHandleValue.Write_CAM1_MaxTemp;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold01].ItemName = Channel + Device + ".CAM1_Threshold01";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold01].ClientHandle = ClientHandleValue.Write_CAM1_Threshold1;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold02].ItemName = Channel + Device + ".CAM1_Threshold02";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold02].ClientHandle = ClientHandleValue.Write_CAM1_Threshold2;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold03].ItemName = Channel + Device + ".CAM1_Threshold03";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold03].ClientHandle = ClientHandleValue.Write_CAM1_Threshold3;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold04].ItemName = Channel + Device + ".CAM1_Threshold04";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold04].ClientHandle = ClientHandleValue.Write_CAM1_Threshold4;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold05].ItemName = Channel + Device + ".CAM1_Threshold05";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold05].ClientHandle = ClientHandleValue.Write_CAM1_Threshold5;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold06].ItemName = Channel + Device + ".CAM1_Threshold06";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold06].ClientHandle = ClientHandleValue.Write_CAM1_Threshold6;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold07].ItemName = Channel + Device + ".CAM1_Threshold07";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold07].ClientHandle = ClientHandleValue.Write_CAM1_Threshold7;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold08].ItemName = Channel + Device + ".CAM1_Threshold08";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold08].ClientHandle = ClientHandleValue.Write_CAM1_Threshold8;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold09].ItemName = Channel + Device + ".CAM1_Threshold09";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold09].ClientHandle = ClientHandleValue.Write_CAM1_Threshold9;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold10].ItemName = Channel + Device + ".CAM1_Threshold10";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold10].ClientHandle = ClientHandleValue.Write_CAM1_Threshold10;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_MaxTemp].ItemName = Channel + Device + ".CAM1_MaxTemp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_MaxTemp].ClientHandle = ClientHandleValue.Write_CAM1_MaxTemp;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold01].ItemName = Channel + Device + ".CAM1_Threshold01";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold01].ClientHandle = ClientHandleValue.Write_CAM1_Threshold1;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold02].ItemName = Channel + Device + ".CAM1_Threshold02";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold02].ClientHandle = ClientHandleValue.Write_CAM1_Threshold2;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold03].ItemName = Channel + Device + ".CAM1_Threshold03";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold03].ClientHandle = ClientHandleValue.Write_CAM1_Threshold3;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold04].ItemName = Channel + Device + ".CAM1_Threshold04";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold04].ClientHandle = ClientHandleValue.Write_CAM1_Threshold4;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold05].ItemName = Channel + Device + ".CAM1_Threshold05";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold05].ClientHandle = ClientHandleValue.Write_CAM1_Threshold5;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold06].ItemName = Channel + Device + ".CAM1_Threshold06";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold06].ClientHandle = ClientHandleValue.Write_CAM1_Threshold6;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold07].ItemName = Channel + Device + ".CAM1_Threshold07";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold07].ClientHandle = ClientHandleValue.Write_CAM1_Threshold7;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold08].ItemName = Channel + Device + ".CAM1_Threshold08";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold08].ClientHandle = ClientHandleValue.Write_CAM1_Threshold8;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold09].ItemName = Channel + Device + ".CAM1_Threshold09";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold09].ClientHandle = ClientHandleValue.Write_CAM1_Threshold9;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold10].ItemName = Channel + Device + ".CAM1_Threshold10";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_Threshold10].ClientHandle = ClientHandleValue.Write_CAM1_Threshold10;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_Temp].ItemName = Channel + Device + ".CAM1_ROI01_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp1;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_Temp].ItemName = Channel + Device + ".CAM1_ROI02_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp2;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_Temp].ItemName = Channel + Device + ".CAM1_ROI03_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp3;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_Temp].ItemName = Channel + Device + ".CAM1_ROI04_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp4;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_Temp].ItemName = Channel + Device + ".CAM1_ROI05_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp5;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_Temp].ItemName = Channel + Device + ".CAM1_ROI06_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp6;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_Temp].ItemName = Channel + Device + ".CAM1_ROI07_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp7;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_Temp].ItemName = Channel + Device + ".CAM1_ROI08_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp8;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_Temp].ItemName = Channel + Device + ".CAM1_ROI09_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp9;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_Temp].ItemName = Channel + Device + ".CAM1_ROI10_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp10;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_Temp].ItemName = Channel + Device + ".CAM1_ROI01_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp1;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_Temp].ItemName = Channel + Device + ".CAM1_ROI02_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp2;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_Temp].ItemName = Channel + Device + ".CAM1_ROI03_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp3;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_Temp].ItemName = Channel + Device + ".CAM1_ROI04_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp4;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_Temp].ItemName = Channel + Device + ".CAM1_ROI05_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp5;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_Temp].ItemName = Channel + Device + ".CAM1_ROI06_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp6;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_Temp].ItemName = Channel + Device + ".CAM1_ROI07_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp7;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_Temp].ItemName = Channel + Device + ".CAM1_ROI08_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp8;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_Temp].ItemName = Channel + Device + ".CAM1_ROI09_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp9;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_Temp].ItemName = Channel + Device + ".CAM1_ROI10_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_Temp].ClientHandle = ClientHandleValue.Write_CAM1_CurrentTemp10;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_MaxTemp].ItemName = Channel + Device + ".CAM2_MaxTemp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_MaxTemp].ClientHandle = ClientHandleValue.Write_CAM2_MaxTemp;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold01].ItemName = Channel + Device + ".CAM2_Threshold01";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold01].ClientHandle = ClientHandleValue.Write_CAM2_Threshold1;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold02].ItemName = Channel + Device + ".CAM2_Threshold02";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold02].ClientHandle = ClientHandleValue.Write_CAM2_Threshold2;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold03].ItemName = Channel + Device + ".CAM2_Threshold03";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold03].ClientHandle = ClientHandleValue.Write_CAM2_Threshold3;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold04].ItemName = Channel + Device + ".CAM2_Threshold04";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold04].ClientHandle = ClientHandleValue.Write_CAM2_Threshold4;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold05].ItemName = Channel + Device + ".CAM2_Threshold05";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold05].ClientHandle = ClientHandleValue.Write_CAM2_Threshold5;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold06].ItemName = Channel + Device + ".CAM2_Threshold06";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold06].ClientHandle = ClientHandleValue.Write_CAM2_Threshold6;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold07].ItemName = Channel + Device + ".CAM2_Threshold07";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold07].ClientHandle = ClientHandleValue.Write_CAM2_Threshold7;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold08].ItemName = Channel + Device + ".CAM2_Threshold08";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold08].ClientHandle = ClientHandleValue.Write_CAM2_Threshold8;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold09].ItemName = Channel + Device + ".CAM2_Threshold09";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold09].ClientHandle = ClientHandleValue.Write_CAM2_Threshold9;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold10].ItemName = Channel + Device + ".CAM2_Threshold10";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold10].ClientHandle = ClientHandleValue.Write_CAM2_Threshold10;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_MaxTemp].ItemName = Channel + Device + ".CAM2_MaxTemp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_MaxTemp].ClientHandle = ClientHandleValue.Write_CAM2_MaxTemp;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold01].ItemName = Channel + Device + ".CAM2_Threshold01";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold01].ClientHandle = ClientHandleValue.Write_CAM2_Threshold1;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold02].ItemName = Channel + Device + ".CAM2_Threshold02";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold02].ClientHandle = ClientHandleValue.Write_CAM2_Threshold2;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold03].ItemName = Channel + Device + ".CAM2_Threshold03";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold03].ClientHandle = ClientHandleValue.Write_CAM2_Threshold3;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold04].ItemName = Channel + Device + ".CAM2_Threshold04";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold04].ClientHandle = ClientHandleValue.Write_CAM2_Threshold4;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold05].ItemName = Channel + Device + ".CAM2_Threshold05";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold05].ClientHandle = ClientHandleValue.Write_CAM2_Threshold5;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold06].ItemName = Channel + Device + ".CAM2_Threshold06";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold06].ClientHandle = ClientHandleValue.Write_CAM2_Threshold6;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold07].ItemName = Channel + Device + ".CAM2_Threshold07";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold07].ClientHandle = ClientHandleValue.Write_CAM2_Threshold7;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold08].ItemName = Channel + Device + ".CAM2_Threshold08";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold08].ClientHandle = ClientHandleValue.Write_CAM2_Threshold8;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold09].ItemName = Channel + Device + ".CAM2_Threshold09";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold09].ClientHandle = ClientHandleValue.Write_CAM2_Threshold9;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold10].ItemName = Channel + Device + ".CAM2_Threshold10";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_Threshold10].ClientHandle = ClientHandleValue.Write_CAM2_Threshold10;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_Temp].ItemName = Channel + Device + ".CAM2_ROI01_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp1;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_Temp].ItemName = Channel + Device + ".CAM2_ROI02_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp2;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_Temp].ItemName = Channel + Device + ".CAM2_ROI03_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp3;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_Temp].ItemName = Channel + Device + ".CAM2_ROI04_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp4;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_Temp].ItemName = Channel + Device + ".CAM2_ROI05_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp5;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_Temp].ItemName = Channel + Device + ".CAM2_ROI06_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp6;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_Temp].ItemName = Channel + Device + ".CAM2_ROI07_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp7;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_Temp].ItemName = Channel + Device + ".CAM2_ROI08_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp8;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_Temp].ItemName = Channel + Device + ".CAM2_ROI09_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp9;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_Temp].ItemName = Channel + Device + ".CAM2_ROI10_Temp";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp10;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_Temp].ItemName = Channel + Device + ".CAM2_ROI01_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp1;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_Temp].ItemName = Channel + Device + ".CAM2_ROI02_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp2;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_Temp].ItemName = Channel + Device + ".CAM2_ROI03_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp3;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_Temp].ItemName = Channel + Device + ".CAM2_ROI04_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp4;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_Temp].ItemName = Channel + Device + ".CAM2_ROI05_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp5;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_Temp].ItemName = Channel + Device + ".CAM2_ROI06_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp6;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_Temp].ItemName = Channel + Device + ".CAM2_ROI07_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp7;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_Temp].ItemName = Channel + Device + ".CAM2_ROI08_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp8;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_Temp].ItemName = Channel + Device + ".CAM2_ROI09_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp9;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_Temp].ItemName = Channel + Device + ".CAM2_ROI10_Temp";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_Temp].ClientHandle = ClientHandleValue.Write_CAM2_CurrentTemp10;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_WAR].ItemName = Channel + Device + ".CAM1_ROI01_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI01_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_WAR].ItemName = Channel + Device + ".CAM1_ROI02_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI02_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_WAR].ItemName = Channel + Device + ".CAM1_ROI03_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI03_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_WAR].ItemName = Channel + Device + ".CAM1_ROI04_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI04_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_WAR].ItemName = Channel + Device + ".CAM1_ROI05_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI05_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_WAR].ItemName = Channel + Device + ".CAM1_ROI06_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI06_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_WAR].ItemName = Channel + Device + ".CAM1_ROI07_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI07_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_WAR].ItemName = Channel + Device + ".CAM1_ROI08_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI08_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_WAR].ItemName = Channel + Device + ".CAM1_ROI09_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI09_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_WAR].ItemName = Channel + Device + ".CAM1_ROI10_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI10_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_WAR].ItemName = Channel + Device + ".CAM1_ROI01_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI01_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_WAR].ItemName = Channel + Device + ".CAM1_ROI02_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI02_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_WAR].ItemName = Channel + Device + ".CAM1_ROI03_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI03_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_WAR].ItemName = Channel + Device + ".CAM1_ROI04_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI04_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_WAR].ItemName = Channel + Device + ".CAM1_ROI05_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI05_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_WAR].ItemName = Channel + Device + ".CAM1_ROI06_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI06_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_WAR].ItemName = Channel + Device + ".CAM1_ROI07_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI07_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_WAR].ItemName = Channel + Device + ".CAM1_ROI08_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI08_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_WAR].ItemName = Channel + Device + ".CAM1_ROI09_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI09_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_WAR].ItemName = Channel + Device + ".CAM1_ROI10_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_WAR].ClientHandle = ClientHandleValue.Write_CAM1_ROI10_WAR;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_WAR].ItemName = Channel + Device + ".CAM2_ROI01_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI01_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_WAR].ItemName = Channel + Device + ".CAM2_ROI02_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI02_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_WAR].ItemName = Channel + Device + ".CAM2_ROI03_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI03_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_WAR].ItemName = Channel + Device + ".CAM2_ROI04_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI04_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_WAR].ItemName = Channel + Device + ".CAM2_ROI05_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI05_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_WAR].ItemName = Channel + Device + ".CAM2_ROI06_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI06_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_WAR].ItemName = Channel + Device + ".CAM2_ROI07_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI07_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_WAR].ItemName = Channel + Device + ".CAM2_ROI08_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI08_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_WAR].ItemName = Channel + Device + ".CAM2_ROI09_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI09_WAR;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_WAR].ItemName = Channel + Device + ".CAM2_ROI10_WAR";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI10_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_WAR].ItemName = Channel + Device + ".CAM2_ROI01_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI01_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_WAR].ItemName = Channel + Device + ".CAM2_ROI02_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI02_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_WAR].ItemName = Channel + Device + ".CAM2_ROI03_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI03_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_WAR].ItemName = Channel + Device + ".CAM2_ROI04_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI04_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_WAR].ItemName = Channel + Device + ".CAM2_ROI05_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI05_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_WAR].ItemName = Channel + Device + ".CAM2_ROI06_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI06_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_WAR].ItemName = Channel + Device + ".CAM2_ROI07_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI07_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_WAR].ItemName = Channel + Device + ".CAM2_ROI08_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI08_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_WAR].ItemName = Channel + Device + ".CAM2_ROI09_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI09_WAR;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_WAR].ItemName = Channel + Device + ".CAM2_ROI10_WAR";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_WAR].ClientHandle = ClientHandleValue.Write_CAM2_ROI10_WAR;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_ALM].ItemName = Channel + Device + ".CAM1_ROI01_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI01_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_ALM].ItemName = Channel + Device + ".CAM1_ROI02_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI02_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_ALM].ItemName = Channel + Device + ".CAM1_ROI03_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI03_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_ALM].ItemName = Channel + Device + ".CAM1_ROI04_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI04_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_ALM].ItemName = Channel + Device + ".CAM1_ROI05_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI05_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_ALM].ItemName = Channel + Device + ".CAM1_ROI06_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI06_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_ALM].ItemName = Channel + Device + ".CAM1_ROI07_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI07_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_ALM].ItemName = Channel + Device + ".CAM1_ROI08_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI08_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_ALM].ItemName = Channel + Device + ".CAM1_ROI09_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI09_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_ALM].ItemName = Channel + Device + ".CAM1_ROI10_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI10_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_ALM].ItemName = Channel + Device + ".CAM1_ROI01_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI01_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI01_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_ALM].ItemName = Channel + Device + ".CAM1_ROI02_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI02_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI02_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_ALM].ItemName = Channel + Device + ".CAM1_ROI03_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI03_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI03_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_ALM].ItemName = Channel + Device + ".CAM1_ROI04_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI04_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI04_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_ALM].ItemName = Channel + Device + ".CAM1_ROI05_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI05_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI05_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_ALM].ItemName = Channel + Device + ".CAM1_ROI06_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI06_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI06_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_ALM].ItemName = Channel + Device + ".CAM1_ROI07_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI07_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI07_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_ALM].ItemName = Channel + Device + ".CAM1_ROI08_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI08_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI08_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_ALM].ItemName = Channel + Device + ".CAM1_ROI09_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI09_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI09_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_ALM].ItemName = Channel + Device + ".CAM1_ROI10_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM1_ROI10_ALM].ClientHandle = ClientHandleValue.Write_CAM1_ROI10_ALM;
 
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_ALM].ItemName = Channel + Device + ".CAM2_ROI01_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI01_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_ALM].ItemName = Channel + Device + ".CAM2_ROI02_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI02_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_ALM].ItemName = Channel + Device + ".CAM2_ROI03_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI03_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_ALM].ItemName = Channel + Device + ".CAM2_ROI04_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI04_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_ALM].ItemName = Channel + Device + ".CAM2_ROI05_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI05_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_ALM].ItemName = Channel + Device + ".CAM2_ROI06_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI06_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_ALM].ItemName = Channel + Device + ".CAM2_ROI07_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI07_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_ALM].ItemName = Channel + Device + ".CAM2_ROI08_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI08_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_ALM].ItemName = Channel + Device + ".CAM2_ROI09_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI09_ALM;
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_ALM].ItemName = Channel + Device + ".CAM2_ROI10_ALM";
-            Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI10_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_ALM].ItemName = Channel + Device + ".CAM2_ROI01_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI01_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI01_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_ALM].ItemName = Channel + Device + ".CAM2_ROI02_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI02_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI02_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_ALM].ItemName = Channel + Device + ".CAM2_ROI03_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI03_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI03_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_ALM].ItemName = Channel + Device + ".CAM2_ROI04_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI04_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI04_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_ALM].ItemName = Channel + Device + ".CAM2_ROI05_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI05_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI05_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_ALM].ItemName = Channel + Device + ".CAM2_ROI06_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI06_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI06_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_ALM].ItemName = Channel + Device + ".CAM2_ROI07_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI07_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI07_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_ALM].ItemName = Channel + Device + ".CAM2_ROI08_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI08_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI08_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_ALM].ItemName = Channel + Device + ".CAM2_ROI09_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI09_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI09_ALM;
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_ALM].ItemName = Channel + Device + ".CAM2_ROI10_ALM";
+            //Write_itemIdentifiers[(int)WritingArrayNo.CAM2_ROI10_ALM].ClientHandle = ClientHandleValue.Write_CAM2_ROI10_ALM;
 
 
             for (int i = 0; i < WriteTagCount; i++)
@@ -611,93 +628,93 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
 
             Write_itemValues[(int)WritingArrayNo.CurrentAngle].Value = CurrentAngle;
-            Write_itemValues[(int)WritingArrayNo.CAM1_MaxTemp].Value = main.FloatMaxTemp;
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold01].Value = result.CAM1_ThresholdTemp[0];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold02].Value = result.CAM1_ThresholdTemp[1];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold03].Value = result.CAM1_ThresholdTemp[2];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold04].Value = result.CAM1_ThresholdTemp[3];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold05].Value = result.CAM1_ThresholdTemp[4];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold06].Value = result.CAM1_ThresholdTemp[5];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold07].Value = result.CAM1_ThresholdTemp[6];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold08].Value = result.CAM1_ThresholdTemp[7];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold09].Value = result.CAM1_ThresholdTemp[8];
-            Write_itemValues[(int)WritingArrayNo.CAM1_Threshold10].Value = result.CAM1_ThresholdTemp[9];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_Temp].Value = imgView.CAM1_TemperatureArr[0];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_Temp].Value = imgView.CAM1_TemperatureArr[1];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_Temp].Value = imgView.CAM1_TemperatureArr[2];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_Temp].Value = imgView.CAM1_TemperatureArr[3];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_Temp].Value = imgView.CAM1_TemperatureArr[4];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_Temp].Value = imgView.CAM1_TemperatureArr[5];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_Temp].Value = imgView.CAM1_TemperatureArr[6];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_Temp].Value = imgView.CAM1_TemperatureArr[7];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_Temp].Value = imgView.CAM1_TemperatureArr[8];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_Temp].Value = imgView.CAM1_TemperatureArr[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_MaxTemp].Value = main.FloatMaxTemp;
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold01].Value = result.CAM1_ThresholdTemp[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold02].Value = result.CAM1_ThresholdTemp[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold03].Value = result.CAM1_ThresholdTemp[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold04].Value = result.CAM1_ThresholdTemp[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold05].Value = result.CAM1_ThresholdTemp[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold06].Value = result.CAM1_ThresholdTemp[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold07].Value = result.CAM1_ThresholdTemp[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold08].Value = result.CAM1_ThresholdTemp[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold09].Value = result.CAM1_ThresholdTemp[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_Threshold10].Value = result.CAM1_ThresholdTemp[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_Temp].Value = imgView.CAM1_TemperatureArr[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_Temp].Value = imgView.CAM1_TemperatureArr[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_Temp].Value = imgView.CAM1_TemperatureArr[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_Temp].Value = imgView.CAM1_TemperatureArr[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_Temp].Value = imgView.CAM1_TemperatureArr[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_Temp].Value = imgView.CAM1_TemperatureArr[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_Temp].Value = imgView.CAM1_TemperatureArr[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_Temp].Value = imgView.CAM1_TemperatureArr[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_Temp].Value = imgView.CAM1_TemperatureArr[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_Temp].Value = imgView.CAM1_TemperatureArr[9];
 
-            Write_itemValues[(int)WritingArrayNo.CAM2_MaxTemp].Value = main.c2_FloatMaxTemp;
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold01].Value = result.CAM2_ThresholdTemp[0];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold02].Value = result.CAM2_ThresholdTemp[1];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold03].Value = result.CAM2_ThresholdTemp[2];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold04].Value = result.CAM2_ThresholdTemp[3];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold05].Value = result.CAM2_ThresholdTemp[4];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold06].Value = result.CAM2_ThresholdTemp[5];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold07].Value = result.CAM2_ThresholdTemp[6];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold08].Value = result.CAM2_ThresholdTemp[7];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold09].Value = result.CAM2_ThresholdTemp[8];
-            Write_itemValues[(int)WritingArrayNo.CAM2_Threshold10].Value = result.CAM2_ThresholdTemp[9];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_Temp].Value = imgView.CAM2_TemperatureArr[0];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_Temp].Value = imgView.CAM2_TemperatureArr[1];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_Temp].Value = imgView.CAM2_TemperatureArr[2];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_Temp].Value = imgView.CAM2_TemperatureArr[3];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_Temp].Value = imgView.CAM2_TemperatureArr[4];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_Temp].Value = imgView.CAM2_TemperatureArr[5];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_Temp].Value = imgView.CAM2_TemperatureArr[6];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_Temp].Value = imgView.CAM2_TemperatureArr[7];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_Temp].Value = imgView.CAM2_TemperatureArr[8];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_Temp].Value = imgView.CAM2_TemperatureArr[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_MaxTemp].Value = main.c2_FloatMaxTemp;
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold01].Value = result.CAM2_ThresholdTemp[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold02].Value = result.CAM2_ThresholdTemp[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold03].Value = result.CAM2_ThresholdTemp[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold04].Value = result.CAM2_ThresholdTemp[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold05].Value = result.CAM2_ThresholdTemp[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold06].Value = result.CAM2_ThresholdTemp[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold07].Value = result.CAM2_ThresholdTemp[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold08].Value = result.CAM2_ThresholdTemp[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold09].Value = result.CAM2_ThresholdTemp[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_Threshold10].Value = result.CAM2_ThresholdTemp[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_Temp].Value = imgView.CAM2_TemperatureArr[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_Temp].Value = imgView.CAM2_TemperatureArr[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_Temp].Value = imgView.CAM2_TemperatureArr[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_Temp].Value = imgView.CAM2_TemperatureArr[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_Temp].Value = imgView.CAM2_TemperatureArr[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_Temp].Value = imgView.CAM2_TemperatureArr[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_Temp].Value = imgView.CAM2_TemperatureArr[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_Temp].Value = imgView.CAM2_TemperatureArr[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_Temp].Value = imgView.CAM2_TemperatureArr[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_Temp].Value = imgView.CAM2_TemperatureArr[9];
 
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_WAR].Value = result.CAM1_isTempPM10[0];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_WAR].Value = result.CAM1_isTempPM10[1];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_WAR].Value = result.CAM1_isTempPM10[2];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_WAR].Value = result.CAM1_isTempPM10[3];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_WAR].Value = result.CAM1_isTempPM10[4];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_WAR].Value = result.CAM1_isTempPM10[5];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_WAR].Value = result.CAM1_isTempPM10[6];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_WAR].Value = result.CAM1_isTempPM10[7];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_WAR].Value = result.CAM1_isTempPM10[8];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_WAR].Value = result.CAM1_isTempPM10[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_WAR].Value = result.CAM1_isTempPM10[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_WAR].Value = result.CAM1_isTempPM10[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_WAR].Value = result.CAM1_isTempPM10[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_WAR].Value = result.CAM1_isTempPM10[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_WAR].Value = result.CAM1_isTempPM10[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_WAR].Value = result.CAM1_isTempPM10[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_WAR].Value = result.CAM1_isTempPM10[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_WAR].Value = result.CAM1_isTempPM10[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_WAR].Value = result.CAM1_isTempPM10[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_WAR].Value = result.CAM1_isTempPM10[9];
 
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_WAR].Value = result.CAM2_isTempPM10[0];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_WAR].Value = result.CAM2_isTempPM10[1];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_WAR].Value = result.CAM2_isTempPM10[2];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_WAR].Value = result.CAM2_isTempPM10[3];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_WAR].Value = result.CAM2_isTempPM10[4];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_WAR].Value = result.CAM2_isTempPM10[5];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_WAR].Value = result.CAM2_isTempPM10[6];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_WAR].Value = result.CAM2_isTempPM10[7];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_WAR].Value = result.CAM2_isTempPM10[8];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_WAR].Value = result.CAM2_isTempPM10[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_WAR].Value = result.CAM2_isTempPM10[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_WAR].Value = result.CAM2_isTempPM10[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_WAR].Value = result.CAM2_isTempPM10[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_WAR].Value = result.CAM2_isTempPM10[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_WAR].Value = result.CAM2_isTempPM10[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_WAR].Value = result.CAM2_isTempPM10[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_WAR].Value = result.CAM2_isTempPM10[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_WAR].Value = result.CAM2_isTempPM10[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_WAR].Value = result.CAM2_isTempPM10[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_WAR].Value = result.CAM2_isTempPM10[9];
 
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_ALM].Value = result.CAM1_isTempUpper10[0];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_ALM].Value = result.CAM1_isTempUpper10[1];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_ALM].Value = result.CAM1_isTempUpper10[2];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_ALM].Value = result.CAM1_isTempUpper10[3];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_ALM].Value = result.CAM1_isTempUpper10[4];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_ALM].Value = result.CAM1_isTempUpper10[5];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_ALM].Value = result.CAM1_isTempUpper10[6];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_ALM].Value = result.CAM1_isTempUpper10[7];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_ALM].Value = result.CAM1_isTempUpper10[8];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_ALM].Value = result.CAM1_isTempUpper10[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_ALM].Value = result.CAM1_isTempUpper10[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_ALM].Value = result.CAM1_isTempUpper10[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_ALM].Value = result.CAM1_isTempUpper10[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_ALM].Value = result.CAM1_isTempUpper10[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_ALM].Value = result.CAM1_isTempUpper10[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_ALM].Value = result.CAM1_isTempUpper10[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_ALM].Value = result.CAM1_isTempUpper10[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_ALM].Value = result.CAM1_isTempUpper10[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_ALM].Value = result.CAM1_isTempUpper10[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_ALM].Value = result.CAM1_isTempUpper10[9];
 
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_ALM].Value = result.CAM2_isTempUpper10[0];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_ALM].Value = result.CAM2_isTempUpper10[1];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_ALM].Value = result.CAM2_isTempUpper10[2];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_ALM].Value = result.CAM2_isTempUpper10[3];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_ALM].Value = result.CAM2_isTempUpper10[4];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_ALM].Value = result.CAM2_isTempUpper10[5];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_ALM].Value = result.CAM2_isTempUpper10[6];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_ALM].Value = result.CAM2_isTempUpper10[7];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_ALM].Value = result.CAM2_isTempUpper10[8];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_ALM].Value = result.CAM2_isTempUpper10[9];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_ALM].Value = result.CAM2_isTempUpper10[0];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_ALM].Value = result.CAM2_isTempUpper10[1];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_ALM].Value = result.CAM2_isTempUpper10[2];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_ALM].Value = result.CAM2_isTempUpper10[3];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_ALM].Value = result.CAM2_isTempUpper10[4];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_ALM].Value = result.CAM2_isTempUpper10[5];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_ALM].Value = result.CAM2_isTempUpper10[6];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_ALM].Value = result.CAM2_isTempUpper10[7];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_ALM].Value = result.CAM2_isTempUpper10[8];
+            //Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_ALM].Value = result.CAM2_isTempUpper10[9];
         }
 
         public void OPC_Write()
@@ -724,18 +741,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Read_itemIdentifiers[i] = new ItemIdentifier();
             }
-            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ItemName = Channel + Device + ".R_CurrentSteelNo";
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelNo);
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelNo].ClientHandle = ClientHandleValue.Read_CurrentSteelNo;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentAngle);
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ClientHandle = ClientHandleValue.Read_CurrentAngle;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentAngle);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentAngle].ClientHandle = ClientHandleValue.Read_CurrentAngle;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelKind);
-            Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ClientHandle = ClientHandleValue.Read_CurrentSteelKind;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelKind);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ClientHandle = ClientHandleValue.Read_CurrentSteelKind;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.BooleanArray);
-            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ClientHandle = ClientHandleValue.Read_BoolArray;
+            //Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.BooleanArray);
+            //Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ClientHandle = ClientHandleValue.Read_BoolArray;
+
             //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Charging1_Progress);
             //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ClientHandle = ClientHandleValue.Read_Charging1_Progress;
 
@@ -802,10 +819,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             // DWORD = System.Uint32(uint), WORD = System.UInt16(ushort), 문자형 = System.String, BooleanArray = System.Boolean[]
 
-            ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
-            ReadingResult[1] = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
-            ReadingResult[2] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
-            ReadingResult[3] = itemValues[(int)ReadingArrayNo.BoolArray].Value;
+            //ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
+            //ReadingResult[1] = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
+            //ReadingResult[2] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
+            //ReadingResult[3] = itemValues[(int)ReadingArrayNo.BoolArray].Value;
+
+            ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
 
             //string b1 = ReadingResult[0].GetType().ToString();
             //string b2 = ReadingResult[1].GetType().ToString();
@@ -813,17 +832,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //string b4 = ReadingResult[3].GetType().ToString();
 
             // DataType을 비교해서
-            for (int i = 0; i < itemValues.Length; i++)
-            {
-                if (ReadingResult[i].GetType().ToString() == "System.Boolean[]") { ChargingStatus = (bool[])ReadingResult[i]; }
-                else if (ReadingResult[i].GetType().ToString() == "System.String") { result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString(); }
-                else if (ReadingResult[i].GetType().ToString() == "System.UInt16") { CurrentAngle = Convert.ToUInt16(ReadingResult[i]); }
-                else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
-                {
-                    main.textBox1.Text = ReadingResult[i].ToString();
-                    main.textBox2.Text = ReadingResult[i].ToString();
-                }
-            }
+            //for (int i = 0; i < itemValues.Length; i++)
+            //{
+            //    if (ReadingResult[i].GetType().ToString() == "System.Boolean[]") { ChargingStatus = (bool[])ReadingResult[i]; }
+            //    else if (ReadingResult[i].GetType().ToString() == "System.String") { result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString(); }
+            //    else if (ReadingResult[i].GetType().ToString() == "System.UInt16") { CurrentAngle = Convert.ToUInt16(ReadingResult[i]); }
+            //    else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
+            //    {
+                    main.textBox1.Text = ReadingResult[0].ToString();
+                    main.textBox2.Text = ReadingResult[0].ToString();
+            //    }
+            //}
 
             //    StringBuilder s = new StringBuilder(50);
             //    s.Clear();

@@ -14,6 +14,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         SystemPropertyGrid grid;
+        CustomOPC opc;
 
         Thread thr1, thr2;
         Thread support_thr1;
@@ -192,6 +193,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.moveToFarStepToolStripMenuItem.Enabled = true;
             main.moveToNearStepToolStripMenuItem.Enabled = true;
 
+            main.OPCSettingToolStripMenuItem.Enabled = true;
+
             main.toolStripSeparator3.Visible = true;
             main.toolStripSeparator4.Visible = true;
             main.toolStripSeparator5.Visible = true;
@@ -217,9 +220,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 support_thr2.Start();
             }
 
-            // OPC 데이터 송수신 활성화
-            main.OPCActivated = true;
-            main.InitOPCTimer();
+            opc = (CustomOPC)main.CustomOPC_forPublicRef();
+
+            if (opc.connectFailed == false)
+            //if(opc.connectFailed==true)
+            {
+                // OPC 데이터 송수신 활성화
+                main.OPCActivated = true;
+                main.InitOPCTimer();
+            }
 
             this.Close();
         }
