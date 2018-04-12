@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PyroSoftM.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kepware.ClientAce.BrowseControls">
       <HintPath>..\..\..\..\..\Program Files (x86)\Kepware Technologies\ClientAce\V4.0\Kepware.ClientAce.BrowseControls.dll</HintPath>
@@ -227,6 +230,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\wws_영문로고.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PyroSoftM.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

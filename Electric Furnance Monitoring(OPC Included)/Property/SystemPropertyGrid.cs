@@ -30,23 +30,23 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #region Variables
 
         // [File]
-        private uint File_numberOfDataRecord = 0;
-        private uint File_currentDataRecord = 0;
+        //private uint File_numberOfDataRecord = 0;
+        //private uint File_currentDataRecord = 0;
 
         // [Camera]
-        private string Camera_CameraType = "";
-        private string Camera_SerialNumber = "";
-        private string Camera_DetectorTemperature = "";
-        private string Camera_CameraTemperature = "";
+        //private string Camera_CameraType = "";
+        //private string Camera_SerialNumber = "";
+        //private string Camera_DetectorTemperature = "";
+        //private string Camera_CameraTemperature = "";
 
         // [Document Size]
-        private string DocSize_Pixel = "";
+        //private string DocSize_Pixel = "";
 
         // [Data Acquisition]
-        private string DataAcq_Date = "";
-        private string DataAcq_Time = "";
-        private uint DataAcq_Index = 0;
-        private string DataAcq_MeasurementRange = "";
+        //private string DataAcq_Date = "";
+        //private string DataAcq_Time = "";
+        //private uint DataAcq_Index = 0;
+        //private string DataAcq_MeasurementRange = "";
         private string DataAcq_AcquisitionFrequency = "";
 
         // [Measurement Object]
@@ -84,7 +84,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         
 
-        #region DefineAttribute_File
+        /*#region DefineAttribute_File
 
         [Category("\t\t\t\t\t\t\tFile"), DefaultValue("0"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         public uint NumberOfDataRecord
@@ -100,9 +100,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             set { File_currentDataRecord = value; }
         }
 
-        #endregion
+        #endregion*/
 
-        #region DefineAttribute_Camera
+        /*#region DefineAttribute_Camera
 
         [Category("\t\t\t\t\t\tCamera"), DefaultValue("-"), ReadOnly(true)]
         public string CameraType
@@ -134,9 +134,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             set { Camera_CameraTemperature = value; }
         }
 
-        #endregion
+        #endregion*/
 
-        #region DefineAttribute_DocumentSize
+        /*#region DefineAttribute_DocumentSize
 
         [Category("\t\t\t\t\tDocument Size"), DefaultValue("-"), ReadOnly(true)]
         public string Pixel
@@ -145,11 +145,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             set { DocSize_Pixel = value; }
         }
 
-        #endregion
+        #endregion*/
 
         #region DefineAttribute_DataAcquisition
         
-        
+        /*
         [Category("\t\t\t\tData Acquisition"), ReadOnly(true), RefreshProperties(RefreshProperties.All)]
         //[RefreshProperties(RefreshProperties.All)]
         //[NotifyParentProperty(true)]
@@ -243,7 +243,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //    ComboData._datas = _cbData.Split(',');
 
         //}
-
+        */
         [Category("\t\t\t\tData Acquisition"), Browsable(true), TypeConverter(typeof(NameConverter))]
         public string AcquisitionFrequency
         {
@@ -831,6 +831,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
+        /*
         private delegate void TimeRefreshOnly();
         public void SafeRefresh_Time()
         {
@@ -865,13 +866,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             //main.propertyGrid1.Invoke();
             main.propertyGrid1.Refresh();
-        }
+        }*/
 
         public void GetAttributesInfo(IntPtr irdxHandle)
         {
 
             StringBuilder s = new StringBuilder(64);
-
+            /*
             #region Attribute_File
 
             DIASDAQ.DDAQ_IRDX_FILE_GET_NUMDATASETS(irdxHandle, ref File_numberOfDataRecord);
@@ -1003,7 +1004,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DataAcq_MeasurementRange = s.ToString();
 
             ///////////////////////////////////////////////////
-
+            */
 
             if (main.m_fps > 0)
             {
@@ -1038,7 +1039,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 ComboData._datas = s.ToString().Split(',');
             }
 
-            #endregion
+            //#endregion
 
             #region Attribute_MeasurementObject
 
@@ -1075,39 +1076,39 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //main.propertyGrid1.Invalidate();
         }
 
-        public void UpdateDataSet()
-        {
-            StringBuilder s = new StringBuilder(20);
+        //public void UpdateDataSet()
+        //{
+        //    StringBuilder s = new StringBuilder(20);
 
-            float temp = 0.0f;
-            bool ok = false;
+        //    float temp = 0.0f;
+        //    bool ok = false;
 
-            if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_DETECTORTEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
-            s.Clear();
-            s.Append(temp.ToString() + " ℃");
-            Camera_DetectorTemperature = s.ToString();
+        //    if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_DETECTORTEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
+        //    s.Clear();
+        //    s.Append(temp.ToString() + " ℃");
+        //    Camera_DetectorTemperature = s.ToString();
 
-            if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_CAMERATEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
-            s.Clear();
-            s.Append(temp.ToString() + " ℃");
-            Camera_CameraTemperature = s.ToString();
+        //    if (DIASDAQ.DDAQ_IRDX_DEVICE_GET_CAMERATEMP(main.pIRDX_Array[0], ref temp, ref ok) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
+        //    s.Clear();
+        //    s.Append(temp.ToString() + " ℃");
+        //    Camera_CameraTemperature = s.ToString();
 
-            int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0, msec = 0;
+        //    int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0, msec = 0;
 
-            if ((DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_TIMESTAMP(main.pIRDX_Array[0], ref year, ref month, ref day, ref hour, ref min, ref sec, ref msec) !=
-                DIASDAQ.DDAQ_ERROR.NO_ERROR)) return;
+        //    if ((DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_TIMESTAMP(main.pIRDX_Array[0], ref year, ref month, ref day, ref hour, ref min, ref sec, ref msec) !=
+        //        DIASDAQ.DDAQ_ERROR.NO_ERROR)) return;
 
-            s.Clear();
-            s.Append(year + "-" + month + "-" + day);
-            //s.Append("1900-01-01");
-            DataAcq_Date = s.ToString();
+        //    s.Clear();
+        //    s.Append(year + "-" + month + "-" + day);
+        //    //s.Append("1900-01-01");
+        //    DataAcq_Date = s.ToString();
 
-            s.Clear();
-            s.Append(hour + ":" + min + ":" + sec + ":" + msec);
-            DataAcq_Time = s.ToString();
+        //    s.Clear();
+        //    s.Append(hour + ":" + min + ":" + sec + ":" + msec);
+        //    DataAcq_Time = s.ToString();
 
             
-        }
+        //}
 
 
         internal class ComboData

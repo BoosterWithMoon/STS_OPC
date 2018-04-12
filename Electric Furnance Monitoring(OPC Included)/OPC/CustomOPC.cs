@@ -51,7 +51,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //Stand_Steel_Progress = 9,
         //Tapping_Progress = 10,
         //O2Lance_Blowing = 11
-        BoolArray=3
+        //BoolArray = 3
+
+        RunningProcess = 3    // Byte
     }
 
     // String Enum
@@ -81,8 +83,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //TappingProgress,
         //[StringValue(".R_O2_Lance_Blowing")]
         //O2LanceBlowing
-        [StringValue(".R_BoolArray")]
-        BooleanArray
+        //[StringValue(".R_BoolArray")]
+        //BooleanArray
+        [StringValue(".R_Progress")]
+        RunningProcess
     }
 
     public enum WritingArrayNo
@@ -196,6 +200,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Read_O2Lance_Blowing = 112,
 
         Read_BoolArray = 113,
+
+        Read_RunningProcess=114,
         #endregion
 
         #region WritingHandle
@@ -317,8 +323,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public string nodeName /*= "192.168.1.100"*/;
 
         // Read 또는 Write할 OPC 태그의 개수
-        private static int ReadTagCount = 4;
-        private static int WriteTagCount = 83;
+        private static int ReadTagCount/* = 4*/;
+        private static int WriteTagCount /*= 83*/;
 
         //private static int ReadTagCount = 1;
         //private static int WriteTagCount = 1;
@@ -332,9 +338,25 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ItemIdentifier[] Write_itemIdentifiers;
         ItemValue[] Write_itemValues;
 
+        bool[] ChargingStatus = new bool[10];
+
+
         public CustomOPC(MainForm _main)
         {
             this.main = _main;
+            string value = "";
+            value = ConfigurationManager.AppSettings["OPC_Channel"];
+            Channel = value;
+            value = ConfigurationManager.AppSettings["OPC_Device"];
+            Device = value;
+            value = ConfigurationManager.AppSettings["OPC_Endpoint"];
+            nodeName = value;
+
+            value = ConfigurationManager.AppSettings["OPC_ReadTagCount"];
+            ReadTagCount = Convert.ToInt32(value);
+            value = ConfigurationManager.AppSettings["OPC_WriteTagCount"];
+            WriteTagCount = Convert.ToInt32(value);
+
             DAServer = new DaServerMgt();
             opcConnectInfo = new ConnectInfo();
             serverEnum = new OpcServerEnum();
@@ -348,13 +370,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Write_itemValues = new ItemValue[WriteTagCount];
 
             //config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            string value = "";
-            value = ConfigurationManager.AppSettings["OPC_Channel"];
-            Channel = value;
-            value = ConfigurationManager.AppSettings["OPC_Device"];
-            Device = value;
-            value = ConfigurationManager.AppSettings["OPC_Endpoint"];
-            nodeName = value;
         }
 
         public void ServerDetection()
@@ -752,8 +767,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.CurrentSteelKind);
             Read_itemIdentifiers[(int)ReadingArrayNo.CurrentSteelKind].ClientHandle = ClientHandleValue.Read_CurrentSteelKind;
 
-            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.BooleanArray);
-            Read_itemIdentifiers[(int)ReadingArrayNo.BoolArray].ClientHandle = ClientHandleValue.Read_BoolArray;
+            Read_itemIdentifiers[(int)ReadingArrayNo.RunningProcess].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.RunningProcess);
+            Read_itemIdentifiers[(int)ReadingArrayNo.RunningProcess].ClientHandle = ClientHandleValue.Read_RunningProcess;
             
             //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ItemName = Channel + Device + StringEnum.GetStringValue(ReadItemIDs.Charging1_Progress);
             //Read_itemIdentifiers[(int)ReadingArrayNo.Charging1_Progress].ClientHandle = ClientHandleValue.Read_Charging1_Progress;
@@ -817,21 +832,21 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
         {
             object[] ReadingResult = new object[itemValues.Length];
-            bool[] ChargingStatus = new bool[10];
+            string temp = "";
 
             // DWORD = System.Uint32(uint), WORD = System.UInt16(ushort), 문자형 = System.String, BooleanArray = System.Boolean[]
 
             ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentAngle].Value;
             ReadingResult[1] = itemValues[(int)ReadingArrayNo.CurrentSteelKind].Value;
             ReadingResult[2] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
-            ReadingResult[3] = itemValues[(int)ReadingArrayNo.BoolArray].Value;
+            ReadingResult[3] = itemValues[(int)ReadingArrayNo.RunningProcess].Value;
 
             //ReadingResult[0] = itemValues[(int)ReadingArrayNo.CurrentSteelNo].Value;
 
-            //string b1 = ReadingResult[0].GetType().ToString();
-            //string b2 = ReadingResult[1].GetType().ToString();
-            //string b3 = ReadingResult[2].GetType().ToString();
-            //string b4 = ReadingResult[3].GetType().ToString();
+            string b1 = ReadingResult[0].GetType().ToString();
+            string b2 = ReadingResult[1].GetType().ToString();
+            string b3 = ReadingResult[2].GetType().ToString();
+            string b4 = ReadingResult[3].GetType().ToString();
 
             // DataType을 비교해서
             for (int i = 0; i < itemValues.Length; i++)
@@ -841,8 +856,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else if (ReadingResult[i].GetType().ToString() == "System.UInt16") { CurrentAngle = Convert.ToUInt16(ReadingResult[i]); }
                 else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
                 {
-                    main.textBox1.Text = ReadingResult[0].ToString();
-                    main.textBox2.Text = ReadingResult[0].ToString();
+                    main.textBox1.Text = ReadingResult[i].ToString();
+                    main.textBox2.Text = ReadingResult[i].ToString();
+                }
+                else if(ReadingResult[i].GetType().ToString() == "System.Byte")
+                {
+                    int inttemp = Convert.ToInt32(ReadingResult[i]);        // Byte를 받아서
+                    temp = Convert.ToString(inttemp, 2);        // 2진수 변환
+
+                    //inttemp = temp.Length;
                 }
             }
 

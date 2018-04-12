@@ -464,6 +464,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                 /// 새로운 데이터가 있으며 종료의 명령이 없을 시
                         return;                                                                                                /// UpDate Data !!
 
+                    float fTemp = 0.0f;
+                    bool bTemp = false;
+                    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(DetectedDevices, ref fTemp, ref bTemp);
+                    CAM1_CameraTemp.Text = fTemp.ToString("N1") + "℃";
+
+                    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(DetectedDevices, ref fTemp, ref bTemp);
+                    CAM1_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
+
                     imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
@@ -475,7 +483,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     VerifyOPC();
                     //propertyGrid1.Invalidate();
-                    customGrid.UpdateDataSet();
+                    //customGrid.UpdateDataSet();
                     //propertyGrid1.Refresh();
                     isDrawnCAM1Image = true;
 
@@ -506,6 +514,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         return;                                                                                     /// UpDate Data !!
 
                     //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
+
+                    float fTemp = 0.0f;
+                    bool bTemp = false;
+                    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(1, ref fTemp, ref bTemp);
+                    CAM2_CameraTemp.Text = fTemp.ToString("N1") + "℃";
+
+                    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(1, ref fTemp, ref bTemp);
+                    CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
+
 
                     imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
                     //imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);

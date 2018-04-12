@@ -100,6 +100,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox_CamTemp = new System.Windows.Forms.GroupBox();
+            this.groupBox_DetectorTemp = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
+            this.CAM2_CameraTemp = new System.Windows.Forms.TextBox();
+            this.CAM2_DetectorTemp = new System.Windows.Forms.TextBox();
+            this.CAM1_DetectorTemp = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -128,6 +139,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2ChartGrid)).BeginInit();
             this.split_CAM2ChartGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.groupBox_CamTemp.SuspendLayout();
+            this.groupBox_DetectorTemp.SuspendLayout();
             this.SuspendLayout();
             // 
             // OPC_textBox1
@@ -371,7 +385,7 @@
             // OPCSettingToolStripMenuItem
             // 
             this.OPCSettingToolStripMenuItem.Name = "OPCSettingToolStripMenuItem";
-            this.OPCSettingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.OPCSettingToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.OPCSettingToolStripMenuItem.Text = "OPC Setting";
             this.OPCSettingToolStripMenuItem.Click += new System.EventHandler(this.oPCSettingToolStripMenuItem_Click);
             // 
@@ -580,9 +594,9 @@
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 51);
+            this.propertyGrid1.Location = new System.Drawing.Point(0, 280);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(244, 978);
+            this.propertyGrid1.Size = new System.Drawing.Size(244, 735);
             this.propertyGrid1.TabIndex = 7;
             // 
             // split_ViewToInfo
@@ -828,11 +842,121 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.groupBox_DetectorTemp);
+            this.panel1.Controls.Add(this.groupBox_CamTemp);
+            this.panel1.Location = new System.Drawing.Point(0, 51);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(244, 224);
+            this.panel1.TabIndex = 10;
+            // 
+            // groupBox_CamTemp
+            // 
+            this.groupBox_CamTemp.Controls.Add(this.CAM2_CameraTemp);
+            this.groupBox_CamTemp.Controls.Add(this.CAM1_CameraTemp);
+            this.groupBox_CamTemp.Controls.Add(this.label8);
+            this.groupBox_CamTemp.Controls.Add(this.label7);
+            this.groupBox_CamTemp.Font = new System.Drawing.Font("맑은 고딕", 11F);
+            this.groupBox_CamTemp.Location = new System.Drawing.Point(3, 6);
+            this.groupBox_CamTemp.Name = "groupBox_CamTemp";
+            this.groupBox_CamTemp.Size = new System.Drawing.Size(238, 100);
+            this.groupBox_CamTemp.TabIndex = 0;
+            this.groupBox_CamTemp.TabStop = false;
+            this.groupBox_CamTemp.Text = "Camera Temp.";
+            // 
+            // groupBox_DetectorTemp
+            // 
+            this.groupBox_DetectorTemp.Controls.Add(this.CAM2_DetectorTemp);
+            this.groupBox_DetectorTemp.Controls.Add(this.CAM1_DetectorTemp);
+            this.groupBox_DetectorTemp.Controls.Add(this.label9);
+            this.groupBox_DetectorTemp.Controls.Add(this.label10);
+            this.groupBox_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 11F);
+            this.groupBox_DetectorTemp.Location = new System.Drawing.Point(3, 112);
+            this.groupBox_DetectorTemp.Name = "groupBox_DetectorTemp";
+            this.groupBox_DetectorTemp.Size = new System.Drawing.Size(238, 100);
+            this.groupBox_DetectorTemp.TabIndex = 1;
+            this.groupBox_DetectorTemp.TabStop = false;
+            this.groupBox_DetectorTemp.Text = "Detector Temp.";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(49, 29);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(26, 20);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "#1";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(158, 29);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(26, 20);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "#2";
+            // 
+            // CAM1_CameraTemp
+            // 
+            this.CAM1_CameraTemp.Location = new System.Drawing.Point(16, 54);
+            this.CAM1_CameraTemp.Name = "CAM1_CameraTemp";
+            this.CAM1_CameraTemp.ReadOnly = true;
+            this.CAM1_CameraTemp.Size = new System.Drawing.Size(100, 27);
+            this.CAM1_CameraTemp.TabIndex = 2;
+            this.CAM1_CameraTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // CAM2_CameraTemp
+            // 
+            this.CAM2_CameraTemp.Location = new System.Drawing.Point(122, 54);
+            this.CAM2_CameraTemp.Name = "CAM2_CameraTemp";
+            this.CAM2_CameraTemp.ReadOnly = true;
+            this.CAM2_CameraTemp.Size = new System.Drawing.Size(100, 27);
+            this.CAM2_CameraTemp.TabIndex = 3;
+            this.CAM2_CameraTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // CAM2_DetectorTemp
+            // 
+            this.CAM2_DetectorTemp.Location = new System.Drawing.Point(122, 52);
+            this.CAM2_DetectorTemp.Name = "CAM2_DetectorTemp";
+            this.CAM2_DetectorTemp.ReadOnly = true;
+            this.CAM2_DetectorTemp.Size = new System.Drawing.Size(100, 27);
+            this.CAM2_DetectorTemp.TabIndex = 7;
+            this.CAM2_DetectorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // CAM1_DetectorTemp
+            // 
+            this.CAM1_DetectorTemp.Location = new System.Drawing.Point(16, 52);
+            this.CAM1_DetectorTemp.Name = "CAM1_DetectorTemp";
+            this.CAM1_DetectorTemp.ReadOnly = true;
+            this.CAM1_DetectorTemp.Size = new System.Drawing.Size(100, 27);
+            this.CAM1_DetectorTemp.TabIndex = 6;
+            this.CAM1_DetectorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(158, 27);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(26, 20);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "#2";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(49, 27);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(26, 20);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "#1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.split_ViewToInfo);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.label_CurrentSteelKind);
@@ -881,6 +1005,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2ChartGrid)).EndInit();
             this.split_CAM2ChartGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.groupBox_CamTemp.ResumeLayout(false);
+            this.groupBox_CamTemp.PerformLayout();
+            this.groupBox_DetectorTemp.ResumeLayout(false);
+            this.groupBox_DetectorTemp.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -958,6 +1087,17 @@
         public System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem OPCSettingToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.GroupBox groupBox_DetectorTemp;
+        private System.Windows.Forms.GroupBox groupBox_CamTemp;
+        private System.Windows.Forms.TextBox CAM2_DetectorTemp;
+        private System.Windows.Forms.TextBox CAM1_DetectorTemp;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox CAM2_CameraTemp;
+        private System.Windows.Forms.TextBox CAM1_CameraTemp;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
     }
 }
 
