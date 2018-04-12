@@ -42,11 +42,11 @@
             // 
             this.label_nodeName.AutoSize = true;
             this.label_nodeName.Font = new System.Drawing.Font("맑은 고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label_nodeName.Location = new System.Drawing.Point(21, 90);
+            this.label_nodeName.Location = new System.Drawing.Point(15, 89);
             this.label_nodeName.Name = "label_nodeName";
-            this.label_nodeName.Size = new System.Drawing.Size(71, 20);
+            this.label_nodeName.Size = new System.Drawing.Size(86, 20);
             this.label_nodeName.TabIndex = 7;
-            this.label_nodeName.Text = "Endpoint";
+            this.label_nodeName.Text = "NodeName";
             // 
             // label_Channel
             // 
