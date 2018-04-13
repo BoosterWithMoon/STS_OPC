@@ -216,7 +216,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void button1_Click(object sender, EventArgs e)
         {
             if (CAM1_SerialNo != POSCO_CAM1_SERIAL || CAM2_SerialNo != POSCO_CAM2_SERIAL)
-            //if(false)
+            //if (false)
             {
                 MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices+"개의 장비 중 적어도 한 개 이상의 올바르지\n않은 장비가 있습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(1);

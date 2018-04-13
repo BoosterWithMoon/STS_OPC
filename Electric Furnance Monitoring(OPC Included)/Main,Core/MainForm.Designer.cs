@@ -893,6 +893,7 @@
             // CAM2_DetectorTemp
             // 
             this.CAM2_DetectorTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_DetectorTemp.Enabled = false;
             this.CAM2_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM2_DetectorTemp.Location = new System.Drawing.Point(115, 93);
             this.CAM2_DetectorTemp.Name = "CAM2_DetectorTemp";
@@ -903,15 +904,18 @@
             // CAM2_Serial
             // 
             this.CAM2_Serial.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_Serial.Enabled = false;
             this.CAM2_Serial.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM2_Serial.Location = new System.Drawing.Point(115, 46);
             this.CAM2_Serial.Name = "CAM2_Serial";
+            this.CAM2_Serial.ReadOnly = true;
             this.CAM2_Serial.Size = new System.Drawing.Size(100, 16);
             this.CAM2_Serial.TabIndex = 8;
             // 
             // CAM2_CameraTemp
             // 
             this.CAM2_CameraTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_CameraTemp.Enabled = false;
             this.CAM2_CameraTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM2_CameraTemp.Location = new System.Drawing.Point(115, 71);
             this.CAM2_CameraTemp.Name = "CAM2_CameraTemp";
@@ -922,9 +926,11 @@
             // CAM2_Type
             // 
             this.CAM2_Type.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_Type.Enabled = false;
             this.CAM2_Type.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM2_Type.Location = new System.Drawing.Point(115, 25);
             this.CAM2_Type.Name = "CAM2_Type";
+            this.CAM2_Type.ReadOnly = true;
             this.CAM2_Type.Size = new System.Drawing.Size(100, 16);
             this.CAM2_Type.TabIndex = 7;
             // 
@@ -989,18 +995,22 @@
             // CAM1_Serial
             // 
             this.CAM1_Serial.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_Serial.Enabled = false;
             this.CAM1_Serial.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM1_Serial.Location = new System.Drawing.Point(114, 49);
             this.CAM1_Serial.Name = "CAM1_Serial";
+            this.CAM1_Serial.ReadOnly = true;
             this.CAM1_Serial.Size = new System.Drawing.Size(101, 16);
             this.CAM1_Serial.TabIndex = 8;
             // 
             // CAM1_Type
             // 
             this.CAM1_Type.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_Type.Enabled = false;
             this.CAM1_Type.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM1_Type.Location = new System.Drawing.Point(114, 27);
             this.CAM1_Type.Name = "CAM1_Type";
+            this.CAM1_Type.ReadOnly = true;
             this.CAM1_Type.Size = new System.Drawing.Size(101, 16);
             this.CAM1_Type.TabIndex = 7;
             // 
@@ -1017,6 +1027,7 @@
             // CAM1_DetectorTemp
             // 
             this.CAM1_DetectorTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_DetectorTemp.Enabled = false;
             this.CAM1_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM1_DetectorTemp.Location = new System.Drawing.Point(114, 93);
             this.CAM1_DetectorTemp.Name = "CAM1_DetectorTemp";
@@ -1037,6 +1048,7 @@
             // CAM1_CameraTemp
             // 
             this.CAM1_CameraTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_CameraTemp.Enabled = false;
             this.CAM1_CameraTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.CAM1_CameraTemp.Location = new System.Drawing.Point(114, 71);
             this.CAM1_CameraTemp.Name = "CAM1_CameraTemp";
