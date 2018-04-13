@@ -101,16 +101,25 @@
             this.split_CAM2ChartGrid = new System.Windows.Forms.SplitContainer();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox_CamTemp = new System.Windows.Forms.GroupBox();
-            this.groupBox_DetectorTemp = new System.Windows.Forms.GroupBox();
+            this.groupBox_CamInfo = new System.Windows.Forms.GroupBox();
+            this.groupBox_CameraInfo_2 = new System.Windows.Forms.GroupBox();
+            this.CAM2_DetectorTemp = new System.Windows.Forms.TextBox();
+            this.CAM2_Serial = new System.Windows.Forms.TextBox();
+            this.CAM2_CameraTemp = new System.Windows.Forms.TextBox();
+            this.CAM2_Type = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
-            this.CAM2_CameraTemp = new System.Windows.Forms.TextBox();
-            this.CAM2_DetectorTemp = new System.Windows.Forms.TextBox();
-            this.CAM1_DetectorTemp = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.groupBox_CameraInfo_1 = new System.Windows.Forms.GroupBox();
+            this.CAM1_Serial = new System.Windows.Forms.TextBox();
+            this.CAM1_Type = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.CAM1_DetectorTemp = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -140,8 +149,9 @@
             this.split_CAM2ChartGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel1.SuspendLayout();
-            this.groupBox_CamTemp.SuspendLayout();
-            this.groupBox_DetectorTemp.SuspendLayout();
+            this.groupBox_CamInfo.SuspendLayout();
+            this.groupBox_CameraInfo_2.SuspendLayout();
+            this.groupBox_CameraInfo_1.SuspendLayout();
             this.SuspendLayout();
             // 
             // OPC_textBox1
@@ -594,9 +604,9 @@
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 280);
+            this.propertyGrid1.Location = new System.Drawing.Point(0, 356);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(244, 735);
+            this.propertyGrid1.Size = new System.Drawing.Size(244, 660);
             this.propertyGrid1.TabIndex = 7;
             // 
             // split_ViewToInfo
@@ -844,112 +854,215 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.groupBox_DetectorTemp);
-            this.panel1.Controls.Add(this.groupBox_CamTemp);
+            this.panel1.Controls.Add(this.groupBox_CamInfo);
             this.panel1.Location = new System.Drawing.Point(0, 51);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(244, 224);
+            this.panel1.Size = new System.Drawing.Size(244, 299);
             this.panel1.TabIndex = 10;
             // 
-            // groupBox_CamTemp
+            // groupBox_CamInfo
             // 
-            this.groupBox_CamTemp.Controls.Add(this.CAM2_CameraTemp);
-            this.groupBox_CamTemp.Controls.Add(this.CAM1_CameraTemp);
-            this.groupBox_CamTemp.Controls.Add(this.label8);
-            this.groupBox_CamTemp.Controls.Add(this.label7);
-            this.groupBox_CamTemp.Font = new System.Drawing.Font("맑은 고딕", 11F);
-            this.groupBox_CamTemp.Location = new System.Drawing.Point(3, 6);
-            this.groupBox_CamTemp.Name = "groupBox_CamTemp";
-            this.groupBox_CamTemp.Size = new System.Drawing.Size(238, 100);
-            this.groupBox_CamTemp.TabIndex = 0;
-            this.groupBox_CamTemp.TabStop = false;
-            this.groupBox_CamTemp.Text = "Camera Temp.";
+            this.groupBox_CamInfo.Controls.Add(this.groupBox_CameraInfo_2);
+            this.groupBox_CamInfo.Controls.Add(this.groupBox_CameraInfo_1);
+            this.groupBox_CamInfo.Font = new System.Drawing.Font("맑은 고딕", 11F);
+            this.groupBox_CamInfo.Location = new System.Drawing.Point(3, 6);
+            this.groupBox_CamInfo.Name = "groupBox_CamInfo";
+            this.groupBox_CamInfo.Size = new System.Drawing.Size(238, 284);
+            this.groupBox_CamInfo.TabIndex = 0;
+            this.groupBox_CamInfo.TabStop = false;
+            this.groupBox_CamInfo.Text = "카메라 정보";
             // 
-            // groupBox_DetectorTemp
+            // groupBox_CameraInfo_2
             // 
-            this.groupBox_DetectorTemp.Controls.Add(this.CAM2_DetectorTemp);
-            this.groupBox_DetectorTemp.Controls.Add(this.CAM1_DetectorTemp);
-            this.groupBox_DetectorTemp.Controls.Add(this.label9);
-            this.groupBox_DetectorTemp.Controls.Add(this.label10);
-            this.groupBox_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 11F);
-            this.groupBox_DetectorTemp.Location = new System.Drawing.Point(3, 112);
-            this.groupBox_DetectorTemp.Name = "groupBox_DetectorTemp";
-            this.groupBox_DetectorTemp.Size = new System.Drawing.Size(238, 100);
-            this.groupBox_DetectorTemp.TabIndex = 1;
-            this.groupBox_DetectorTemp.TabStop = false;
-            this.groupBox_DetectorTemp.Text = "Detector Temp.";
+            this.groupBox_CameraInfo_2.Controls.Add(this.CAM2_DetectorTemp);
+            this.groupBox_CameraInfo_2.Controls.Add(this.CAM2_Serial);
+            this.groupBox_CameraInfo_2.Controls.Add(this.CAM2_CameraTemp);
+            this.groupBox_CameraInfo_2.Controls.Add(this.CAM2_Type);
+            this.groupBox_CameraInfo_2.Controls.Add(this.label7);
+            this.groupBox_CameraInfo_2.Controls.Add(this.label8);
+            this.groupBox_CameraInfo_2.Controls.Add(this.label10);
+            this.groupBox_CameraInfo_2.Controls.Add(this.label15);
+            this.groupBox_CameraInfo_2.Font = new System.Drawing.Font("맑은 고딕", 10F);
+            this.groupBox_CameraInfo_2.Location = new System.Drawing.Point(6, 145);
+            this.groupBox_CameraInfo_2.Name = "groupBox_CameraInfo_2";
+            this.groupBox_CameraInfo_2.Size = new System.Drawing.Size(223, 121);
+            this.groupBox_CameraInfo_2.TabIndex = 9;
+            this.groupBox_CameraInfo_2.TabStop = false;
+            this.groupBox_CameraInfo_2.Text = "#2";
+            // 
+            // CAM2_DetectorTemp
+            // 
+            this.CAM2_DetectorTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM2_DetectorTemp.Location = new System.Drawing.Point(115, 93);
+            this.CAM2_DetectorTemp.Name = "CAM2_DetectorTemp";
+            this.CAM2_DetectorTemp.ReadOnly = true;
+            this.CAM2_DetectorTemp.Size = new System.Drawing.Size(100, 16);
+            this.CAM2_DetectorTemp.TabIndex = 7;
+            // 
+            // CAM2_Serial
+            // 
+            this.CAM2_Serial.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_Serial.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM2_Serial.Location = new System.Drawing.Point(115, 46);
+            this.CAM2_Serial.Name = "CAM2_Serial";
+            this.CAM2_Serial.Size = new System.Drawing.Size(100, 16);
+            this.CAM2_Serial.TabIndex = 8;
+            // 
+            // CAM2_CameraTemp
+            // 
+            this.CAM2_CameraTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_CameraTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM2_CameraTemp.Location = new System.Drawing.Point(115, 71);
+            this.CAM2_CameraTemp.Name = "CAM2_CameraTemp";
+            this.CAM2_CameraTemp.ReadOnly = true;
+            this.CAM2_CameraTemp.Size = new System.Drawing.Size(100, 16);
+            this.CAM2_CameraTemp.TabIndex = 3;
+            // 
+            // CAM2_Type
+            // 
+            this.CAM2_Type.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM2_Type.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM2_Type.Location = new System.Drawing.Point(115, 25);
+            this.CAM2_Type.Name = "CAM2_Type";
+            this.CAM2_Type.Size = new System.Drawing.Size(100, 16);
+            this.CAM2_Type.TabIndex = 7;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(49, 29);
+            this.label7.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label7.Location = new System.Drawing.Point(10, 93);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(26, 20);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "#1";
+            this.label7.Size = new System.Drawing.Size(87, 15);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Detector Temp";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(158, 29);
+            this.label8.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label8.Location = new System.Drawing.Point(19, 70);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(26, 20);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "#2";
-            // 
-            // CAM1_CameraTemp
-            // 
-            this.CAM1_CameraTemp.Location = new System.Drawing.Point(16, 54);
-            this.CAM1_CameraTemp.Name = "CAM1_CameraTemp";
-            this.CAM1_CameraTemp.ReadOnly = true;
-            this.CAM1_CameraTemp.Size = new System.Drawing.Size(100, 27);
-            this.CAM1_CameraTemp.TabIndex = 2;
-            this.CAM1_CameraTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // CAM2_CameraTemp
-            // 
-            this.CAM2_CameraTemp.Location = new System.Drawing.Point(122, 54);
-            this.CAM2_CameraTemp.Name = "CAM2_CameraTemp";
-            this.CAM2_CameraTemp.ReadOnly = true;
-            this.CAM2_CameraTemp.Size = new System.Drawing.Size(100, 27);
-            this.CAM2_CameraTemp.TabIndex = 3;
-            this.CAM2_CameraTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // CAM2_DetectorTemp
-            // 
-            this.CAM2_DetectorTemp.Location = new System.Drawing.Point(122, 52);
-            this.CAM2_DetectorTemp.Name = "CAM2_DetectorTemp";
-            this.CAM2_DetectorTemp.ReadOnly = true;
-            this.CAM2_DetectorTemp.Size = new System.Drawing.Size(100, 27);
-            this.CAM2_DetectorTemp.TabIndex = 7;
-            this.CAM2_DetectorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // CAM1_DetectorTemp
-            // 
-            this.CAM1_DetectorTemp.Location = new System.Drawing.Point(16, 52);
-            this.CAM1_DetectorTemp.Name = "CAM1_DetectorTemp";
-            this.CAM1_DetectorTemp.ReadOnly = true;
-            this.CAM1_DetectorTemp.Size = new System.Drawing.Size(100, 27);
-            this.CAM1_DetectorTemp.TabIndex = 6;
-            this.CAM1_DetectorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(158, 27);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(26, 20);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "#2";
+            this.label8.Size = new System.Drawing.Size(68, 15);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "CAM Temp";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(49, 27);
+            this.label10.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label10.Location = new System.Drawing.Point(31, 47);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(26, 20);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "#1";
+            this.label10.Size = new System.Drawing.Size(36, 15);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Serial";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label15.Location = new System.Drawing.Point(33, 24);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(32, 15);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "Type";
+            // 
+            // groupBox_CameraInfo_1
+            // 
+            this.groupBox_CameraInfo_1.Controls.Add(this.CAM1_Serial);
+            this.groupBox_CameraInfo_1.Controls.Add(this.CAM1_Type);
+            this.groupBox_CameraInfo_1.Controls.Add(this.label14);
+            this.groupBox_CameraInfo_1.Controls.Add(this.CAM1_DetectorTemp);
+            this.groupBox_CameraInfo_1.Controls.Add(this.label13);
+            this.groupBox_CameraInfo_1.Controls.Add(this.CAM1_CameraTemp);
+            this.groupBox_CameraInfo_1.Controls.Add(this.label12);
+            this.groupBox_CameraInfo_1.Controls.Add(this.label11);
+            this.groupBox_CameraInfo_1.Font = new System.Drawing.Font("맑은 고딕", 10F);
+            this.groupBox_CameraInfo_1.Location = new System.Drawing.Point(7, 20);
+            this.groupBox_CameraInfo_1.Name = "groupBox_CameraInfo_1";
+            this.groupBox_CameraInfo_1.Size = new System.Drawing.Size(223, 121);
+            this.groupBox_CameraInfo_1.TabIndex = 4;
+            this.groupBox_CameraInfo_1.TabStop = false;
+            this.groupBox_CameraInfo_1.Text = "#1";
+            // 
+            // CAM1_Serial
+            // 
+            this.CAM1_Serial.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_Serial.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM1_Serial.Location = new System.Drawing.Point(114, 49);
+            this.CAM1_Serial.Name = "CAM1_Serial";
+            this.CAM1_Serial.Size = new System.Drawing.Size(101, 16);
+            this.CAM1_Serial.TabIndex = 8;
+            // 
+            // CAM1_Type
+            // 
+            this.CAM1_Type.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_Type.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM1_Type.Location = new System.Drawing.Point(114, 27);
+            this.CAM1_Type.Name = "CAM1_Type";
+            this.CAM1_Type.Size = new System.Drawing.Size(101, 16);
+            this.CAM1_Type.TabIndex = 7;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label14.Location = new System.Drawing.Point(10, 93);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(87, 15);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Detector Temp";
+            // 
+            // CAM1_DetectorTemp
+            // 
+            this.CAM1_DetectorTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_DetectorTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM1_DetectorTemp.Location = new System.Drawing.Point(114, 93);
+            this.CAM1_DetectorTemp.Name = "CAM1_DetectorTemp";
+            this.CAM1_DetectorTemp.ReadOnly = true;
+            this.CAM1_DetectorTemp.Size = new System.Drawing.Size(101, 16);
+            this.CAM1_DetectorTemp.TabIndex = 6;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label13.Location = new System.Drawing.Point(18, 71);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(68, 15);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "CAM Temp";
+            // 
+            // CAM1_CameraTemp
+            // 
+            this.CAM1_CameraTemp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CAM1_CameraTemp.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.CAM1_CameraTemp.Location = new System.Drawing.Point(114, 71);
+            this.CAM1_CameraTemp.Name = "CAM1_CameraTemp";
+            this.CAM1_CameraTemp.ReadOnly = true;
+            this.CAM1_CameraTemp.Size = new System.Drawing.Size(101, 16);
+            this.CAM1_CameraTemp.TabIndex = 2;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label12.Location = new System.Drawing.Point(30, 49);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(36, 15);
+            this.label12.TabIndex = 1;
+            this.label12.Text = "Serial";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.label11.Location = new System.Drawing.Point(32, 25);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(32, 15);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "Type";
             // 
             // MainForm
             // 
@@ -1006,10 +1119,11 @@
             this.split_CAM2ChartGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.groupBox_CamTemp.ResumeLayout(false);
-            this.groupBox_CamTemp.PerformLayout();
-            this.groupBox_DetectorTemp.ResumeLayout(false);
-            this.groupBox_DetectorTemp.PerformLayout();
+            this.groupBox_CamInfo.ResumeLayout(false);
+            this.groupBox_CameraInfo_2.ResumeLayout(false);
+            this.groupBox_CameraInfo_2.PerformLayout();
+            this.groupBox_CameraInfo_1.ResumeLayout(false);
+            this.groupBox_CameraInfo_1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1087,17 +1201,26 @@
         public System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem OPCSettingToolStripMenuItem;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.GroupBox groupBox_DetectorTemp;
-        private System.Windows.Forms.GroupBox groupBox_CamTemp;
-        private System.Windows.Forms.TextBox CAM2_DetectorTemp;
-        private System.Windows.Forms.TextBox CAM1_DetectorTemp;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox CAM2_CameraTemp;
-        private System.Windows.Forms.TextBox CAM1_CameraTemp;
-        private System.Windows.Forms.Label label8;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.GroupBox groupBox_CamInfo;
+        public System.Windows.Forms.TextBox CAM2_DetectorTemp;
+        public System.Windows.Forms.TextBox CAM1_DetectorTemp;
+        public System.Windows.Forms.TextBox CAM2_CameraTemp;
+        public System.Windows.Forms.TextBox CAM1_CameraTemp;
+        private System.Windows.Forms.GroupBox groupBox_CameraInfo_2;
+        public System.Windows.Forms.TextBox CAM2_Serial;
+        public System.Windows.Forms.TextBox CAM2_Type;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.GroupBox groupBox_CameraInfo_1;
+        public System.Windows.Forms.TextBox CAM1_Serial;
+        public System.Windows.Forms.TextBox CAM1_Type;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
     }
 }
 

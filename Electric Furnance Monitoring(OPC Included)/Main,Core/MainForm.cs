@@ -340,6 +340,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox3.Visible = false;
             textBox4.Visible = false;
 
+            split_ViewToInfo.Visible = false;
+
             toolStripSeparator3.Visible = false;
             toolStripSeparator4.Visible = false;
             toolStripSeparator5.Visible = false;
@@ -378,6 +380,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             moveToFarStepToolStripMenuItem.Enabled = false;
 
             OPCSettingToolStripMenuItem.Enabled = false;
+
+            //groupBox_CamTemp.Visible = false;
+            //groupBox_DetectorTemp.Visible = false;
+            panel1.Visible = false;
+
+            propertyGrid1.Visible = false;
 
             ViewAdjust();
 
@@ -1338,6 +1346,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 label1.Text = "IRDX Mode";
                 label1.Visible = true;
 
+                split_ViewToInfo.Visible = true;
+                panel1.Visible = true;
+                propertyGrid1.Visible = true;
+
                 textBox1.Visible = true;
                 textBox2.Visible = true;
                 textBox3.Visible = true;
@@ -1471,6 +1483,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             InitImageView();
             InitChart();
             InitGridView();
+
+            split_ViewToInfo.Visible = true;
+            panel1.Visible = true;
+            propertyGrid1.Visible = true;
 
             label1.Visible = true;
             label2.Visible = true;

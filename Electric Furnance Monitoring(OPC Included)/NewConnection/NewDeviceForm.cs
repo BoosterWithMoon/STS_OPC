@@ -12,6 +12,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class NewDeviceForm : Form
     {
+        private static string POSCO_CAM1_SERIAL = "C1157727";
+        private static string POSCO_CAM2_SERIAL = "C1157827";
+
         MainForm main;
         SystemPropertyGrid grid;
         CustomOPC opc;
@@ -26,6 +29,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         uint NDF_DetectedDevices;
         // ======================= Variable that prevent for CS1690 Warning
 
+        private string CAM1_SerialNo = "";
+        private string CAM2_SerialNo = "";
+
         public NewDeviceForm(MainForm _main)
         {
             this.main = _main;
@@ -36,8 +42,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
 
         }
-
-        
 
         private void NewDeviceForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -73,6 +77,87 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         }
 
+        private void GetDeviceType(uint DeviceNo, IntPtr irdxHandle)
+        {
+            StringBuilder s = new StringBuilder(20);
+            uint type = 0;
+            DIASDAQ.DDAQ_DEVICE_TYPE id = 0;
+
+            DIASDAQ.DDAQ_DEVICE_GET_ID(DeviceNo, ref id, ref type);
+            string s2 = "";
+            switch (type)
+            {
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_100:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_100.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_256:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_256.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_320:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.VIEW_320.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.MIDAS:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.MIDAS.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.MODULE_128:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.MODULE_128.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.LINE_128:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.LINE_128.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.LINE_256:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.LINE_256.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.HZK_160:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.HZK_160.ToString();
+                    break;
+                case (uint)DIASDAQ.DDAQ_DEVICE_TYPE.HZK_256:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.HZK_256.ToString();
+                    break;
+                case 52:
+                    s2 = "VIEW_512";
+                    break;
+                default:
+                    s2 = DIASDAQ.DDAQ_DEVICE_TYPE.NO.ToString();
+                    break;
+            }
+            s.Clear();
+            s.Append("PYRO" + s2);
+
+            if (irdxHandle == main.pIRDX_Array[0])
+                main.CAM1_Type.Text = s.ToString();
+            else
+                main.CAM2_Type.Text = s.ToString();
+        }
+
+        private void GetDeviceID(uint DeviceNo, IntPtr irdxHandle)
+        {
+            StringBuilder s = new StringBuilder(64);
+            byte[] tempDeviceID = new byte[64];
+            char[] ch_tempDeviceID = new char[64];
+
+            s.Clear();
+            DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(DeviceNo, tempDeviceID, 64);
+            for(int i=0; i<64; i++)
+            {
+                ch_tempDeviceID[i] = (char)tempDeviceID[i];
+                string temp = ch_tempDeviceID[i].ToString();
+                s.Append(temp);
+            }
+            string result = s.ToString();
+            int serialTemp = result.IndexOf("C");
+            if(irdxHandle == main.pIRDX_Array[0])
+            {
+                CAM1_SerialNo = result.Substring(serialTemp, 8);
+                main.CAM1_Serial.Text = CAM1_SerialNo.ToString();
+            }
+            else
+            {
+                CAM2_SerialNo = result.Substring(serialTemp, 8);
+                main.CAM2_Serial.Text = CAM2_SerialNo.ToString();
+            }
+        }
+
         public void ReadyToRun()
         {
             main.DetectedDevices = NDF_DetectedDevices;
@@ -85,8 +170,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             // CAMERA #1 (320L)
             DIASDAQ.DDAQ_DEVICE_DO_OPEN(NDF_DetectedDevices, null);
-            DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(NDF_DetectedDevices, tempDeviceID, 64);
             DIASDAQ.DDAQ_DEVICE_GET_IRDX(NDF_DetectedDevices, ref main.pIRDX_Array[0]);
+
+            GetDeviceType(NDF_DetectedDevices, main.pIRDX_Array[0]);
+
+            DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(NDF_DetectedDevices, tempDeviceID, 64);
             for (int i = 0; i < 64; i++)
             {
                 ch_tempDeviceID[i] = (char)tempDeviceID[i];
@@ -98,12 +186,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             comboBox1.Items.Add(DeviceID[0]);
             comboBox1.SelectedIndex = 0;
 
-            if (NDF_DetectedDevices == 1) return;
+            GetDeviceID(NDF_DetectedDevices, main.pIRDX_Array[0]);
+
             // CAMERA #2 (512N)
+            if (NDF_DetectedDevices == 1) return;
+
             result.Clear();
+
             DIASDAQ.DDAQ_DEVICE_DO_OPEN(1, null);
-            DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(1, tempDeviceID, 64);
             DIASDAQ.DDAQ_DEVICE_GET_IRDX(1, ref main.pIRDX_Array[1]);
+
+            GetDeviceType(1, main.pIRDX_Array[1]);
+
+            DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(1, tempDeviceID, 64);
             for (int i = 0; i < 64; i++)
             {
                 ch_tempDeviceID[i] = (char)tempDeviceID[i];
@@ -114,10 +209,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DeviceID[1] = forComboBox;
             comboBox2.Items.Add(DeviceID[1]);
             comboBox2.SelectedIndex = 0;
+
+            GetDeviceID(1, main.pIRDX_Array[1]);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (CAM1_SerialNo != POSCO_CAM1_SERIAL || CAM2_SerialNo != POSCO_CAM2_SERIAL)
+            //if(false)
+            {
+                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices+"개의 장비 중 적어도 한 개 이상의 올바르지\n않은 장비가 있습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
+                main.pIRDX_Array[0] = IntPtr.Zero;
+                main.pIRDX_Array[1] = IntPtr.Zero;
+                Close();
+                return;
+            }
             for (uint i = 0; i < NDF_DetectedDevices; i++)
             {
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(main.pIRDX_Array[i], ref main.sizeX_Array[i], ref main.sizeY_Array[i]);
@@ -172,6 +284,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.InitGridView();
             main.InitResultView();
 
+            main.split_ViewToInfo.Visible = true;
+
             main.label1.Visible = true;
             main.label3.Visible = true;
             main.label5.Visible = true;
@@ -199,6 +313,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.toolStripSeparator4.Visible = true;
             main.toolStripSeparator5.Visible = true;
             main.toolStripSeparator6.Visible = true;
+
+            //main.groupBox_CamTemp.Visible = true;
+            //main.groupBox_DetectorTemp.Visible = true;
+            main.panel1.Visible = true;
+
+            main.propertyGrid1.Visible = true;
 
             thr1 = (Thread)main.Thread1_forPublicRef();
             thr1.Start();
