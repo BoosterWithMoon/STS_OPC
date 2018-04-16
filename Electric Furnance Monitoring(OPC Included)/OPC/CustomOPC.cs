@@ -851,7 +851,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // byte 후처리
             string aa = "";
             int substringTemp = 0;
-            for(int i=ChargingStatus.Length-temp.Length; i<ChargingStatus.Length; i++)
+            for (int i = 0; i < 8; i++)
+            {
+                ChargingStatus[i] = false;
+            }
+            for (int i = ChargingStatus.Length - temp.Length; i < ChargingStatus.Length; i++)       // 변환한 2진수 집어넣기
             {
                 aa = temp.Substring(substringTemp, 1);
                 if (aa == "1") ChargingStatus[i] = true;
@@ -859,15 +863,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 substringTemp++;
             }
 
+            for (int i = 0; i < 8; i++)
+            {
+                if (ChargingStatus[i] == true) main.ProgressLabel[i].ForeColor = result.Connected_NoWarning;
+                else main.ProgressLabel[i].ForeColor = result.NotConnected;
+            }
+            if (O2LanceResult == true) main.ProgressLabel[8].ForeColor = result.Connected_NoWarning;
+            else main.ProgressLabel[8].ForeColor = result.NotConnected;
         }
 
         private int RandomNumber(int MaxNumber, int MinNumber)
         {
-            //initialize random number generator
             Random r = new Random(System.DateTime.Now.Millisecond);
-
-            //if passed incorrect arguments, swap them
-            //can also throw exception or return 0
 
             if (MinNumber > MaxNumber)
             {
@@ -875,7 +882,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 MinNumber = MaxNumber;
                 MaxNumber = t;
             }
-
             return r.Next(MinNumber, MaxNumber);
         }
 

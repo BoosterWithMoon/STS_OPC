@@ -33,9 +33,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public bool[] CAM2_isTempPM10 = new bool[10];
         public bool[] CAM2_isTempUpper10 = new bool[10];
 
-        public static Color NotConnected = Color.Gray;
-        public static Color Connected_NoWarning = Color.Green;
-        public static Color Connected_Warning = Color.Red;
+        public /*static*/ Color NotConnected = Color.Gray;
+        public /*static*/ Color Connected_NoWarning = Color.Green;
+        public /*static*/ Color Connected_Warning = Color.Red;
 
         public ResultView(MainForm _main)
         {

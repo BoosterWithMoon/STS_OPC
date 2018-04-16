@@ -130,6 +130,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         [DllImport("kernel32.dll")]
         public static extern void Beep(int frequency, int duration);
 
+        public Label[] ProgressLabel = new Label[9];
+
         public MainForm()
         {
             InitializeComponent();
@@ -213,8 +215,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             split_CamToCam.Width = split_ViewToInfo.Panel1.Width / 2;
 
             // CAM #1 영역 Height 조정
-            split_CAM1Info.SplitterDistance = 70;
+            split_CAM1Info.SplitterDistance = 140;
             split_CAM1ChartGrid.SplitterDistance = 265;
+
             split_CAM2Info.SplitterDistance = split_CAM1Info.Panel1.Height;
             split_CAM2ChartGrid.SplitterDistance = split_CAM1ChartGrid.Panel1.Height;
         }
@@ -296,6 +299,21 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             result.Text = "";
             result.ControlBox = false;
             result.Show();
+
+            ProgressLabel[0] = label_Charging1;
+            ProgressLabel[1] = label_Melting1;
+            ProgressLabel[2] = label_Charging2;
+            ProgressLabel[3] = label_Melting2;
+            ProgressLabel[4] = label_Charging3;
+            ProgressLabel[5] = label_Melting3;
+            ProgressLabel[6] = label_StandSteel;
+            ProgressLabel[7] = label_Tapping;
+            ProgressLabel[8] = label_O2Lance;
+
+            for(int i=0; i<9; i++)
+            {
+                ProgressLabel[i].ForeColor = result.NotConnected;
+            }
         }
         #endregion
 

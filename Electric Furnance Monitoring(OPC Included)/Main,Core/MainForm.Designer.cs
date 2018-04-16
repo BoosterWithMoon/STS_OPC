@@ -120,6 +120,24 @@
             this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_Charging1 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label_Melting1 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label_Charging2 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label_Melting2 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label_Charging3 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label_Melting3 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label_StandSteel = new System.Windows.Forms.Label();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label_Tapping = new System.Windows.Forms.Label();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label_O2Lance = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -152,6 +170,15 @@
             this.groupBox_CamInfo.SuspendLayout();
             this.groupBox_CameraInfo_2.SuspendLayout();
             this.groupBox_CameraInfo_1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // OPC_textBox1
@@ -671,13 +698,20 @@
             // 
             // split_CAM1Info.Panel1
             // 
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox7);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox6);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox5);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox4);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox3);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox2);
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox1);
             this.split_CAM1Info.Panel1.Controls.Add(this.textBox3);
             this.split_CAM1Info.Panel1.Controls.Add(this.textBox1);
             this.split_CAM1Info.Panel1.Controls.Add(this.label5);
             this.split_CAM1Info.Panel1.Controls.Add(this.label3);
             this.split_CAM1Info.Panel1.Controls.Add(this.label1);
             this.split_CAM1Info.Size = new System.Drawing.Size(689, 638);
-            this.split_CAM1Info.SplitterDistance = 94;
+            this.split_CAM1Info.SplitterDistance = 154;
             this.split_CAM1Info.TabIndex = 0;
             // 
             // textBox3
@@ -685,7 +719,7 @@
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Enabled = false;
             this.textBox3.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox3.Location = new System.Drawing.Point(580, 15);
+            this.textBox3.Location = new System.Drawing.Point(580, 95);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(100, 40);
@@ -697,7 +731,7 @@
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox1.Location = new System.Drawing.Point(343, 15);
+            this.textBox1.Location = new System.Drawing.Point(345, 94);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(95, 40);
@@ -708,7 +742,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(444, 20);
+            this.label5.Location = new System.Drawing.Point(447, 103);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(126, 34);
             this.label5.TabIndex = 4;
@@ -718,7 +752,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.Location = new System.Drawing.Point(224, 20);
+            this.label3.Location = new System.Drawing.Point(218, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(121, 34);
             this.label3.TabIndex = 2;
@@ -728,7 +762,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
-            this.label1.Location = new System.Drawing.Point(3, 18);
+            this.label1.Location = new System.Drawing.Point(3, 99);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(196, 37);
             this.label1.TabIndex = 0;
@@ -774,13 +808,15 @@
             // 
             // split_CAM2Info.Panel1
             // 
+            this.split_CAM2Info.Panel1.Controls.Add(this.groupBox9);
+            this.split_CAM2Info.Panel1.Controls.Add(this.groupBox8);
             this.split_CAM2Info.Panel1.Controls.Add(this.textBox4);
             this.split_CAM2Info.Panel1.Controls.Add(this.textBox2);
             this.split_CAM2Info.Panel1.Controls.Add(this.label6);
             this.split_CAM2Info.Panel1.Controls.Add(this.label4);
             this.split_CAM2Info.Panel1.Controls.Add(this.label2);
             this.split_CAM2Info.Size = new System.Drawing.Size(670, 638);
-            this.split_CAM2Info.SplitterDistance = 94;
+            this.split_CAM2Info.SplitterDistance = 154;
             this.split_CAM2Info.TabIndex = 0;
             // 
             // textBox4
@@ -788,7 +824,7 @@
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox4.Enabled = false;
             this.textBox4.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox4.Location = new System.Drawing.Point(567, 13);
+            this.textBox4.Location = new System.Drawing.Point(565, 94);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(100, 40);
@@ -800,7 +836,7 @@
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Enabled = false;
             this.textBox2.Font = new System.Drawing.Font("맑은 고딕", 22F);
-            this.textBox2.Location = new System.Drawing.Point(329, 13);
+            this.textBox2.Location = new System.Drawing.Point(327, 94);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(100, 40);
@@ -811,7 +847,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label6.Location = new System.Drawing.Point(433, 22);
+            this.label6.Location = new System.Drawing.Point(431, 103);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(126, 34);
             this.label6.TabIndex = 5;
@@ -821,7 +857,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("나눔바른고딕", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(200, 20);
+            this.label4.Location = new System.Drawing.Point(198, 101);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(121, 34);
             this.label4.TabIndex = 3;
@@ -831,7 +867,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
-            this.label2.Location = new System.Drawing.Point(3, 20);
+            this.label2.Location = new System.Drawing.Point(1, 101);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(198, 37);
             this.label2.TabIndex = 1;
@@ -1076,6 +1112,204 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "Type";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label_Charging1);
+            this.groupBox1.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox1.Location = new System.Drawing.Point(11, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(90, 90);
+            this.groupBox1.TabIndex = 8;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Charging1";
+            // 
+            // label_Charging1
+            // 
+            this.label_Charging1.AutoSize = true;
+            this.label_Charging1.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Charging1.Location = new System.Drawing.Point(7, 19);
+            this.label_Charging1.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Charging1.Name = "label_Charging1";
+            this.label_Charging1.Size = new System.Drawing.Size(78, 60);
+            this.label_Charging1.TabIndex = 0;
+            this.label_Charging1.Text = "■";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label_Melting1);
+            this.groupBox2.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox2.Location = new System.Drawing.Point(109, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(90, 90);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Melting1";
+            // 
+            // label_Melting1
+            // 
+            this.label_Melting1.AutoSize = true;
+            this.label_Melting1.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Melting1.Location = new System.Drawing.Point(7, 19);
+            this.label_Melting1.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Melting1.Name = "label_Melting1";
+            this.label_Melting1.Size = new System.Drawing.Size(78, 60);
+            this.label_Melting1.TabIndex = 0;
+            this.label_Melting1.Text = "■";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label_Charging2);
+            this.groupBox3.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox3.Location = new System.Drawing.Point(205, 8);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(90, 90);
+            this.groupBox3.TabIndex = 10;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Charging2";
+            // 
+            // label_Charging2
+            // 
+            this.label_Charging2.AutoSize = true;
+            this.label_Charging2.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Charging2.Location = new System.Drawing.Point(7, 19);
+            this.label_Charging2.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Charging2.Name = "label_Charging2";
+            this.label_Charging2.Size = new System.Drawing.Size(78, 60);
+            this.label_Charging2.TabIndex = 0;
+            this.label_Charging2.Text = "■";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label_Melting2);
+            this.groupBox4.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox4.Location = new System.Drawing.Point(301, 8);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(90, 90);
+            this.groupBox4.TabIndex = 11;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Melting2";
+            // 
+            // label_Melting2
+            // 
+            this.label_Melting2.AutoSize = true;
+            this.label_Melting2.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Melting2.Location = new System.Drawing.Point(7, 19);
+            this.label_Melting2.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Melting2.Name = "label_Melting2";
+            this.label_Melting2.Size = new System.Drawing.Size(78, 60);
+            this.label_Melting2.TabIndex = 0;
+            this.label_Melting2.Text = "■";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label_Charging3);
+            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox5.Location = new System.Drawing.Point(397, 8);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(90, 90);
+            this.groupBox5.TabIndex = 12;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Charging3";
+            // 
+            // label_Charging3
+            // 
+            this.label_Charging3.AutoSize = true;
+            this.label_Charging3.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Charging3.Location = new System.Drawing.Point(7, 19);
+            this.label_Charging3.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Charging3.Name = "label_Charging3";
+            this.label_Charging3.Size = new System.Drawing.Size(78, 60);
+            this.label_Charging3.TabIndex = 0;
+            this.label_Charging3.Text = "■";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label_Melting3);
+            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox6.Location = new System.Drawing.Point(493, 8);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(90, 90);
+            this.groupBox6.TabIndex = 13;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Melting3";
+            // 
+            // label_Melting3
+            // 
+            this.label_Melting3.AutoSize = true;
+            this.label_Melting3.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Melting3.Location = new System.Drawing.Point(7, 19);
+            this.label_Melting3.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Melting3.Name = "label_Melting3";
+            this.label_Melting3.Size = new System.Drawing.Size(78, 60);
+            this.label_Melting3.TabIndex = 0;
+            this.label_Melting3.Text = "■";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label_StandSteel);
+            this.groupBox7.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox7.Location = new System.Drawing.Point(589, 8);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(90, 90);
+            this.groupBox7.TabIndex = 14;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "StandSteel";
+            // 
+            // label_StandSteel
+            // 
+            this.label_StandSteel.AutoSize = true;
+            this.label_StandSteel.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_StandSteel.Location = new System.Drawing.Point(7, 19);
+            this.label_StandSteel.Margin = new System.Windows.Forms.Padding(0);
+            this.label_StandSteel.Name = "label_StandSteel";
+            this.label_StandSteel.Size = new System.Drawing.Size(78, 60);
+            this.label_StandSteel.TabIndex = 0;
+            this.label_StandSteel.Text = "■";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.label_Tapping);
+            this.groupBox8.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox8.Location = new System.Drawing.Point(8, 8);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(90, 90);
+            this.groupBox8.TabIndex = 15;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Tapping";
+            // 
+            // label_Tapping
+            // 
+            this.label_Tapping.AutoSize = true;
+            this.label_Tapping.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Tapping.Location = new System.Drawing.Point(7, 19);
+            this.label_Tapping.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Tapping.Name = "label_Tapping";
+            this.label_Tapping.Size = new System.Drawing.Size(78, 60);
+            this.label_Tapping.TabIndex = 0;
+            this.label_Tapping.Text = "■";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.label_O2Lance);
+            this.groupBox9.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox9.Location = new System.Drawing.Point(104, 8);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(90, 90);
+            this.groupBox9.TabIndex = 16;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "O2Lance";
+            // 
+            // label_O2Lance
+            // 
+            this.label_O2Lance.AutoSize = true;
+            this.label_O2Lance.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_O2Lance.Location = new System.Drawing.Point(7, 19);
+            this.label_O2Lance.Margin = new System.Windows.Forms.Padding(0);
+            this.label_O2Lance.Name = "label_O2Lance";
+            this.label_O2Lance.Size = new System.Drawing.Size(78, 60);
+            this.label_O2Lance.TabIndex = 0;
+            this.label_O2Lance.Text = "■";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -1136,6 +1370,24 @@
             this.groupBox_CameraInfo_2.PerformLayout();
             this.groupBox_CameraInfo_1.ResumeLayout(false);
             this.groupBox_CameraInfo_1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1233,6 +1485,24 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label_Charging1;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label label_StandSteel;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label label_Melting3;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label_Charging3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label_Melting2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label_Charging2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label_Melting1;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Label label_O2Lance;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Label label_Tapping;
     }
 }
 
