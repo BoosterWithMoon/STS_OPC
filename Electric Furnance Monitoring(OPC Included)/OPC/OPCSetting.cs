@@ -75,6 +75,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Close();
         }
 
-        
+        private void OPCSetting_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

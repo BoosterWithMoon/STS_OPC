@@ -31,6 +31,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             this.main = _main;
             c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
+            c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
         }
 
         #region Variables
@@ -180,7 +181,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else if (MousePosTemp.X<0 || MousePosTemp.X>(/*320*/m_bmp_isize_x+m_bmp_ofs_x)*m_bmp_zoom ||
                     MousePosTemp.Y<=m_bmp_ofs_y || MousePosTemp.Y>(m_bmp_size_y+m_bmp_ofs_y))
                 {
-
+                    // 안그림
                 }
                 else  // DEFAULT
                 {
@@ -321,7 +322,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else if (MousePosTemp.X < 0 || MousePosTemp.X > (/*320*/c2_m_bmp_isize_x + c2_m_bmp_ofs_x) * c2_m_bmp_zoom ||
                     MousePosTemp.Y <= c2_m_bmp_ofs_y || MousePosTemp.Y > (c2_m_bmp_size_y + c2_m_bmp_ofs_y))
                 {
-
+                    // 안그림
                 }
                 else  // DEFAULT
                 {

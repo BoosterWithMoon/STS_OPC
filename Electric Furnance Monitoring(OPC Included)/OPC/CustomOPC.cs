@@ -318,6 +318,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         bool returnAllServers = false;
         public bool detected = false;
         int detectedIndex = 0;
+        // OPC DA 지정
         ServerCategory[] serverCategories = { ServerCategory.OPCDA };
 
         // 연결시킬 OPC 태그가 존재하는 채널 / Device ID

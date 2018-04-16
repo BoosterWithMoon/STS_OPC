@@ -17,8 +17,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         SystemPropertyGrid property;
         SetThreshold thresholdForm;
 
-        CustomOPC opc;
-
         public Label[] CAM1_LabelArray = new Label[10];
         public Color[] CAM1_POIConnected = new Color[10];
         public float[] CAM1_ThresholdTemp = new float[10];
@@ -48,8 +46,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             CAM2_AlarmInitialize();
             imgView = (ImageView)main.ImageView_forPublicRef();
             property = (SystemPropertyGrid)main.customGrid_forPublicRef();
-
-            //opc = (CustomOPC)main.CustomOPC_forPublicRef();
 
             thresholdForm = new SetThreshold(_main);
 
@@ -82,8 +78,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_ThresholdTemp[i] = Convert.ToSingle(value);
             }
         }
-
-        //public object SetThreshold_forPublicRef() { return thresholdForm; }
 
         public void CAM1_AlarmInitialize()
         {
@@ -205,15 +199,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 // 제일 처음 초기화 상태로 되돌린다
                 CAM1_AlarmInitialize();
             }
-
-
         }
 
         public void CAM2_DetectTempThreshold()
         {
             if (imgView.CAM2_POICount != 0)
             {
-
                 for (int i = 0; i < imgView.CAM2_POICount; i++)
                 {
                     //if (imgView.CAM2_TemperatureArr[i] >= property.Threshold)

@@ -27,5 +27,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             Close();
         }
+
+        private void AboutForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Escape || e.KeyCode == Keys.Enter)
+            {
+                Close();
+            }
+        }
     }
 }

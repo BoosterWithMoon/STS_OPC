@@ -130,6 +130,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OPCSetting";
             this.Load += new System.EventHandler(this.OPCSetting_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OPCSetting_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

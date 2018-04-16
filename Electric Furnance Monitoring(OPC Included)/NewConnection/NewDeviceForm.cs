@@ -138,7 +138,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             s.Clear();
             DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(DeviceNo, tempDeviceID, 64);
-            for(int i=0; i<64; i++)
+            for (int i = 0; i < 64; i++)
             {
                 ch_tempDeviceID[i] = (char)tempDeviceID[i];
                 string temp = ch_tempDeviceID[i].ToString();
@@ -146,7 +146,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             string result = s.ToString();
             int serialTemp = result.IndexOf("C");
-            if(irdxHandle == main.pIRDX_Array[0])
+            if (irdxHandle == main.pIRDX_Array[0])
             {
                 CAM1_SerialNo = result.Substring(serialTemp, 8);
                 main.CAM1_Serial.Text = CAM1_SerialNo.ToString();
@@ -301,6 +301,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.moveROIToolStripMenuItem.Enabled = true;
 
             main.LogStart_toolStripButton.Visible = true;
+            main.LogStop_toolStripButton.Visible = true;
+            main.LogStop_toolStripButton.Enabled = false;
             main.startToolStripMenuItem.Enabled = true;
 
             main.MoveFocus_FarStep.Visible = true;

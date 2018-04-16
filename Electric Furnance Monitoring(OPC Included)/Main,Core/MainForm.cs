@@ -52,10 +52,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread CAM2_DataView;
 
         AboutForm about;
-
-        //Thread propertyGridUpdate;
         #endregion
 
+        #region VariablesDeclare
         public uint DetectedDevices;
         public IntPtr[] pIRDX_Array;
 
@@ -65,58 +64,52 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public float currentEmissivity;
         public float currentTransmittance;
         public float currentAmbientTemp;
-        public float cMaxTemp = 0;
-        public float Scale_MaxTemp = 0;
-        public float cMinTemp = 0;
-        public float Scale_MinTemp = 0;
-        public uint NumOfDataRecord = 0;
-        public uint CurDataRecord = 0;
-        public float m_fps = 0;
-        public ushort m_avg = 0;
 
-        private bool isClosing = false;
+        public float cMaxTemp;
+        public float cMinTemp;
+        public float Scale_MaxTemp;
+        public float Scale_MinTemp;
 
-        private bool isDrawnCAM1Image = false;
-        private bool isDrawnCAM2Image = false;
+        public uint NumOfDataRecord;
+        public uint CurDataRecord;
 
-        public uint acq_index = 0;
+        public float m_fps;
+        public ushort m_avg;
 
-        public string fileFullName = "";
-        public ushort sizeX = 0;
-        public ushort sizeY = 0;
-        public ushort sizeX_2 = 0;
-        public ushort sizeY_2 = 0;
-        public float min = 0.0f, max = 0.0f;
+        private bool isClosing;
 
-        public bool Activate_DrawPOI = false;
+        private bool isDrawnCAM1Image;
+        private bool isDrawnCAM2Image;
 
-        string NewIRDXFileName = "";
-        string newRawDataFileName = "";
-        string newResultDataFileName = "";
-        string CAM2_NewIRDXFileName = "";
-        string CAM2_newRawDataFileName = "";
-        string CAM2_newResultDataFileName = "";
-        public bool isLoggingRunning = false;
+        public uint acq_index;
 
-        public System.Windows.Forms.Timer OPCTimer = new System.Windows.Forms.Timer();
+        public string fileFullName;
+        public ushort sizeX;
+        public ushort sizeY;
+        public ushort sizeX_2;
+        public ushort sizeY_2;
+        public float min, max;
 
-        public enum OpenMode : int
-        {
-            Online = 1,
-            Simulation = 2,
-            IRDX = 3
-        }
-        public OpenMode currentOpenMode = OpenMode.IRDX;
+        public bool Activate_DrawPOI;
 
-        public bool OPCActivated = false;
+        string NewIRDXFileName;
+        string newRawDataFileName;
+        string newResultDataFileName;
+        string CAM2_NewIRDXFileName;
+        string CAM2_newRawDataFileName;
+        string CAM2_newResultDataFileName;
+        public bool isLoggingRunning;
+        System.Windows.Forms.Timer dataplayerTimer;
 
-        private uint position = 0;
-        private uint numDataSet = 0;
+        public System.Windows.Forms.Timer OPCTimer;
+        public bool OPCActivated;
 
-        System.Windows.Forms.Timer dataplayerTimer = new System.Windows.Forms.Timer();
-        bool isTimerRunning = false;
+        private uint position;
+        private uint numDataSet;
 
-        public int IRDXFileCount = 0;
+        bool isTimerRunning;
+
+        public int IRDXFileCount;
 
         private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
         private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
@@ -130,32 +123,48 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         [DllImport("kernel32.dll")]
         public static extern void Beep(int frequency, int duration);
 
-        public Label[] ProgressLabel = new Label[9];
+        public Label[] ProgressLabel;
+
+        public enum OpenMode : int
+        {
+            Online = 1,
+            Simulation = 2,
+            IRDX = 3
+        }
+        public OpenMode currentOpenMode;
+
+        System.Windows.Forms.Timer LoggingTimer = new System.Windows.Forms.Timer();
+        FileStream Text_RawData;
+        FileStream Text_ResultData;
+        StreamWriter outputFile;
+        StreamWriter outputFile_Result;
+
+        FileStream c2_Text_RawData;
+        FileStream c2_Text_ResultData;
+        StreamWriter c2_outputFile;
+        StreamWriter c2_outputFile_Result;
+
+        IntPtr irdxHandle_write = new IntPtr();
+        IntPtr c2_irdxHandle_write = new IntPtr();
+        int tickCount = 0;
+
+        System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+        #endregion
 
         public MainForm()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
 
+            #region ClassAllocation
             newDevice = new NewDeviceForm(this);
-            DetectedDevices = 0;
-            pIRDX_Array = new IntPtr[2];
-            sizeX_Array = new ushort[2];
-            sizeY_Array = new ushort[2];
-            currentEmissivity = 1.0f;
-            currentTransmittance = 1.0f;
 
             customGrid = new SystemPropertyGrid(this);
 
             imgView = new ImageView(this);
             c1_imgView = new CAM1_ImageView(this);
             c2_imgView = new CAM2_ImageView(this);
-
-            mThread = new Thread(new ThreadStart(run));
-            mThread_two = new Thread(new ThreadStart(run_two));
-            CAM1_DataView = new Thread(new ThreadStart(CAM1_AllView));
-            CAM2_DataView = new Thread(new ThreadStart(CAM2_AllView));
-            //propertyGridUpdate = new Thread(new ThreadStart(UpdateProperty));
 
             c1_chartView = new CAM1_ChartView(this);
             c2_chartView = new CAM2_ChartView(this);
@@ -170,7 +179,76 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             openDlg = new OpenFileDialog();
 
+            mThread = new Thread(new ThreadStart(run));
+            mThread_two = new Thread(new ThreadStart(run_two));
+
+            CAM1_DataView = new Thread(new ThreadStart(CAM1_AllView));
+            CAM2_DataView = new Thread(new ThreadStart(CAM2_AllView));
+
             about = new AboutForm(this);
+            #endregion
+
+            DetectedDevices = 0;
+            pIRDX_Array = new IntPtr[2];
+
+            sizeX_Array = new ushort[2];
+            sizeY_Array = new ushort[2];
+
+            currentEmissivity = 1.0f;
+            currentTransmittance = 1.0f;
+            currentAmbientTemp = 25;
+
+            cMaxTemp = 0;
+            cMinTemp = 0;
+            Scale_MaxTemp = 0;
+            Scale_MinTemp = 0;
+
+            NumOfDataRecord = 0;
+            CurDataRecord = 0;
+
+            m_fps = 0;
+            m_avg = 0;
+
+            isClosing = false;
+
+            isDrawnCAM1Image = false;
+            isDrawnCAM2Image = false;
+
+            acq_index = 0;
+
+            fileFullName = "";
+            sizeX = 0;
+            sizeY = 0;
+            sizeX_2 = 0;
+            sizeY_2 = 0;
+            min = 0.0f;
+            max = 0.0f;
+
+            Activate_DrawPOI = false;
+
+            NewIRDXFileName = "";
+            newRawDataFileName = "";
+            newResultDataFileName = "";
+            CAM2_NewIRDXFileName = "";
+            CAM2_newRawDataFileName = "";
+            CAM2_newResultDataFileName = "";
+            isLoggingRunning = false;
+
+            dataplayerTimer = new System.Windows.Forms.Timer();
+            OPCTimer = new System.Windows.Forms.Timer();
+
+            OPCActivated = false;
+
+            position = 0;
+            numDataSet = 0;
+
+            isTimerRunning = false;
+
+            IRDXFileCount = 0;
+
+            ProgressLabel = new Label[9];
+
+            currentOpenMode = OpenMode.IRDX;
         }
 
         #region Publicize_AllocatedClass
@@ -932,7 +1010,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //bool isRawFolderExist = File.Exists(customGrid.RawData_Location);
             //bool isResultFolderExist = File.Exists(customGrid.ResultData_Location);
 
-
             if (!isRawFolderExist || !isResultFolderExist)
             {
                 string appPath = Application.StartupPath;
@@ -963,21 +1040,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             if (isRawFolderExist)
             {
-                //newRawDataFolderName = customGrid.RawData_Location + "\\" + currentTime;
-                //Directory.CreateDirectory(newRawDataFolderName);
                 newRawDataFolderName = customGrid.RawData_Location + "\\RawData";
                 Directory.CreateDirectory(newRawDataFolderName);
-                //newRawDataFolderName += currentTime_DateOnly;
                 newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newRawDataFolderName);
             }
             if (isResultFolderExist)
             {
-                //newResultDataFolderName = customGrid.ResultData_Location+ "\\" + currentTime;
-                //Directory.CreateDirectory(newResultDataFolderName);
                 newResultDataFolderName = customGrid.ResultData_Location + "\\ResultData";
                 Directory.CreateDirectory(newResultDataFolderName);
-                //newResultDataFolderName += currentTime_DateOnly;
                 newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newResultDataFolderName);
             }
@@ -989,31 +1060,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     strFileName = newRawDataFolderName + "\\" + strFileName;
                     break;
                 case 1:
-                    //strFileName = strFileName + time.ToString() + ".txt";
                     strFileName = strFileName + currentTime + ".txt";
                     strFileName = newRawDataFolderName + "\\" + strFileName;
-                    //strFileName = "[" + id.ToString() + "]" + " Raw";
                     break;
                 case 2:
                     strFileName = strFileName + currentTime + ".txt";
                     strFileName = newResultDataFolderName + "\\" + strFileName;
-                    //strFileName = "[" + id.ToString() + "]" + " Result";
                     break;
             }
 
             return strFileName;
         }
-
-        System.Windows.Forms.Timer LoggingTimer = new System.Windows.Forms.Timer();
-        FileStream Text_RawData;
-        FileStream Text_ResultData;
-        StreamWriter outputFile;
-        StreamWriter outputFile_Result;
-
-        FileStream c2_Text_RawData;
-        FileStream c2_Text_ResultData;
-        StreamWriter c2_outputFile;
-        StreamWriter c2_outputFile_Result;
 
         private void DeviceLoggingStart()
         {
@@ -1084,9 +1141,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        IntPtr irdxHandle_write = new IntPtr();
-        IntPtr c2_irdxHandle_write = new IntPtr();
-        int tickCount = 0;
 
         private void T_Tick(object sender, EventArgs e)
         {
@@ -1125,8 +1179,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             tickCount++;
         }
 
-
-
         private void DeviceLoggingStop()
         {
             isLoggingRunning = false;
@@ -1156,13 +1208,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 c2_Text_ResultData.Close();
             }
         }
-
         #endregion
 
 
         #region ConfigurationControl
-
-        System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
         private void LoadConfiguration()
         {
@@ -1214,10 +1263,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
         }
-
-
         #endregion
-
 
         private void VerifyOPC()
         {
@@ -1230,8 +1276,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 result.OPCActiveAlarm.ForeColor = Color.Green;
             else
                 result.OPCActiveAlarm.ForeColor = Color.Red;
-
-
         }
 
         public float FloatMaxTemp = 0.0f;
@@ -1284,7 +1328,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             MaxTemp = c2_FloatMaxTemp.ToString("N1") + "℃";
             textBox4.Text = MaxTemp;
         }
-
 
         private void OPC_DataSending(object sender, EventArgs e)
         {
@@ -1549,6 +1592,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             opcSet.ShowDialog();
         }
 
+        // IRDX Frame keepmoving timer
         private void InitTimerForPlayer()
         {
             dataplayerTimer.Interval = 10;  // ms
