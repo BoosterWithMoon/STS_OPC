@@ -203,6 +203,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
 
+            CalculateCurrentTemp(irdxHandle, CAM1_POICount, CAM1_ClickedPosition, CAM1_TemperatureArr);
+
             if (position[0].X <= 0 || position[0].Y <= 0) return;
 
             int fShort = 1, fLong = 4;
@@ -342,6 +344,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public void CAM2_DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, /*float[] temp, */int poiCount, ref Graphics g)
         {
             c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
+
+            CalculateCurrentTemp(irdxHandle, CAM2_POICount, CAM2_ClickedPosition, CAM2_TemperatureArr);
+
             if (position[0].X <= 0 || position[0].Y <= 0) return;
 
             float fShort = 1.0f, fLong = 4.0f;

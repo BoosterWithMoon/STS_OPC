@@ -13,7 +13,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         ImageView imgView;
-        private int colCount = 0;
+        //private int colCount = 0;
 
         public CAM1_DataGridView(MainForm _main)
         {

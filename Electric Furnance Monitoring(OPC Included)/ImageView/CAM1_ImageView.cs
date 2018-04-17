@@ -25,7 +25,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public bool CAM1_clicked = false;
         public bool CAM1_POIClicked = false;
         public int CAM1_pointIdx = 0;
-        bool c1focused = false;
+        //bool c1focused = false;
 
         public CAM1_ImageView(MainForm _main)
         {

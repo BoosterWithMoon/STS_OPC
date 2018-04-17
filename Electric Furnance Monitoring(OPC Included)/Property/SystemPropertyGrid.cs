@@ -62,13 +62,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         //private uint Scale_NumberOfColor = 0;
         private float Scale_Maximum = 0.0f;
         private float Scale_Minimun = 0.0f;
-        private float Scale_IsoTherm = 0.0f;
+        //private float Scale_IsoTherm = 0.0f;
 
         // [Measuerment]
-        private float Measurement_HFOV = 0.0f;
-        private float Measurement_VFOV = 0.0f;
-        private float Measurement_IncidnetAngle = 0.0f;
-        private float Measurement_Distance = 0.0f;
+        //private float Measurement_HFOV = 0.0f;
+        //private float Measurement_VFOV = 0.0f;
+        //private float Measurement_IncidnetAngle = 0.0f;
+        //private float Measurement_Distance = 0.0f;
 
         // [Data Logging]
         private string DataLog_RawDataLocation = "";
@@ -77,7 +77,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         // [For Calculate Something]
         private float fav = 0.0f;
         private ushort avg = 0;
-        private float Threshold_Temperature = 0.0f;
+        //private float Threshold_Temperature = 0.0f;
 
         #endregion
 

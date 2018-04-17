@@ -30,10 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.OPC_textBox1 = new System.Windows.Forms.TextBox();
-            this.OPC_textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newOnlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,14 +81,7 @@
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
             this.split_CAM1UpToDown = new System.Windows.Forms.SplitContainer();
             this.split_CAM1Info = new System.Windows.Forms.SplitContainer();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.label_StandSteel = new System.Windows.Forms.Label();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.label_Melting3 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label_Charging3 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label_Melting2 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label_Charging2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -107,6 +96,14 @@
             this.split_CAM1ChartGrid = new System.Windows.Forms.SplitContainer();
             this.split_CAM2UpToDown = new System.Windows.Forms.SplitContainer();
             this.split_CAM2Info = new System.Windows.Forms.SplitContainer();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label_Melting2 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label_Charging3 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label_Melting3 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label_StandSteel = new System.Windows.Forms.Label();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.label_O2Lance = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -138,7 +135,6 @@
             this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.label_CurrentSteelKind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -155,10 +151,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM1Info)).BeginInit();
             this.split_CAM1Info.Panel1.SuspendLayout();
             this.split_CAM1Info.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -171,6 +163,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2Info)).BeginInit();
             this.split_CAM2Info.Panel1.SuspendLayout();
             this.split_CAM2Info.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2ChartGrid)).BeginInit();
@@ -181,40 +177,6 @@
             this.groupBox_CameraInfo_2.SuspendLayout();
             this.groupBox_CameraInfo_1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // OPC_textBox1
-            // 
-            this.OPC_textBox1.Location = new System.Drawing.Point(1370, 12);
-            this.OPC_textBox1.Name = "OPC_textBox1";
-            this.OPC_textBox1.Size = new System.Drawing.Size(100, 21);
-            this.OPC_textBox1.TabIndex = 0;
-            // 
-            // OPC_textBox2
-            // 
-            this.OPC_textBox2.Location = new System.Drawing.Point(1568, 12);
-            this.OPC_textBox2.Name = "OPC_textBox2";
-            this.OPC_textBox2.Size = new System.Drawing.Size(100, 21);
-            this.OPC_textBox2.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1476, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(1683, 13);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // menuStrip1
             // 
@@ -477,7 +439,7 @@
             this.새로만들기ToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.새로만들기ToolStripButton.Name = "새로만들기ToolStripButton";
             this.새로만들기ToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.새로만들기ToolStripButton.Text = "새로 만들기";
+            this.새로만들기ToolStripButton.Text = "새 카메라 연결을 만듭니다.";
             this.새로만들기ToolStripButton.Click += new System.EventHandler(this.새로만들기ToolStripButton_Click);
             // 
             // 열기ToolStripButton
@@ -488,6 +450,7 @@
             this.열기ToolStripButton.Name = "열기ToolStripButton";
             this.열기ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.열기ToolStripButton.Text = "열기";
+            this.열기ToolStripButton.ToolTipText = "IRDX 파일 열기";
             this.열기ToolStripButton.Click += new System.EventHandler(this.열기ToolStripButton_Click);
             // 
             // toolStripSeparator3
@@ -502,7 +465,7 @@
             this.PreviousRecord_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PreviousRecord_toolStripButton.Name = "PreviousRecord_toolStripButton";
             this.PreviousRecord_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.PreviousRecord_toolStripButton.Text = "toolStripButton1";
+            this.PreviousRecord_toolStripButton.Text = "이전 Record로 이동";
             this.PreviousRecord_toolStripButton.Click += new System.EventHandler(this.PreviousRecord_toolStripButton_Click);
             // 
             // NextRecord_toolStripButton
@@ -512,7 +475,7 @@
             this.NextRecord_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.NextRecord_toolStripButton.Name = "NextRecord_toolStripButton";
             this.NextRecord_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.NextRecord_toolStripButton.Text = "toolStripButton2";
+            this.NextRecord_toolStripButton.Text = "앞 Record로 이동";
             this.NextRecord_toolStripButton.Click += new System.EventHandler(this.NextRecord_toolStripButton_Click);
             // 
             // KeepMoving_toolStripButton
@@ -522,7 +485,7 @@
             this.KeepMoving_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.KeepMoving_toolStripButton.Name = "KeepMoving_toolStripButton";
             this.KeepMoving_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.KeepMoving_toolStripButton.Text = "toolStripButton3";
+            this.KeepMoving_toolStripButton.Text = "앞 Record로 계속해서 이동";
             this.KeepMoving_toolStripButton.Click += new System.EventHandler(this.KeepMoving_toolStripButton_Click);
             // 
             // Pause_toolStripButton
@@ -532,7 +495,7 @@
             this.Pause_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Pause_toolStripButton.Name = "Pause_toolStripButton";
             this.Pause_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.Pause_toolStripButton.Text = "toolStripButton4";
+            this.Pause_toolStripButton.Text = "Record 이동 중지";
             this.Pause_toolStripButton.Click += new System.EventHandler(this.Pause_toolStripButton_Click);
             // 
             // MoveFocus_NearStep
@@ -542,7 +505,7 @@
             this.MoveFocus_NearStep.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.MoveFocus_NearStep.Name = "MoveFocus_NearStep";
             this.MoveFocus_NearStep.Size = new System.Drawing.Size(23, 22);
-            this.MoveFocus_NearStep.Text = "NearStep";
+            this.MoveFocus_NearStep.Text = "카메라 Focus를 NearStep 이동";
             this.MoveFocus_NearStep.Click += new System.EventHandler(this.NearStep_toolStripButtonClick);
             // 
             // MoveFocus_FarStep
@@ -552,7 +515,7 @@
             this.MoveFocus_FarStep.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.MoveFocus_FarStep.Name = "MoveFocus_FarStep";
             this.MoveFocus_FarStep.Size = new System.Drawing.Size(23, 22);
-            this.MoveFocus_FarStep.Text = "FarStep";
+            this.MoveFocus_FarStep.Text = "카메라 Focus를 FarStep 이동";
             this.MoveFocus_FarStep.Click += new System.EventHandler(this.FarStep_toolStripButtonClick);
             // 
             // toolStripSeparator4
@@ -567,7 +530,7 @@
             this.DrawPOI_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DrawPOI_toolStripButton.Name = "DrawPOI_toolStripButton";
             this.DrawPOI_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.DrawPOI_toolStripButton.Text = "toolStripButton5";
+            this.DrawPOI_toolStripButton.Text = "포인트 ROI를 그립니다.";
             this.DrawPOI_toolStripButton.Click += new System.EventHandler(this.DrawPOI_toolStripButton_Click);
             // 
             // MovePOI_toolStripButton
@@ -577,7 +540,7 @@
             this.MovePOI_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.MovePOI_toolStripButton.Name = "MovePOI_toolStripButton";
             this.MovePOI_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.MovePOI_toolStripButton.Text = "toolStripButton6";
+            this.MovePOI_toolStripButton.Text = "포인트 ROI를 이동시킵니다.";
             this.MovePOI_toolStripButton.Click += new System.EventHandler(this.MovePOI_toolStripButton_Click);
             // 
             // DeletePOI_toolStripButton
@@ -587,7 +550,7 @@
             this.DeletePOI_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DeletePOI_toolStripButton.Name = "DeletePOI_toolStripButton";
             this.DeletePOI_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.DeletePOI_toolStripButton.Text = "toolStripButton7";
+            this.DeletePOI_toolStripButton.Text = "포인트 ROI를 삭제합니다.";
             this.DeletePOI_toolStripButton.Click += new System.EventHandler(this.DeletePOI_toolStripButton_Click);
             // 
             // toolStripSeparator5
@@ -602,7 +565,7 @@
             this.LogStart_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LogStart_toolStripButton.Name = "LogStart_toolStripButton";
             this.LogStart_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.LogStart_toolStripButton.Text = "toolStripButton8";
+            this.LogStart_toolStripButton.Text = "Data Logging을 시작합니다.";
             this.LogStart_toolStripButton.Click += new System.EventHandler(this.LogStart_toolStripButton_Click);
             // 
             // LogStop_toolStripButton
@@ -612,7 +575,7 @@
             this.LogStop_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LogStop_toolStripButton.Name = "LogStop_toolStripButton";
             this.LogStop_toolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.LogStop_toolStripButton.Text = "toolStripButton9";
+            this.LogStop_toolStripButton.Text = "Data Logging을 중지합니다.";
             this.LogStop_toolStripButton.Click += new System.EventHandler(this.LogStop_toolStripButton_Click);
             // 
             // toolStripSeparator6
@@ -712,93 +675,15 @@
             this.split_CAM1Info.SplitterDistance = 154;
             this.split_CAM1Info.TabIndex = 0;
             // 
-            // groupBox7
+            // label9
             // 
-            this.groupBox7.Controls.Add(this.label_StandSteel);
-            this.groupBox7.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
-            this.groupBox7.Location = new System.Drawing.Point(352, 6);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(90, 90);
-            this.groupBox7.TabIndex = 14;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "StandSteel";
-            // 
-            // label_StandSteel
-            // 
-            this.label_StandSteel.AutoSize = true;
-            this.label_StandSteel.Font = new System.Drawing.Font("굴림", 45F);
-            this.label_StandSteel.Location = new System.Drawing.Point(7, 19);
-            this.label_StandSteel.Margin = new System.Windows.Forms.Padding(0);
-            this.label_StandSteel.Name = "label_StandSteel";
-            this.label_StandSteel.Size = new System.Drawing.Size(78, 60);
-            this.label_StandSteel.TabIndex = 0;
-            this.label_StandSteel.Text = "■";
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.label_Melting3);
-            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
-            this.groupBox6.Location = new System.Drawing.Point(240, 6);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(90, 90);
-            this.groupBox6.TabIndex = 13;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Melting3";
-            // 
-            // label_Melting3
-            // 
-            this.label_Melting3.AutoSize = true;
-            this.label_Melting3.Font = new System.Drawing.Font("굴림", 45F);
-            this.label_Melting3.Location = new System.Drawing.Point(7, 19);
-            this.label_Melting3.Margin = new System.Windows.Forms.Padding(0);
-            this.label_Melting3.Name = "label_Melting3";
-            this.label_Melting3.Size = new System.Drawing.Size(78, 60);
-            this.label_Melting3.TabIndex = 0;
-            this.label_Melting3.Text = "■";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.label_Charging3);
-            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
-            this.groupBox5.Location = new System.Drawing.Point(122, 6);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(90, 90);
-            this.groupBox5.TabIndex = 12;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Charging3";
-            // 
-            // label_Charging3
-            // 
-            this.label_Charging3.AutoSize = true;
-            this.label_Charging3.Font = new System.Drawing.Font("굴림", 45F);
-            this.label_Charging3.Location = new System.Drawing.Point(7, 19);
-            this.label_Charging3.Margin = new System.Windows.Forms.Padding(0);
-            this.label_Charging3.Name = "label_Charging3";
-            this.label_Charging3.Size = new System.Drawing.Size(78, 60);
-            this.label_Charging3.TabIndex = 0;
-            this.label_Charging3.Text = "■";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label_Melting2);
-            this.groupBox4.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
-            this.groupBox4.Location = new System.Drawing.Point(10, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(90, 90);
-            this.groupBox4.TabIndex = 11;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Melting2";
-            // 
-            // label_Melting2
-            // 
-            this.label_Melting2.AutoSize = true;
-            this.label_Melting2.Font = new System.Drawing.Font("굴림", 45F);
-            this.label_Melting2.Location = new System.Drawing.Point(7, 19);
-            this.label_Melting2.Margin = new System.Windows.Forms.Padding(0);
-            this.label_Melting2.Name = "label_Melting2";
-            this.label_Melting2.Size = new System.Drawing.Size(78, 60);
-            this.label_Melting2.TabIndex = 0;
-            this.label_Melting2.Text = "■";
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("맑은 고딕", 25F);
+            this.label9.Location = new System.Drawing.Point(32, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(303, 46);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Charging Progress";
             // 
             // groupBox3
             // 
@@ -974,6 +859,94 @@
             this.split_CAM2Info.Size = new System.Drawing.Size(670, 638);
             this.split_CAM2Info.SplitterDistance = 154;
             this.split_CAM2Info.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label_Melting2);
+            this.groupBox4.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox4.Location = new System.Drawing.Point(10, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(90, 90);
+            this.groupBox4.TabIndex = 11;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Melting2";
+            // 
+            // label_Melting2
+            // 
+            this.label_Melting2.AutoSize = true;
+            this.label_Melting2.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Melting2.Location = new System.Drawing.Point(7, 19);
+            this.label_Melting2.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Melting2.Name = "label_Melting2";
+            this.label_Melting2.Size = new System.Drawing.Size(78, 60);
+            this.label_Melting2.TabIndex = 0;
+            this.label_Melting2.Text = "■";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label_Charging3);
+            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox5.Location = new System.Drawing.Point(122, 6);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(90, 90);
+            this.groupBox5.TabIndex = 12;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Charging3";
+            // 
+            // label_Charging3
+            // 
+            this.label_Charging3.AutoSize = true;
+            this.label_Charging3.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Charging3.Location = new System.Drawing.Point(7, 19);
+            this.label_Charging3.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Charging3.Name = "label_Charging3";
+            this.label_Charging3.Size = new System.Drawing.Size(78, 60);
+            this.label_Charging3.TabIndex = 0;
+            this.label_Charging3.Text = "■";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label_Melting3);
+            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox6.Location = new System.Drawing.Point(240, 6);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(90, 90);
+            this.groupBox6.TabIndex = 13;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Melting3";
+            // 
+            // label_Melting3
+            // 
+            this.label_Melting3.AutoSize = true;
+            this.label_Melting3.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_Melting3.Location = new System.Drawing.Point(7, 19);
+            this.label_Melting3.Margin = new System.Windows.Forms.Padding(0);
+            this.label_Melting3.Name = "label_Melting3";
+            this.label_Melting3.Size = new System.Drawing.Size(78, 60);
+            this.label_Melting3.TabIndex = 0;
+            this.label_Melting3.Text = "■";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label_StandSteel);
+            this.groupBox7.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox7.Location = new System.Drawing.Point(352, 6);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(90, 90);
+            this.groupBox7.TabIndex = 14;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "StandSteel";
+            // 
+            // label_StandSteel
+            // 
+            this.label_StandSteel.AutoSize = true;
+            this.label_StandSteel.Font = new System.Drawing.Font("굴림", 45F);
+            this.label_StandSteel.Location = new System.Drawing.Point(7, 19);
+            this.label_StandSteel.Margin = new System.Windows.Forms.Padding(0);
+            this.label_StandSteel.Name = "label_StandSteel";
+            this.label_StandSteel.Size = new System.Drawing.Size(78, 60);
+            this.label_StandSteel.TabIndex = 0;
+            this.label_StandSteel.Text = "■";
             // 
             // groupBox9
             // 
@@ -1312,16 +1285,6 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "Type";
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("맑은 고딕", 25F);
-            this.label9.Location = new System.Drawing.Point(32, 28);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(303, 46);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "Charging Progress";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -1331,10 +1294,6 @@
             this.Controls.Add(this.split_ViewToInfo);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.label_CurrentSteelKind);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.OPC_textBox2);
-            this.Controls.Add(this.OPC_textBox1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
@@ -1363,14 +1322,6 @@
             this.split_CAM1Info.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM1Info)).EndInit();
             this.split_CAM1Info.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1387,6 +1338,14 @@
             this.split_CAM2Info.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM2Info)).EndInit();
             this.split_CAM2Info.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.groupBox8.ResumeLayout(false);
@@ -1406,11 +1365,6 @@
         }
 
         #endregion
-
-        public System.Windows.Forms.TextBox OPC_textBox1;
-        public System.Windows.Forms.TextBox OPC_textBox2;
-        public System.Windows.Forms.Button button1;
-        public System.Windows.Forms.Button button2;
         public System.Windows.Forms.MenuStrip menuStrip1;
         public System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem newOnlineToolStripMenuItem;

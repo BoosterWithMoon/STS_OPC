@@ -111,14 +111,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public int IRDXFileCount;
 
-        private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
-        private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
-        private static ushort DDAQ_MOTORFOCUS_CMD_NEAR = 2;     //< move focus to near
-        private static ushort DDAQ_MOTORFOCUS_CMD_FAR = 3;      //< move focus to far
+        //private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
+        //private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
+        //private static ushort DDAQ_MOTORFOCUS_CMD_NEAR = 2;     //< move focus to near
+        //private static ushort DDAQ_MOTORFOCUS_CMD_FAR = 3;      //< move focus to far
         private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP = 4; //< move focus one step to near
         private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP = 5; //< move focus one step to far
-        private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP_BIG = 6; //< move focus one big step to near
-        private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP_BIG = 7;   //< move focus one big step to far
+        //private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP_BIG = 6; //< move focus one big step to near
+        //private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP_BIG = 7;   //< move focus one big step to far
 
         [DllImport("kernel32.dll")]
         public static extern void Beep(int frequency, int duration);
@@ -188,6 +188,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             about = new AboutForm(this);
             #endregion
 
+            #region VariablesInitialize
             DetectedDevices = 0;
             pIRDX_Array = new IntPtr[2];
 
@@ -249,6 +250,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             ProgressLabel = new Label[9];
 
             currentOpenMode = OpenMode.IRDX;
+
+            #endregion
         }
 
         #region Publicize_AllocatedClass
@@ -417,12 +420,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             LoadConfiguration();
 
             InitPropertyGrid();
-
-            OPC_textBox1.Visible = false;
-            OPC_textBox2.Visible = false;
-            button1.Visible = false;
-            button2.Visible = false;
-
+            
             // CAMERA #1,2 status
             label1.Visible = false;
             label2.Visible = false;
@@ -548,7 +546,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         #region Thread
 
-        //[MethodImpl(MethodImplOptions.Synchronized)]
+        private static EventWaitHandle ThreadOne_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private static EventWaitHandle ThreadTwo_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
         private void run()  // Current: 320L
         {
             bool newDataReady = false;
@@ -576,11 +575,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(DetectedDevices, ref fTemp, ref bTemp);
                     CAM1_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
 
-                    imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+                    //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
                     
-
                     acq_index++;
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);
                     result.CAM1_DetectTemp_ForOPC();
@@ -593,6 +591,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)             /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
+
+                    //ThreadOne_WFSO.Set();
                 }
             }
 
@@ -628,7 +628,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
 
 
-                    imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
+                    //imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
                     //imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
 
@@ -640,6 +640,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
+
+                    //ThreadTwo_WFSO.Set();
                 }
 
             }
@@ -650,6 +652,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
+                //ThreadOne_WFSO.WaitOne();
 
                 if (!isDrawnCAM1Image)
                 {
@@ -670,6 +673,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
+                //ThreadTwo_WFSO.WaitOne();
 
                 if (!isDrawnCAM2Image)
                 {

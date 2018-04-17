@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.AlertToConnection = new System.Windows.Forms.SplitContainer();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.textBox_CurrentSteelKind = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.c2_poi10 = new System.Windows.Forms.Label();
@@ -76,23 +78,21 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.c1_MainAlarm = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.OPCActiveAlarm = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OPCConnectAlarm = new System.Windows.Forms.Label();
-            this.OPCActiveAlarm = new System.Windows.Forms.Label();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.textBox_CurrentSteelKind = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.AlertToConnection)).BeginInit();
             this.AlertToConnection.Panel1.SuspendLayout();
             this.AlertToConnection.Panel2.SuspendLayout();
             this.AlertToConnection.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // AlertToConnection
@@ -115,6 +115,29 @@
             this.AlertToConnection.Size = new System.Drawing.Size(269, 945);
             this.AlertToConnection.SplitterDistance = 740;
             this.AlertToConnection.TabIndex = 0;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.textBox_CurrentSteelKind);
+            this.groupBox7.Font = new System.Drawing.Font("나눔바른고딕", 15F);
+            this.groupBox7.Location = new System.Drawing.Point(6, 643);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(260, 94);
+            this.groupBox7.TabIndex = 3;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "현재강종";
+            // 
+            // textBox_CurrentSteelKind
+            // 
+            this.textBox_CurrentSteelKind.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_CurrentSteelKind.Enabled = false;
+            this.textBox_CurrentSteelKind.Font = new System.Drawing.Font("나눔바른고딕", 28F);
+            this.textBox_CurrentSteelKind.Location = new System.Drawing.Point(6, 31);
+            this.textBox_CurrentSteelKind.Name = "textBox_CurrentSteelKind";
+            this.textBox_CurrentSteelKind.ReadOnly = true;
+            this.textBox_CurrentSteelKind.Size = new System.Drawing.Size(248, 43);
+            this.textBox_CurrentSteelKind.TabIndex = 0;
+            this.textBox_CurrentSteelKind.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // button1
             // 
@@ -628,10 +651,32 @@
             this.c1_MainAlarm.TabIndex = 1;
             this.c1_MainAlarm.Text = "■";
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.OPCActiveAlarm);
+            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.groupBox6.Location = new System.Drawing.Point(139, 0);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(127, 137);
+            this.groupBox6.TabIndex = 3;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "OPC Activated";
+            // 
+            // OPCActiveAlarm
+            // 
+            this.OPCActiveAlarm.AutoSize = true;
+            this.OPCActiveAlarm.Font = new System.Drawing.Font("굴림", 58F);
+            this.OPCActiveAlarm.Location = new System.Drawing.Point(12, 29);
+            this.OPCActiveAlarm.Name = "OPCActiveAlarm";
+            this.OPCActiveAlarm.Size = new System.Drawing.Size(102, 78);
+            this.OPCActiveAlarm.TabIndex = 2;
+            this.OPCActiveAlarm.Text = "■";
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.OPCConnectAlarm);
-            this.groupBox5.Location = new System.Drawing.Point(3, 3);
+            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.groupBox5.Location = new System.Drawing.Point(3, 0);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(127, 137);
             this.groupBox5.TabIndex = 0;
@@ -648,48 +693,6 @@
             this.OPCConnectAlarm.TabIndex = 2;
             this.OPCConnectAlarm.Text = "■";
             // 
-            // OPCActiveAlarm
-            // 
-            this.OPCActiveAlarm.AutoSize = true;
-            this.OPCActiveAlarm.Font = new System.Drawing.Font("굴림", 58F);
-            this.OPCActiveAlarm.Location = new System.Drawing.Point(12, 29);
-            this.OPCActiveAlarm.Name = "OPCActiveAlarm";
-            this.OPCActiveAlarm.Size = new System.Drawing.Size(102, 78);
-            this.OPCActiveAlarm.TabIndex = 2;
-            this.OPCActiveAlarm.Text = "■";
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.OPCActiveAlarm);
-            this.groupBox6.Location = new System.Drawing.Point(139, 3);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(127, 137);
-            this.groupBox6.TabIndex = 3;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "OPC Activated";
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.textBox_CurrentSteelKind);
-            this.groupBox7.Font = new System.Drawing.Font("나눔바른고딕", 15F);
-            this.groupBox7.Location = new System.Drawing.Point(6, 643);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(260, 94);
-            this.groupBox7.TabIndex = 3;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "현재강종";
-            // 
-            // textBox_CurrentSteelKind
-            // 
-            this.textBox_CurrentSteelKind.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox_CurrentSteelKind.Font = new System.Drawing.Font("나눔바른고딕", 28F);
-            this.textBox_CurrentSteelKind.Location = new System.Drawing.Point(6, 31);
-            this.textBox_CurrentSteelKind.Name = "textBox_CurrentSteelKind";
-            this.textBox_CurrentSteelKind.ReadOnly = true;
-            this.textBox_CurrentSteelKind.Size = new System.Drawing.Size(248, 43);
-            this.textBox_CurrentSteelKind.TabIndex = 0;
-            this.textBox_CurrentSteelKind.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // ResultView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -704,6 +707,8 @@
             this.AlertToConnection.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AlertToConnection)).EndInit();
             this.AlertToConnection.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -712,12 +717,10 @@
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }

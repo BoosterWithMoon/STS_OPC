@@ -306,7 +306,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
 
-        Configuration config;
+        //Configuration config;
 
         DaServerMgt DAServer;
         ConnectInfo opcConnectInfo;
