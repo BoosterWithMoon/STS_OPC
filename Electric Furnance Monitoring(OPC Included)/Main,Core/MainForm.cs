@@ -269,6 +269,130 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             #endregion
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            LoadConfiguration();
+
+            InitPropertyGrid();
+
+            // CAMERA #1,2 status
+            label1.Visible = false;
+            label2.Visible = false;
+            label3.Visible = false;
+            label4.Visible = false;
+            label5.Visible = false;
+            label6.Visible = false;
+
+            textBox1.Visible = false;
+            textBox2.Visible = false;
+            textBox3.Visible = false;
+            textBox4.Visible = false;
+
+            split_ViewToInfo.Visible = false;
+
+            toolStripSeparator3.Visible = false;
+            toolStripSeparator4.Visible = false;
+            toolStripSeparator5.Visible = false;
+            toolStripSeparator6.Visible = false;
+
+            // program buttons
+            PreviousRecord_toolStripButton.Visible = false;     // Previous Record
+            NextRecord_toolStripButton.Visible = false;     // Next Record
+            KeepMoving_toolStripButton.Visible = false;     // Play Record
+            Pause_toolStripButton.Visible = false;          // Pause Record
+
+            DrawPOI_toolStripButton.Visible = false;   // Draw POI
+            DeletePOI_toolStripButton.Visible = false;   // Delete POI
+            MovePOI_toolStripButton.Visible = false;   // Move POI
+
+            LogStart_toolStripButton.Visible = false;   // Log Start
+            LogStop_toolStripButton.Visible = false;   // Log Stop
+
+            MoveFocus_FarStep.Visible = false;      // Move DeviceFocus
+            MoveFocus_NearStep.Visible = false;
+
+            // menu items
+            previousRecordToolStripMenuItem.Enabled = false;
+            nextRecordToolStripMenuItem.Enabled = false;
+            playToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem1.Enabled = false;
+
+            drawROIToolStripMenuItem.Enabled = false;
+            deleteROIToolStripMenuItem.Enabled = false;
+            moveROIToolStripMenuItem.Enabled = false;
+
+            startToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = false;
+
+            moveToNearStepToolStripMenuItem.Enabled = false;
+            moveToFarStepToolStripMenuItem.Enabled = false;
+
+            OPCSettingToolStripMenuItem.Enabled = false;
+
+            //groupBox_CamTemp.Visible = false;
+            //groupBox_DetectorTemp.Visible = false;
+            panel1.Visible = false;
+
+            propertyGrid1.Visible = false;
+
+            ViewAdjust();
+
+            opc.ServerDetection();
+            opc.ServerConnection();
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Maximized;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveConfiguration();
+
+            if (OPCActivated)
+            {
+                OPCTimer.Stop();
+                OPCActivated = false;
+            }
+
+            opc.ServerDisconnection();
+
+            isClosing = true;
+
+            Thread.Sleep(3);
+
+            // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
+            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive/* || propertyGridUpdate.IsAlive*/)
+            {
+                mThread.Abort();
+                mThread_two.Abort();
+                CAM1_DataView.Abort();
+                CAM2_DataView.Abort();
+                //propertyGridUpdate.Abort();
+            }
+
+            DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+            DIASDAQ.DDAQ_DEVICE_DO_STOP(2);
+
+            if (DetectedDevices != 0)
+            {
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
+            }
+
+            System.Threading.Thread.Sleep(100);
+
+            c1_chartView.axTChart1.Dispose();
+            c2_chartView.axTChart1.Dispose();
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            ViewAdjust();
+        }
+
+
         #region Publicize_AllocatedClass
 
         public object ImageView_forPublicRef() { return imgView; }
@@ -301,14 +425,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         #endregion
 
+
         #region InitView
         private void ViewAdjust()
         {
             // 전체 ImageView 영역 width 조정
-            split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
-            //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width-
-            //int temp = Screen.PrimaryScreen.Bounds.Width;
-
+            //split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
+            //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width - 310;
+            split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
+            
             // 카메라별 ImageView 영역 Width 조정
             split_CamToCam.Width = split_ViewToInfo.Panel1.Width / 2;
 
@@ -415,124 +540,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
         #endregion
         
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            LoadConfiguration();
-
-            InitPropertyGrid();
-            
-            // CAMERA #1,2 status
-            label1.Visible = false;
-            label2.Visible = false;
-            label3.Visible = false;
-            label4.Visible = false;
-            label5.Visible = false;
-            label6.Visible = false;
-
-            textBox1.Visible = false;
-            textBox2.Visible = false;
-            textBox3.Visible = false;
-            textBox4.Visible = false;
-
-            split_ViewToInfo.Visible = false;
-
-            toolStripSeparator3.Visible = false;
-            toolStripSeparator4.Visible = false;
-            toolStripSeparator5.Visible = false;
-            toolStripSeparator6.Visible = false;
-
-            // program buttons
-            PreviousRecord_toolStripButton.Visible = false;     // Previous Record
-            NextRecord_toolStripButton.Visible = false;     // Next Record
-            KeepMoving_toolStripButton.Visible = false;     // Play Record
-            Pause_toolStripButton.Visible = false;          // Pause Record
-            
-            DrawPOI_toolStripButton.Visible = false;   // Draw POI
-            DeletePOI_toolStripButton.Visible = false;   // Delete POI
-            MovePOI_toolStripButton.Visible = false;   // Move POI
-
-            LogStart_toolStripButton.Visible = false;   // Log Start
-            LogStop_toolStripButton.Visible = false;   // Log Stop
-
-            MoveFocus_FarStep.Visible = false;      // Move DeviceFocus
-            MoveFocus_NearStep.Visible = false;
-
-            // menu items
-            previousRecordToolStripMenuItem.Enabled = false;
-            nextRecordToolStripMenuItem.Enabled = false;
-            playToolStripMenuItem.Enabled = false;
-            stopToolStripMenuItem1.Enabled = false;
-
-            drawROIToolStripMenuItem.Enabled = false;
-            deleteROIToolStripMenuItem.Enabled = false;
-            moveROIToolStripMenuItem.Enabled = false;
-
-            startToolStripMenuItem.Enabled = false;
-            stopToolStripMenuItem.Enabled = false;
-
-            moveToNearStepToolStripMenuItem.Enabled = false;
-            moveToFarStepToolStripMenuItem.Enabled = false;
-
-            OPCSettingToolStripMenuItem.Enabled = false;
-
-            //groupBox_CamTemp.Visible = false;
-            //groupBox_DetectorTemp.Visible = false;
-            panel1.Visible = false;
-
-            propertyGrid1.Visible = false;
-
-            ViewAdjust();
-
-            opc.ServerDetection();
-            opc.ServerConnection();
-        }
-
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Maximized;
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            SaveConfiguration();
-
-            if (OPCActivated)
-            {
-                OPCTimer.Stop();
-                OPCActivated = false;
-            }
-
-            opc.ServerDisconnection();
-
-            isClosing = true;
-
-            Thread.Sleep(3);
-
-            // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
-            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive/* || propertyGridUpdate.IsAlive*/)
-            {
-                mThread.Abort();
-                mThread_two.Abort();
-                CAM1_DataView.Abort();
-                CAM2_DataView.Abort();
-                //propertyGridUpdate.Abort();
-            }
-
-            DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-            DIASDAQ.DDAQ_DEVICE_DO_STOP(2);
-
-            if (DetectedDevices != 0)
-            {
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
-            }
-
-            System.Threading.Thread.Sleep(100);
-
-            c1_chartView.axTChart1.Dispose();
-            c2_chartView.axTChart1.Dispose();
-        }
-
 
         #region Thread
 
