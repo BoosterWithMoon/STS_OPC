@@ -12,9 +12,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class NewDeviceForm : Form
     {
-        private static string POSCO_CAM1_SERIAL = "C1157727";
-        private static string POSCO_CAM2_SERIAL = "C1157827";
-
         MainForm main;
         SystemPropertyGrid grid;
         CustomOPC opc;
@@ -25,9 +22,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public bool isDetected = true;
         public string[] DeviceID;
-        // Variable that prevent for CS1690 Warning =======================
-        uint NDF_DetectedDevices;
-        // ======================= Variable that prevent for CS1690 Warning
+        uint NDF_DetectedDevices;           // CS1690 Warning
 
         private string CAM1_SerialNo = "";
         private string CAM2_SerialNo = "";
@@ -73,6 +68,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             else
             {
                 MessageBox.Show(NDF_DetectedDevices.ToString() + "개의 카메라가 감지 되었습니다.", "New Device Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                isDetected = true;
             }
 
         }
@@ -213,12 +209,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             GetDeviceID(1, main.pIRDX_Array[1]);
         }
 
+        // Accept
         private void button1_Click(object sender, EventArgs e)
         {
-            //if (!(CAM1_SerialNo == POSCO_CAM1_SERIAL && CAM2_SerialNo == POSCO_CAM2_SERIAL) || !(CAM1_SerialNo == POSCO_CAM2_SERIAL && CAM2_SerialNo == POSCO_CAM1_SERIAL))
-                if (false)
-                {
-                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices + "개의 장비 중 적어도 한 개 이상의 올바르지\n않은 장비가 있습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Configuration 검증
+            if (main.POSCO_CAM1_SERIAL == "" || main.POSCO_CAM2_SERIAL == "")
+            {
+                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\nSerial Numer 정보를 확인할 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
                 DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
@@ -230,6 +227,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 Close();
                 return;
             }
+
+            if (!(CAM1_SerialNo == main.POSCO_CAM1_SERIAL && CAM2_SerialNo == main.POSCO_CAM2_SERIAL) ||
+                !(CAM1_SerialNo == main.POSCO_CAM2_SERIAL && CAM2_SerialNo == main.POSCO_CAM1_SERIAL))
+            //if (false)
+            {
+                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices + "개의 장비 중 적어도 한 개 이상의 장비가\n연결이 성립될 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
+                main.pIRDX_Array[0] = IntPtr.Zero;
+                main.pIRDX_Array[1] = IntPtr.Zero;
+                Close();
+                return;
+            }
+
             for (uint i = 0; i < NDF_DetectedDevices; i++)
             {
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(main.pIRDX_Array[i], ref main.sizeX_Array[i], ref main.sizeY_Array[i]);
@@ -247,6 +262,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], min, max);
                 DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(main.pIRDX_Array[i], ref avg);
             }
+
             // CAMERA #1 Thread ID Registering
             /// Get 기본 Thread ID Value
             uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;
@@ -254,7 +270,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(NDF_DetectedDevices, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                 return;
             /// Default Frequency
-            //if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], 8) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
             if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                 return;
             /// Device do start
@@ -267,13 +282,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 uint nThreadID_two = (uint)Thread.CurrentThread.ManagedThreadId;
                 if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(1, nThreadID_two) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                     return;
-                //if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[1], 8) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                 if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[1], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                     return;
                 if (DIASDAQ.DDAQ_DEVICE_DO_START(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                     return;
             }
-            //main.currentOpenMode = MainForm.OpenMode.Online;
+
+            main.currentOpenMode = MainForm.OpenMode.Online;
 
             grid = (SystemPropertyGrid)main.customGrid_forPublicRef();
             grid.GetAttributesInfo(main.pIRDX_Array[0]);
@@ -355,8 +370,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             this.Close();
         }
 
+        // Cancel
         private void button2_Click(object sender, EventArgs e)
         {
+            if (isDetected) isDetected = false;
             DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
             DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
             Close();

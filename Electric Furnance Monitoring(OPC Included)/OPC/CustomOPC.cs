@@ -306,34 +306,28 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
 
-        //Configuration config;
-
         DaServerMgt DAServer;
         ConnectInfo opcConnectInfo;
         ServerIdentifier[] availableOPCServers;
-        public bool connectFailed = true;
+        public bool connectFailed;
         OpcServerEnum serverEnum;
-        public bool exceptionOccured = false;
 
-        bool returnAllServers = false;
-        public bool detected = false;
-        int detectedIndex = 0;
+        bool returnAllServers;
+        public bool detected;
+        int detectedIndex;
         // OPC DA 지정
         ServerCategory[] serverCategories = { ServerCategory.OPCDA };
 
         // 연결시킬 OPC 태그가 존재하는 채널 / Device ID
-        public string Channel/* = "Channel4"*/;
-        public string Device /*= ".Device1"*/;
+        public string Channel;
+        public string Device;
 
-        // Kepware가 설치된 컴퓨터의 주소
-        public string nodeName /*= "192.168.1.100"*/;
+        // Kepware가 설치된 컴퓨터 노드 이름
+        public string nodeName;
 
         // Read 또는 Write할 OPC 태그의 개수
-        private static int ReadTagCount/* = 4*/;
-        private static int WriteTagCount /*= 83*/;
-
-        //private static int ReadTagCount = 1;
-        //private static int WriteTagCount = 1;
+        private static int ReadTagCount;
+        private static int WriteTagCount;
 
         public int CurrentAngle;
 
@@ -344,13 +338,37 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ItemIdentifier[] Write_itemIdentifiers;
         ItemValue[] Write_itemValues;
 
-        //bool[] ChargingStatus = new bool[8];
-        BitArray ChargingStatus = new BitArray(8, false);
-        bool O2LanceResult = false;
+        BitArray ChargingStatus;
+        bool O2LanceResult;
 
         public CustomOPC(MainForm _main)
         {
             this.main = _main;
+            LoadOPCConfiguration();
+
+            DAServer = new DaServerMgt();
+            opcConnectInfo = new ConnectInfo();
+            connectFailed = true;
+            serverEnum = new OpcServerEnum();
+
+            returnAllServers = false;
+            detected = false;
+            detectedIndex = 0;
+
+            ChargingStatus = new BitArray(8, false);
+            O2LanceResult = false;
+
+            result = (ResultView)main.ResultView_forPublicRef();
+            imgView = (ImageView)main.ImageView_forPublicRef();
+
+            Read_itemIdentifiers = new ItemIdentifier[ReadTagCount];
+
+            Write_itemIdentifiers = new ItemIdentifier[WriteTagCount];
+            Write_itemValues = new ItemValue[WriteTagCount];
+        }
+
+        private void LoadOPCConfiguration()
+        {
             string value = "";
             value = ConfigurationManager.AppSettings["OPC_Channel"];
             Channel = value;
@@ -363,20 +381,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             ReadTagCount = Convert.ToInt32(value);
             value = ConfigurationManager.AppSettings["OPC_WriteTagCount"];
             WriteTagCount = Convert.ToInt32(value);
-
-            DAServer = new DaServerMgt();
-            opcConnectInfo = new ConnectInfo();
-            serverEnum = new OpcServerEnum();
-
-            result = (ResultView)main.ResultView_forPublicRef();
-            imgView = (ImageView)main.ImageView_forPublicRef();
-
-            Read_itemIdentifiers = new ItemIdentifier[ReadTagCount];
-
-            Write_itemIdentifiers = new ItemIdentifier[WriteTagCount];
-            Write_itemValues = new ItemValue[WriteTagCount];
-
-            //config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
         public void ServerDetection()
@@ -835,7 +839,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 /*if (ReadingResult[i].GetType().ToString() == "System.Boolean[]") { ChargingStatus = (bool[])ReadingResult[i]; }
                 else*/
                 if (ReadingResult[i].GetType().ToString() == "System.String") { result.textBox_CurrentSteelKind.Text = ReadingResult[i].ToString(); }
-                else if (ReadingResult[i].GetType().ToString() == "System.UInt16") { CurrentAngle = Convert.ToUInt16(ReadingResult[i]); }
+                else if (ReadingResult[i].GetType().ToString() == "System.UInt16")
+                {
+                    CurrentAngle = Convert.ToUInt16(ReadingResult[i]);
+                    main.textBox_SlopeAngle.Text = CurrentAngle.ToString() + "º";
+                }
                 else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
                 {
                     main.textBox1.Text = ReadingResult[i].ToString();

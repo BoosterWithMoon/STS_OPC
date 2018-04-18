@@ -15,6 +15,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CAM1_ImageView c1_imgView;
         CAM2_ImageView c2_imgView;
 
+        #region Variables
         public Bitmap bmp;
         public Bitmap Stretched_bmp;
         public Bitmap CAM2_bmp;
@@ -26,15 +27,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public Graphics g_backbuffer;
         public Graphics CAM2_g;
         public Graphics CAM2_g_backbuffer;
-
-        public ImageView(MainForm _main)
-        {
-            this.main = _main;
-            c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
-            c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
-        }
-
-        #region Variables
+        
         public ushort m_bmp_isize_x = 0;    // real bmp image x
         public ushort m_bmp_isize_y = 0;    // real bmp image y
         public ushort c2_m_bmp_isize_x = 0;
@@ -82,6 +75,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private static int POI_TemperatureBox_X = 85;
         private static int POI_TemperatureBox_Y = 19;
         #endregion
+
+        public ImageView(MainForm _main)
+        {
+            this.main = _main;
+            c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
+            c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
+        }
 
         public void CalculatePoint(IntPtr irdxHandle, Point p)
         {

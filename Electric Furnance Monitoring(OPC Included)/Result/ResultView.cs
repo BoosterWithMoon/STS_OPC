@@ -16,38 +16,59 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ImageView imgView;
         SystemPropertyGrid property;
         SetThreshold thresholdForm;
+        System.Configuration.Configuration config;
 
-        public Label[] CAM1_LabelArray = new Label[10];
-        public Color[] CAM1_POIConnected = new Color[10];
-        public float[] CAM1_ThresholdTemp = new float[10];
-        bool[] CAM1_verify = new bool[10];
-        public bool[] CAM1_isTempPM10 = new bool[10];
-        public bool[] CAM1_isTempUpper10 = new bool[10];
+        public Label[] CAM1_LabelArray;
+        public Color[] CAM1_POIConnected;
+        public float[] CAM1_ThresholdTemp;
+        bool[] CAM1_verify;
+        public bool[] CAM1_isTempPM10;
+        public bool[] CAM1_isTempUpper10;
 
-        public Label[] CAM2_LabelArray = new Label[10];
-        public Color[] CAM2_POIConnected = new Color[10];
-        public float[] CAM2_ThresholdTemp = new float[10];
-        bool[] CAM2_verify = new bool[10];
-        public bool[] CAM2_isTempPM10 = new bool[10];
-        public bool[] CAM2_isTempUpper10 = new bool[10];
+        public Label[] CAM2_LabelArray;
+        public Color[] CAM2_POIConnected;
+        public float[] CAM2_ThresholdTemp;
+        bool[] CAM2_verify;
+        public bool[] CAM2_isTempPM10;
+        public bool[] CAM2_isTempUpper10;
 
-        public /*static*/ Color NotConnected = Color.Gray;
-        public /*static*/ Color Connected_NoWarning = Color.Green;
-        public /*static*/ Color Connected_Warning = Color.Red;
+        public Color NotConnected;
+        public Color Connected_NoWarning;
+        public Color Connected_Warning;
 
         public ResultView(MainForm _main)
         {
             this.main = _main;
+            imgView = (ImageView)main.ImageView_forPublicRef();
+            property = (SystemPropertyGrid)main.customGrid_forPublicRef();
+            thresholdForm = new SetThreshold(_main);
+
             InitializeComponent();
 
             ShowingAreaAdjust();
 
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            CAM1_LabelArray = new Label[10];
+            CAM1_POIConnected = new Color[10];
+            CAM1_ThresholdTemp = new float[10];
+            CAM1_verify = new bool[10];
+            CAM1_isTempPM10 = new bool[10];
+            CAM1_isTempUpper10 = new bool[10];
+
+            CAM2_LabelArray = new Label[10];
+            CAM2_POIConnected = new Color[10];
+            CAM2_ThresholdTemp = new float[10];
+            CAM2_verify = new bool[10];
+            CAM2_isTempPM10 = new bool[10];
+            CAM2_isTempUpper10 = new bool[10];
+
+            NotConnected = Color.Gray;
+            Connected_NoWarning = Color.Green;
+            Connected_Warning = Color.Red;
+
             CAM1_AlarmInitialize();
             CAM2_AlarmInitialize();
-            imgView = (ImageView)main.ImageView_forPublicRef();
-            property = (SystemPropertyGrid)main.customGrid_forPublicRef();
-
-            thresholdForm = new SetThreshold(_main);
 
             LoadConfiguration_Temperature();
         }
@@ -56,8 +77,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             AlertToConnection.SplitterDistance = 750;
         }
-
-        System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        
         private void LoadConfiguration_Temperature()
         {
             string value = "";
@@ -133,18 +153,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             #endregion
         }
 
-        public void CAM1_Connection()
-        {
-            if ((imgView.CAM1_POICount + 1) == 0) return;
-            else
-            {
-                for (int i = 0; i < imgView.CAM1_POICount + 1; i++)
-                {
-                    CAM1_LabelArray[i].ForeColor = Connected_NoWarning;
-                }
-            }
-        }
-
         public void CAM1_DetectTempThreshold()
         {
             //VerifyOPC();
@@ -187,10 +195,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 {
                     c1_MainAlarm.ForeColor = Connected_Warning;
                 }
-
-
                 #endregion
-
             }
 
             // POI가 찍혀있었지만 모두 지워서 현재 화면상에 남아있는 POI가 없을 때에는
@@ -229,7 +234,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 if (CAM2_verify[0] == false && CAM2_verify[1] == false && CAM2_verify[2] == false && CAM2_verify[3] == false && CAM2_verify[4] == false &&
                     CAM2_verify[5] == false && CAM2_verify[6] == false && CAM2_verify[7] == false && CAM2_verify[8] == false && CAM2_verify[9] == false)
                 {
-                    //c1_MainAlarm.ForeColor = Connected_NoWarning;
                     c2_MainAlarm.ForeColor = Connected_NoWarning;
                 }
                 else

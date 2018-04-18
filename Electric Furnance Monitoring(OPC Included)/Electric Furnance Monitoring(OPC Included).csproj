@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>PyroSoftM.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\PyroSoftM.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kepware.ClientAce.BrowseControls">
@@ -232,7 +232,7 @@
     <None Include="Resources\wws_영문로고.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PyroSoftM.ico" />
+    <Content Include="Resources\PyroSoftM.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

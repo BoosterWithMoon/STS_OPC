@@ -81,6 +81,8 @@
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
             this.split_CAM1UpToDown = new System.Windows.Forms.SplitContainer();
             this.split_CAM1Info = new System.Windows.Forms.SplitContainer();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.textBox_SlopeAngle = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label_Charging2 = new System.Windows.Forms.Label();
@@ -151,6 +153,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM1Info)).BeginInit();
             this.split_CAM1Info.Panel1.SuspendLayout();
             this.split_CAM1Info.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -662,6 +665,7 @@
             // 
             // split_CAM1Info.Panel1
             // 
+            this.split_CAM1Info.Panel1.Controls.Add(this.groupBox10);
             this.split_CAM1Info.Panel1.Controls.Add(this.label9);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox3);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox2);
@@ -675,15 +679,38 @@
             this.split_CAM1Info.SplitterDistance = 154;
             this.split_CAM1Info.TabIndex = 0;
             // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.textBox_SlopeAngle);
+            this.groupBox10.Font = new System.Drawing.Font("맑은 고딕", 9.5F, System.Drawing.FontStyle.Bold);
+            this.groupBox10.Location = new System.Drawing.Point(186, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(165, 90);
+            this.groupBox10.TabIndex = 9;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "경동 각도";
+            // 
+            // textBox_SlopeAngle
+            // 
+            this.textBox_SlopeAngle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_SlopeAngle.Enabled = false;
+            this.textBox_SlopeAngle.Font = new System.Drawing.Font("맑은 고딕", 30F);
+            this.textBox_SlopeAngle.Location = new System.Drawing.Point(33, 19);
+            this.textBox_SlopeAngle.Name = "textBox_SlopeAngle";
+            this.textBox_SlopeAngle.ReadOnly = true;
+            this.textBox_SlopeAngle.Size = new System.Drawing.Size(100, 54);
+            this.textBox_SlopeAngle.TabIndex = 0;
+            this.textBox_SlopeAngle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("맑은 고딕", 25F);
-            this.label9.Location = new System.Drawing.Point(32, 28);
+            this.label9.Font = new System.Drawing.Font("맑은 고딕", 25F, System.Drawing.FontStyle.Bold);
+            this.label9.Location = new System.Drawing.Point(15, 26);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(303, 46);
+            this.label9.Size = new System.Drawing.Size(160, 46);
             this.label9.TabIndex = 11;
-            this.label9.Text = "Charging Progress";
+            this.label9.Text = "Progress";
             // 
             // groupBox3
             // 
@@ -1322,6 +1349,8 @@
             this.split_CAM1Info.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_CAM1Info)).EndInit();
             this.split_CAM1Info.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1470,6 +1499,8 @@
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.Label label_Tapping;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox groupBox10;
+        public System.Windows.Forms.TextBox textBox_SlopeAngle;
     }
 }
 

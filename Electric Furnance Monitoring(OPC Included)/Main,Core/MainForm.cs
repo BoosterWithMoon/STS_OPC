@@ -133,7 +133,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
         public OpenMode currentOpenMode;
 
-        System.Windows.Forms.Timer LoggingTimer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer LoggingTimer;
         FileStream Text_RawData;
         FileStream Text_ResultData;
         StreamWriter outputFile;
@@ -144,11 +144,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         StreamWriter c2_outputFile;
         StreamWriter c2_outputFile_Result;
 
-        IntPtr irdxHandle_write = new IntPtr();
-        IntPtr c2_irdxHandle_write = new IntPtr();
-        int tickCount = 0;
+        IntPtr irdxHandle_write;
+        IntPtr c2_irdxHandle_write;
+        int tickCount;
 
-        System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        System.Configuration.Configuration config;
+
+        public string POSCO_CAM1_SERIAL;
+        public string POSCO_CAM2_SERIAL;
+
+        public float FloatMaxTemp;
+        public float c2_FloatMaxTemp;
 
         #endregion
 
@@ -188,7 +194,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             about = new AboutForm(this);
             #endregion
 
-            #region VariablesInitialize
+            #region VariableInitialize
             DetectedDevices = 0;
             pIRDX_Array = new IntPtr[2];
 
@@ -251,6 +257,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             currentOpenMode = OpenMode.IRDX;
 
+            LoggingTimer = new System.Windows.Forms.Timer();
+            irdxHandle_write = new IntPtr();
+            c2_irdxHandle_write = new IntPtr();
+            tickCount = 0;
+
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            FloatMaxTemp = 0.0f;
+            c2_FloatMaxTemp = 0.0f;
             #endregion
         }
 
@@ -291,6 +306,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             // 전체 ImageView 영역 width 조정
             split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
+            //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width-
+            //int temp = Screen.PrimaryScreen.Bounds.Width;
 
             // 카메라별 ImageView 영역 Width 조정
             split_CamToCam.Width = split_ViewToInfo.Panel1.Width / 2;
@@ -397,23 +414,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
         #endregion
-
-        private void OpenNewDevice()
-        {
-            newDevice.DeviceDetection();
-            if (newDevice.isDetected == true)
-            {
-                if (newDevice.isDetected == false) return;
-                else
-                {
-                    Cursor.Current = Cursors.WaitCursor;
-                    newDevice.ReadyToRun();
-                    Cursor.Current = Cursors.Default;
-
-                    newDevice.ShowDialog();
-                }
-            }
-        }
         
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -531,16 +531,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             c1_chartView.axTChart1.Dispose();
             c2_chartView.axTChart1.Dispose();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            opc.OPC_Write();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            opc.OPC_Read();
         }
 
 
@@ -985,6 +975,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             도움말ToolStripButton_Click(sender, e);
         }
 
+        private void oPCSettingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            opcSet.ShowDialog();
+        }
+
         #endregion
 
 
@@ -1220,6 +1215,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void LoadConfiguration()
         {
             string value = "";
+            value = ConfigurationManager.AppSettings["Serial1"];
+            POSCO_CAM1_SERIAL = value;
+            value = ConfigurationManager.AppSettings["Serial2"];
+            POSCO_CAM2_SERIAL = value;
+
             value = ConfigurationManager.AppSettings["Emissivity"];
             customGrid.Emissivity = Convert.ToSingle(value);
             value = ConfigurationManager.AppSettings["Transmission"];
@@ -1269,20 +1269,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
         #endregion
 
-        private void VerifyOPC()
-        {
-            if (opc.detected)
-                result.OPCConnectAlarm.ForeColor = Color.Green;
-            else
-                result.OPCConnectAlarm.ForeColor = Color.Red;
 
-            if (OPCTimerActivated && OPCActivated)
-                result.OPCActiveAlarm.ForeColor = Color.Green;
-            else
-                result.OPCActiveAlarm.ForeColor = Color.Red;
-        }
-
-        public float FloatMaxTemp = 0.0f;
+        #region CompareMaxTempValue
         public void CompareMaxTemperature(float[] TemperatureArray)
         {
             FloatMaxTemp = 0.0f;
@@ -1308,7 +1296,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             textBox3.Text = MaxTemp;
         }
 
-        public float c2_FloatMaxTemp = 0.0f;
         public void CAM2_CompareMaxTemperature(float[] TemperatureArray)
         {
             c2_FloatMaxTemp = 0.0f;
@@ -1331,6 +1318,23 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             MaxTemp = c2_FloatMaxTemp.ToString("N1") + "℃";
             textBox4.Text = MaxTemp;
+        }
+        #endregion
+
+
+        #region OPCFunctions
+        // Verify OPC Connection, Activity
+        private void VerifyOPC()
+        {
+            if (opc.detected)
+                result.OPCConnectAlarm.ForeColor = Color.Green;
+            else
+                result.OPCConnectAlarm.ForeColor = Color.Red;
+
+            if (OPCTimerActivated && OPCActivated)
+                result.OPCActiveAlarm.ForeColor = Color.Green;
+            else
+                result.OPCActiveAlarm.ForeColor = Color.Red;
         }
 
         private void OPC_DataSending(object sender, EventArgs e)
@@ -1366,6 +1370,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 OPCTimer.Start();
             }
         }
+        #endregion
+
 
         #region OpenIRDX
         private void OpenIRDX()
@@ -1460,14 +1466,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 imgView.DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
             }
-
         }
-
-
         #endregion
 
-        #region OpenSimulation
 
+        #region OpenSimulation
         private void OpenSimulation()
         {
             // OpenFileDialog setting
@@ -1581,20 +1584,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             OPCActivated = true;
             InitOPCTimer();
         }
-
-
-
         #endregion
 
-        private void OpenAbout()
-        {
-            about.ShowDialog();
-        }
-
-        private void oPCSettingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            opcSet.ShowDialog();
-        }
 
         // IRDX Frame keepmoving timer
         private void InitTimerForPlayer()
@@ -1606,5 +1597,26 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             isTimerRunning = true;
         }
 
+        private void OpenNewDevice()
+        {
+            newDevice.DeviceDetection();
+            if (newDevice.isDetected == true)
+            {
+                if (newDevice.isDetected == false) return;
+                else
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    newDevice.ReadyToRun();
+                    Cursor.Current = Cursors.Default;
+
+                    newDevice.ShowDialog();
+                }
+            }
+        }
+
+        private void OpenAbout()
+        {
+            about.ShowDialog();
+        }
     }
 }
