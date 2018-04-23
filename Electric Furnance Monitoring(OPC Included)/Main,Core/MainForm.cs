@@ -22,6 +22,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class MainForm : Form
     {
+        //[DllImport("MFCLibrary1.dll")]
+        //private static extern void ShowMessageBox();
+
         #region ClassDeclare
         NewDeviceForm newDevice;
 
@@ -1421,7 +1424,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 InitGridView();
                 InitResultView();
 
-                label1.Text = "IRDX Mode";
+                label_Progress.Text = "IRDX Mode";
+                groupBox_SlopeAngle.Visible = false;
+                groupBox_Charging1.Visible = false;
+                groupBox_Melting1.Visible = false;
+                groupBox_Charging2.Visible = false;
+                groupBox_Melting2.Visible = false;
+                groupBox_Charging3.Visible = false;
+                groupBox_Melting3.Visible = false;
+                groupBox_StandSteel.Visible = false;
+                groupBox_Tapping.Visible = false;
+                groupBox_O2Lance.Visible = false;
+
+                //label1.Text = "IRDX Mode";
                 label1.Visible = true;
 
                 split_ViewToInfo.Visible = true;
@@ -1460,6 +1475,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 customGrid.GetAttributesInfo(pIRDX_Array[0]);
                 propertyGrid1.Refresh();
 
+                
             }
             else if (IRDXFileCount == 2)
             {
@@ -1499,8 +1515,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             DetectedDevices = 2;
 
-            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(1, fileFullName);     // DevNo1: 512N
-            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(2, fileFullName);     // DevNo2: 320L
+            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(1, fileFullName);  
+            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(2, fileFullName);  
 
             // IRDX handle 받아오기
             DIASDAQ.DDAQ_DEVICE_GET_IRDX(1, ref pIRDX_Array[0]); // 512
@@ -1540,9 +1556,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 return;
 
             // SET ACQUISITION FREQUENCY
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[0], 2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)               /// Default ACQ_Frequency 8 으로 설정
+            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)               /// Default ACQ_Frequency 8 으로 설정
                 return;
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[1], 2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[1], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                 return;
 
             if (DIASDAQ.DDAQ_DEVICE_DO_START(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                   /// 각 카메라 Do Start!!
@@ -1554,10 +1570,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             //customGrid.GetAttributesInfo();
             //propertyGrid1.Refresh();
+            button1.Visible = false;
+
+            label_Progress.Text = "Simulation Mode";
+            groupBox_SlopeAngle.Visible = false;
+            groupBox_Charging1.Visible = false;
+            groupBox_Melting1.Visible = false;
+            groupBox_Charging2.Visible = false;
+            groupBox_Melting2.Visible = false;
+            groupBox_Charging3.Visible = false;
+            groupBox_Melting3.Visible = false;
+            groupBox_StandSteel.Visible = false;
+            groupBox_Tapping.Visible = false;
+            groupBox_O2Lance.Visible = false;
 
             InitImageView();
             InitChart();
             InitGridView();
+            InitResultView();
 
             split_ViewToInfo.Visible = true;
             panel1.Visible = true;
@@ -1586,10 +1616,32 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             mThread.Start();
             mThread_two.Start();
 
-            InitResultView();
+            CAM1_DataView.Start();
+            CAM2_DataView.Start();
 
-            OPCActivated = true;
+            //OPCActivated = true;
             InitOPCTimer();
+
+            //uint type = 0;
+            //StringBuilder s = new StringBuilder(64);
+            //byte[] deviceID = new byte[64];
+            //char[] ch_tempDeviceID = new char[64];
+
+            //DIASDAQ.DDAQ_DEVICE_TYPE id = 0;
+
+            //DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(1, deviceID, 64);
+            //DIASDAQ.DDAQ_DEVICE_GET_ID(1, ref id, ref type);
+
+            //for (int i = 0; i < 64; i++)
+            //{
+            //    ch_tempDeviceID[i] = (char)deviceID[i];
+            //    string temp = ch_tempDeviceID[i].ToString();
+            //    s.Append(temp);
+            //}
+            //string result = s.ToString();
+
+            newDevice.GetDeviceID(1, pIRDX_Array[0]);
+            //newDevice.GetDeviceType(1, pIRDX_Array[0]);
         }
         #endregion
 
@@ -1619,6 +1671,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     newDevice.ShowDialog();
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //ShowMessageBox();
         }
 
         private void OpenAbout()

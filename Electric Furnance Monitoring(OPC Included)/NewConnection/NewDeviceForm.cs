@@ -73,7 +73,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         }
 
-        private void GetDeviceType(uint DeviceNo, IntPtr irdxHandle)
+        public void GetDeviceType(uint DeviceNo, IntPtr irdxHandle)
         {
             StringBuilder s = new StringBuilder(20);
             uint type = 0;
@@ -126,12 +126,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 main.CAM2_Type.Text = s.ToString();
         }
 
-        private void GetDeviceID(uint DeviceNo, IntPtr irdxHandle)
+        public void GetDeviceID(uint DeviceNo, IntPtr irdxHandle)
         {
             StringBuilder s = new StringBuilder(64);
             byte[] tempDeviceID = new byte[64];
             char[] ch_tempDeviceID = new char[64];
-
+            
             s.Clear();
             DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(DeviceNo, tempDeviceID, 64);
             for (int i = 0; i < 64; i++)
