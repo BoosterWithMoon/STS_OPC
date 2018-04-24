@@ -57,7 +57,7 @@
             this.OPCSettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label_CurrentSteelKind = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.새로만들기ToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.열기ToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -81,7 +81,6 @@
             this.split_CamToCam = new System.Windows.Forms.SplitContainer();
             this.split_CAM1UpToDown = new System.Windows.Forms.SplitContainer();
             this.split_CAM1Info = new System.Windows.Forms.SplitContainer();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox_SlopeAngle = new System.Windows.Forms.GroupBox();
             this.textBox_SlopeAngle = new System.Windows.Forms.TextBox();
             this.label_Progress = new System.Windows.Forms.Label();
@@ -139,7 +138,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
-            this.label_CurrentSteelKind.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
             this.split_ViewToInfo.Panel1.SuspendLayout();
             this.split_ViewToInfo.SuspendLayout();
@@ -409,9 +408,9 @@
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // label_CurrentSteelKind
+            // toolStrip
             // 
-            this.label_CurrentSteelKind.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.새로만들기ToolStripButton,
             this.열기ToolStripButton,
             this.toolStripSeparator3,
@@ -430,11 +429,11 @@
             this.LogStop_toolStripButton,
             this.toolStripSeparator6,
             this.도움말ToolStripButton});
-            this.label_CurrentSteelKind.Location = new System.Drawing.Point(0, 24);
-            this.label_CurrentSteelKind.Name = "label_CurrentSteelKind";
-            this.label_CurrentSteelKind.Size = new System.Drawing.Size(1904, 25);
-            this.label_CurrentSteelKind.TabIndex = 5;
-            this.label_CurrentSteelKind.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(1904, 25);
+            this.toolStrip.TabIndex = 5;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // 새로만들기ToolStripButton
             // 
@@ -666,7 +665,6 @@
             // 
             // split_CAM1Info.Panel1
             // 
-            this.split_CAM1Info.Panel1.Controls.Add(this.button1);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox_SlopeAngle);
             this.split_CAM1Info.Panel1.Controls.Add(this.label_Progress);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox_Charging2);
@@ -680,16 +678,6 @@
             this.split_CAM1Info.Size = new System.Drawing.Size(689, 638);
             this.split_CAM1Info.SplitterDistance = 154;
             this.split_CAM1Info.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(105, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox_SlopeAngle
             // 
@@ -1332,7 +1320,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.split_ViewToInfo);
             this.Controls.Add(this.propertyGrid1);
-            this.Controls.Add(this.label_CurrentSteelKind);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
@@ -1345,8 +1333,8 @@
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.label_CurrentSteelKind.ResumeLayout(false);
-            this.label_CurrentSteelKind.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.split_ViewToInfo.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).EndInit();
             this.split_ViewToInfo.ResumeLayout(false);
@@ -1410,7 +1398,7 @@
         public System.Windows.Forms.MenuStrip menuStrip1;
         public System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem newOnlineToolStripMenuItem;
-        public System.Windows.Forms.ToolStrip label_CurrentSteelKind;
+        public System.Windows.Forms.ToolStrip toolStrip;
         public System.Windows.Forms.ToolStripMenuItem newSimulationToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem openIRDXToolStripMenuItem;
         public System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -1514,7 +1502,6 @@
         public System.Windows.Forms.Label label_Progress;
         private System.Windows.Forms.GroupBox groupBox_SlopeAngle;
         public System.Windows.Forms.TextBox textBox_SlopeAngle;
-        private System.Windows.Forms.Button button1;
     }
 }
 

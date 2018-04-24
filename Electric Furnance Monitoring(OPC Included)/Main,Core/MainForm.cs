@@ -366,13 +366,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Thread.Sleep(3);
 
             // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
-            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive/* || propertyGridUpdate.IsAlive*/)
+            if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive)
             {
                 mThread.Abort();
                 mThread_two.Abort();
                 CAM1_DataView.Abort();
                 CAM2_DataView.Abort();
-                //propertyGridUpdate.Abort();
             }
 
             DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
@@ -384,10 +383,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
             }
 
-            System.Threading.Thread.Sleep(100);
+            //System.Threading.Thread.Sleep(100);
 
             c1_chartView.axTChart1.Dispose();
             c2_chartView.axTChart1.Dispose();
+
         }
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
@@ -1468,14 +1468,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DeletePOI_toolStripButton.Visible = true;
 
                 LogStart_toolStripButton.Visible = true;
+                LogStop_toolStripButton.Enabled = false;
                 LogStop_toolStripButton.Visible = true;
+                LogStop_toolStripButton.Enabled = false;
 
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
                 customGrid.GetAttributesInfo(pIRDX_Array[0]);
                 propertyGrid1.Refresh();
 
-                
+                result.OPCConnectAlarm.ForeColor = result.NotConnected;
+                result.OPCActiveAlarm.ForeColor = result.NotConnected;
             }
             else if (IRDXFileCount == 2)
             {
@@ -1570,7 +1573,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             //customGrid.GetAttributesInfo();
             //propertyGrid1.Refresh();
-            button1.Visible = false;
+            //button1.Visible = false;
 
             label_Progress.Text = "Simulation Mode";
             groupBox_SlopeAngle.Visible = false;
@@ -1619,29 +1622,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             CAM1_DataView.Start();
             CAM2_DataView.Start();
 
-            //OPCActivated = true;
             InitOPCTimer();
 
-            //uint type = 0;
-            //StringBuilder s = new StringBuilder(64);
-            //byte[] deviceID = new byte[64];
-            //char[] ch_tempDeviceID = new char[64];
-
-            //DIASDAQ.DDAQ_DEVICE_TYPE id = 0;
-
-            //DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(1, deviceID, 64);
-            //DIASDAQ.DDAQ_DEVICE_GET_ID(1, ref id, ref type);
-
-            //for (int i = 0; i < 64; i++)
-            //{
-            //    ch_tempDeviceID[i] = (char)deviceID[i];
-            //    string temp = ch_tempDeviceID[i].ToString();
-            //    s.Append(temp);
-            //}
-            //string result = s.ToString();
-
             newDevice.GetDeviceID(1, pIRDX_Array[0]);
-            //newDevice.GetDeviceType(1, pIRDX_Array[0]);
         }
         #endregion
 
@@ -1682,5 +1665,69 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             about.ShowDialog();
         }
+
     }
+
+    /*public partial class ToolStripMenuItem : ToolStripControlHost
+    {
+        public ToolStripMenuItem(): base(CreateControlInstance())
+        {
+        }
+
+        public TrackBar TrackBar
+        {
+            get
+            {
+                return Control as TrackBar;
+            }
+        }
+
+        private static Control CreateControlInstance()
+        {
+            TrackBar t = new TrackBar();
+            t.AutoSize = false;
+            return t;
+        }
+
+        [DefaultValue(0)]
+        public int Value
+        {
+            get { return TrackBar.Value; }
+            set { TrackBar.Value = value; }
+        }
+
+        protected override void OnSubscribeControlEvents(Control control)
+        {
+            base.OnSubscribeControlEvents(control);
+            TrackBar trackBar = control as TrackBar;
+            TrackBar.ValueChanged += new EventHandler(trackBar_ValueChanged);
+        }
+
+        protected override void OnUnsubscribeControlEvents(Control control)
+        {
+            base.OnUnsubscribeControlEvents(control);
+            TrackBar trackBar = control as TrackBar;
+            TrackBar.ValueChanged -= new EventHandler(trackBar_ValueChanged);
+        }
+
+        void trackBar_ValueChanged(object sender, EventArgs e)
+        {
+            if(this.ValueChanged != null)
+            {
+                ValueChanged(sender, e);
+            }
+        }
+
+        public event EventHandler ValueChanged;
+
+        protected override Size DefaultSize
+        {
+            get
+            {
+                return new Size(200, 16);
+            }
+        }
+    }*/
+
+
 }
