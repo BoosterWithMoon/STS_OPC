@@ -101,6 +101,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         string CAM2_NewIRDXFileName;
         string CAM2_newRawDataFileName;
         string CAM2_newResultDataFileName;
+        string newOPCReadDataFileName;
+        string newOPCWriteDataFileName;
         public bool isLoggingRunning;
         System.Windows.Forms.Timer dataplayerTimer;
 
@@ -139,8 +141,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         System.Windows.Forms.Timer LoggingTimer;
         FileStream Text_RawData;
         FileStream Text_ResultData;
+        FileStream Text_OPCReadData;
+        FileStream Text_OPCWriteData;
         StreamWriter outputFile;
         StreamWriter outputFile_Result;
+        StreamWriter outputFile_OPCRead;
+        StreamWriter outputFile_OPCWrite;
 
         FileStream c2_Text_RawData;
         FileStream c2_Text_ResultData;
@@ -1007,7 +1013,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             DateTime time = DateTime.Now;
             string currentTime = time.ToString("yyyyMMdd_HHmmss");
-            string currentTime_DateOnly = time.ToString("yyMMdd");
+            string currentTime_DateOnly = time.ToString("yyyyMMdd");
             strFileName = "[" + id.ToString() + "]";
 
             DirectoryInfo VerifyRawFolder = new DirectoryInfo(customGrid.RawData_Location);
@@ -1045,6 +1051,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
                         Directory.CreateDirectory(newResultDataFolderName);
                         break;
+                    case 3:
+                        customGrid.ResultData_Location = appPath;
+                        customGrid.ResultData_Location += "\\ResultData";
+                        Directory.CreateDirectory(customGrid.ResultData_Location);
+                        newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
+                        Directory.CreateDirectory(newResultDataFolderName);
+                        break;
+                    case 4:
+                        customGrid.ResultData_Location = appPath;
+                        customGrid.ResultData_Location += "\\ResultData";
+                        Directory.CreateDirectory(customGrid.ResultData_Location);
+                        newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
+                        Directory.CreateDirectory(newResultDataFolderName);
+                        break;
                 }
             }
             if (isRawFolderExist)
@@ -1076,8 +1096,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     strFileName = strFileName + currentTime + ".txt";
                     strFileName = newResultDataFolderName + "\\" + strFileName;
                     break;
+                case 3:
+                    strFileName = "[OPC_READ]" /*+ strFileName*/ + currentTime + ".txt";
+                    strFileName = newResultDataFolderName + "\\" + strFileName;
+                    break;
+                case 4:
+                    strFileName = "[OPC_WRITE]" /*+ strFileName*/ + currentTime + ".txt";
+                    strFileName = newResultDataFolderName + "\\" + strFileName;
+                    break;
             }
-
             return strFileName;
         }
 
@@ -1097,18 +1124,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 MovePOI_toolStripButton.Enabled = false;   // Move POI Disable
                 DeletePOI_toolStripButton.Enabled = false;   // Delete POI Disable
 
-                int IRDX = 0, RawData = 1, ResultData = 2;
+                int IRDX = 0, RawData = 1, ResultData = 2, OPCRead = 3, OPCWrite = 4;
 
                 NewIRDXFileName = GetNewDataFileName(IRDX, pIRDX_Array[0]);
                 newRawDataFileName = GetNewDataFileName(RawData, pIRDX_Array[0]);
                 newResultDataFileName = GetNewDataFileName(ResultData, pIRDX_Array[0]);
+                newOPCReadDataFileName = GetNewDataFileName(OPCRead, pIRDX_Array[0]);
+                newOPCWriteDataFileName = GetNewDataFileName(OPCWrite, pIRDX_Array[0]);
 
                 Text_RawData = new FileStream(newRawDataFileName, FileMode.Append, FileAccess.Write);
                 Text_ResultData = new FileStream(newResultDataFileName, FileMode.Append, FileAccess.Write);
 
                 outputFile = new StreamWriter(Text_RawData);
                 outputFile_Result = new StreamWriter(Text_ResultData);
-
                 //if (imageView.CAM1_POICount == 0)
                 //{
                 //    MessageBox.Show("저장할 데이터를 확인하세요.\n저장 프로세스가 시작되지 않았습니다.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1122,6 +1150,26 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     legend = legend + "POI #" + (k + 1).ToString() + "\tTemperature\t";
                 }
                 outputFile_Result.WriteLine(legend);
+
+
+                if (OPCActivated && OPCTimerActivated)
+                {
+                    Text_OPCReadData = new FileStream(newOPCReadDataFileName, FileMode.Append, FileAccess.Write);
+                    Text_OPCWriteData = new FileStream(newOPCWriteDataFileName, FileMode.Append, FileAccess.Write);
+
+                    outputFile_OPCRead = new StreamWriter(Text_OPCReadData);
+                    outputFile_OPCWrite = new StreamWriter(Text_OPCWriteData);
+
+                    // put OPCRead textfile legend
+                    legend = "Index\t";
+                    SetTextfileLegend_OPCRead(legend);
+                    outputFile_OPCRead.WriteLine(legend);
+
+                    // put OPCWrite textfile legend
+                    legend = "Index\t";
+                    SetTextfileLegend_OPCWrite(legend);
+                    outputFile_OPCWrite.WriteLine(legend);
+                }
 
                 // 카메라가 두대 붙어있으면 한번 더 하면 됨
                 if (pIRDX_Array[1] != IntPtr.Zero)
@@ -1150,6 +1198,121 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
+        private string SetTextfileLegend_OPCRead(string legend)
+        {
+            legend = legend + "Slope Angle\t";
+
+            legend = legend + "CAM1_MaxTemp\t";
+
+            legend = legend + "CAM1_Threshold01\t";
+            legend = legend + "CAM1_Threshold02\t";
+            legend = legend + "CAM1_Threshold03\t";
+            legend = legend + "CAM1_Threshold04\t";
+            legend = legend + "CAM1_Threshold05\t";
+            legend = legend + "CAM1_Threshold06\t";
+            legend = legend + "CAM1_Threshold07\t";
+            legend = legend + "CAM1_Threshold08\t";
+            legend = legend + "CAM1_Threshold09\t";
+            legend = legend + "CAM1_Threshold10\t";
+
+            legend = legend + "CAM1_ROI01Temp\t";
+            legend = legend + "CAM1_ROI02Temp\t";
+            legend = legend + "CAM1_ROI03Temp\t";
+            legend = legend + "CAM1_ROI04Temp\t";
+            legend = legend + "CAM1_ROI05Temp\t";
+            legend = legend + "CAM1_ROI06Temp\t";
+            legend = legend + "CAM1_ROI07Temp\t";
+            legend = legend + "CAM1_ROI08Temp\t";
+            legend = legend + "CAM1_ROI09Temp\t";
+            legend = legend + "CAM1_ROI10Temp\t";
+
+            legend = legend + "CAM1_ROI01_Warning\t";
+            legend = legend + "CAM1_ROI02_Warning\t";
+            legend = legend + "CAM1_ROI03_Warning\t";
+            legend = legend + "CAM1_ROI04_Warning\t";
+            legend = legend + "CAM1_ROI05_Warning\t";
+            legend = legend + "CAM1_ROI06_Warning\t";
+            legend = legend + "CAM1_ROI07_Warning\t";
+            legend = legend + "CAM1_ROI08_Warning\t";
+            legend = legend + "CAM1_ROI09_Warning\t";
+            legend = legend + "CAM1_ROI10_Warning\t";
+
+            legend = legend + "CAM1_ROI01_Alarm\t";
+            legend = legend + "CAM1_ROI02_Alarm\t";
+            legend = legend + "CAM1_ROI03_Alarm\t";
+            legend = legend + "CAM1_ROI04_Alarm\t";
+            legend = legend + "CAM1_ROI05_Alarm\t";
+            legend = legend + "CAM1_ROI06_Alarm\t";
+            legend = legend + "CAM1_ROI07_Alarm\t";
+            legend = legend + "CAM1_ROI08_Alarm\t";
+            legend = legend + "CAM1_ROI09_Alarm\t";
+            legend = legend + "CAM1_ROI10_Alarm\t";
+
+            legend = legend + "CAM2_MaxTemp\t";
+
+            legend = legend + "CAM2_Threshold01\t";
+            legend = legend + "CAM2_Threshold02\t";
+            legend = legend + "CAM2_Threshold03\t";
+            legend = legend + "CAM2_Threshold04\t";
+            legend = legend + "CAM2_Threshold05\t";
+            legend = legend + "CAM2_Threshold06\t";
+            legend = legend + "CAM2_Threshold07\t";
+            legend = legend + "CAM2_Threshold08\t";
+            legend = legend + "CAM2_Threshold09\t";
+            legend = legend + "CAM2_Threshold10\t";        
+                
+            legend = legend + "CAM2_ROI01Temp\t";
+            legend = legend + "CAM2_ROI02Temp\t";
+            legend = legend + "CAM2_ROI03Temp\t";
+            legend = legend + "CAM2_ROI04Temp\t";
+            legend = legend + "CAM2_ROI05Temp\t";
+            legend = legend + "CAM2_ROI06Temp\t";
+            legend = legend + "CAM2_ROI07Temp\t";
+            legend = legend + "CAM2_ROI08Temp\t";
+            legend = legend + "CAM2_ROI09Temp\t";
+            legend = legend + "CAM2_ROI10Temp\t";
+
+            legend = legend + "CAM2_ROI01_Warning\t";
+            legend = legend + "CAM2_ROI02_Warning\t";
+            legend = legend + "CAM2_ROI03_Warning\t";
+            legend = legend + "CAM2_ROI04_Warning\t";
+            legend = legend + "CAM2_ROI05_Warning\t";
+            legend = legend + "CAM2_ROI06_Warning\t";
+            legend = legend + "CAM2_ROI07_Warning\t";
+            legend = legend + "CAM2_ROI08_Warning\t";
+            legend = legend + "CAM2_ROI09_Warning\t";
+            legend = legend + "CAM2_ROI10_Warning\t";
+
+            legend = legend + "CAM2_ROI01_Alarm\t";
+            legend = legend + "CAM2_ROI02_Alarm\t";
+            legend = legend + "CAM2_ROI03_Alarm\t";
+            legend = legend + "CAM2_ROI04_Alarm\t";
+            legend = legend + "CAM2_ROI05_Alarm\t";
+            legend = legend + "CAM2_ROI06_Alarm\t";
+            legend = legend + "CAM2_ROI07_Alarm\t";
+            legend = legend + "CAM2_ROI08_Alarm\t";
+            legend = legend + "CAM2_ROI09_Alarm\t";
+            legend = legend + "CAM2_ROI10_Alarm\t";
+
+            return legend;
+        }
+
+        private string SetTextfileLegend_OPCWrite(string legend)
+        {
+            legend = legend + "SteelNo\t";
+            legend = legend + "Slope Angle\t";
+            legend = legend + "Charging1\t";
+            legend = legend + "Melting1\t";
+            legend = legend + "Charging2\t";
+            legend = legend + "Melting2\t";
+            legend = legend + "Charging3\t";
+            legend = legend + "Melting3\t";
+            legend = legend + "StandSteel\t";
+            legend = legend + "Tapping\t";
+            legend = legend + "O2LanceBlowing\t";
+
+            return legend;
+        }
 
         private void T_Tick(object sender, EventArgs e)
         {
@@ -1164,6 +1327,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 test2 = test2 + "\t\t" + imgView.CAM1_TemperatureArr[i];
             }
             outputFile_Result.WriteLine(test2);
+
+            // Write OPC_READ data
+            //test2 = tickCount.ToString();
+
+
 
             if (irdxHandle_write == IntPtr.Zero) // write용 irdxHandle이 없으면 새로 만들고
                 DIASDAQ.DDAQ_IRDX_FILE_OPEN_WRITE(NewIRDXFileName, true, ref irdxHandle_write);
@@ -1206,6 +1374,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             outputFile_Result.Close();
             Text_RawData.Close();
             Text_ResultData.Close();
+            Text_OPCReadData.Close();
+            Text_OPCWriteData.Close();
 
             if (DetectedDevices == 2)
             {

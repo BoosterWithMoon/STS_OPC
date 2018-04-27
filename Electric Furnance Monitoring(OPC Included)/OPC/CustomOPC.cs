@@ -326,8 +326,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public string nodeName;
 
         // Read 또는 Write할 OPC 태그의 개수
-        private static int ReadTagCount;
-        private static int WriteTagCount;
+        public int ReadTagCount;
+        public int WriteTagCount;
 
         public int CurrentAngle;
 
