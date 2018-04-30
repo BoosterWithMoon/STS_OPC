@@ -137,6 +137,7 @@
             this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -665,6 +666,7 @@
             // 
             // split_CAM1Info.Panel1
             // 
+            this.split_CAM1Info.Panel1.Controls.Add(this.button1);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox_SlopeAngle);
             this.split_CAM1Info.Panel1.Controls.Add(this.label_Progress);
             this.split_CAM1Info.Panel1.Controls.Add(this.groupBox_Charging2);
@@ -1312,6 +1314,16 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "Type";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(95, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -1502,6 +1514,7 @@
         public System.Windows.Forms.Label label_Progress;
         private System.Windows.Forms.GroupBox groupBox_SlopeAngle;
         public System.Windows.Forms.TextBox textBox_SlopeAngle;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -20,7 +20,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread support_thr1;
         Thread support_thr2;
 
-        public bool isDetected = true;
+        public bool isDetected = false;
+        public bool isConnectedDevices = false;
         public string[] DeviceID;
         uint NDF_DetectedDevices;           // CS1690 Warning
 
@@ -215,7 +216,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // Configuration 검증
             if (main.POSCO_CAM1_SERIAL == "" || main.POSCO_CAM2_SERIAL == "")
             {
-                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\nSerial Numer 정보를 확인할 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\nSerial Number 정보를 확인할 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
                 DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
@@ -342,6 +343,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             support_thr1 = (Thread)main.Support_Thread1_forPublicRef();
             support_thr1.Start();
+
+            isConnectedDevices = true;
 
             if (NDF_DetectedDevices != 1)
             {

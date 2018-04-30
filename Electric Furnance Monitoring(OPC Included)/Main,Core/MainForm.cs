@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AxTeeChart;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Reflection;
@@ -17,6 +16,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using Kepware.ClientAce.OpcDaClient;
 using Kepware.ClientAce.OpcCmn;
+using System.Collections;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
@@ -139,6 +139,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public OpenMode currentOpenMode;
 
         System.Windows.Forms.Timer LoggingTimer;
+        public DateTime time;
         FileStream Text_RawData;
         FileStream Text_ResultData;
         FileStream Text_OPCReadData;
@@ -357,6 +358,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (isLoggingRunning)
+            {
+                DeviceLoggingStop();
+            }
+
             SaveConfiguration();
 
             if (OPCActivated)
@@ -441,8 +447,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // 전체 ImageView 영역 width 조정
             //split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
             //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width - 310;
-            split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
+            if(this.Width - propertyGrid1.Width - 310 < 0)
+            {
+                return;
+            }else
+            {
+                split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
+            }
+
+            //split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
             
+
+
             // 카메라별 ImageView 영역 Width 조정
             split_CamToCam.Width = split_ViewToInfo.Panel1.Width / 2;
 
@@ -841,15 +857,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void LogStart_toolStripButton_Click(object sender, EventArgs e)
         {
             DeviceLoggingStart();
-            LogStart_toolStripButton.Enabled = false;
-            LogStop_toolStripButton.Enabled = true;
         }
 
         private void LogStop_toolStripButton_Click(object sender, EventArgs e)
         {
             DeviceLoggingStop();
-            LogStart_toolStripButton.Enabled = true;
-            LogStop_toolStripButton.Enabled = false;
         }
 
         private void MoveToNearStep()
@@ -1000,7 +1012,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
 
         #region DataLoggingControl
-
         private string GetNewDataFileName(int SaveType, IntPtr irdxHandle)
         {
             string newRawDataFolderName = "";
@@ -1011,9 +1022,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             DIASDAQ.DDAQ_IRDX_DEVICE_GET_ID(irdxHandle, ref id, ref type);
 
-            DateTime time = DateTime.Now;
-            string currentTime = time.ToString("yyyyMMdd_HHmmss");
-            string currentTime_DateOnly = time.ToString("yyyyMMdd");
+            time = DateTime.Now;
+            string currentTime = time.ToString("yyMMdd_HHmmss");
+            string currentTime_DateOnly = time.ToString("yyMMdd");
             strFileName = "[" + id.ToString() + "]";
 
             DirectoryInfo VerifyRawFolder = new DirectoryInfo(customGrid.RawData_Location);
@@ -1119,6 +1130,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 isLoggingRunning = true;
 
+                LogStart_toolStripButton.Enabled = false;
+                LogStop_toolStripButton.Enabled = true;
+
                 propertyGrid1.Enabled = false;      // Propertygrid Disable
                 DrawPOI_toolStripButton.Enabled = false;   // Draw POI Disable
                 MovePOI_toolStripButton.Enabled = false;   // Move POI Disable
@@ -1137,6 +1151,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 outputFile = new StreamWriter(Text_RawData);
                 outputFile_Result = new StreamWriter(Text_ResultData);
+
                 //if (imageView.CAM1_POICount == 0)
                 //{
                 //    MessageBox.Show("저장할 데이터를 확인하세요.\n저장 프로세스가 시작되지 않았습니다.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1162,12 +1177,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     // put OPCRead textfile legend
                     legend = "Index\t";
-                    SetTextfileLegend_OPCRead(legend);
+                    legend = SetTextfileLegend_OPCRead(legend);
                     outputFile_OPCRead.WriteLine(legend);
 
                     // put OPCWrite textfile legend
                     legend = "Index\t";
-                    SetTextfileLegend_OPCWrite(legend);
+                    legend = SetTextfileLegend_OPCWrite(legend);
                     outputFile_OPCWrite.WriteLine(legend);
                 }
 
@@ -1200,6 +1215,23 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private string SetTextfileLegend_OPCRead(string legend)
         {
+            legend = legend + "SteelNo\t";
+            legend = legend + "Slope Angle\t";
+            legend = legend + "Charging1\t";
+            legend = legend + "Melting1\t";
+            legend = legend + "Charging2\t";
+            legend = legend + "Melting2\t";
+            legend = legend + "Charging3\t";
+            legend = legend + "Melting3\t";
+            legend = legend + "StandSteel\t";
+            legend = legend + "Tapping\t";
+            legend = legend + "O2LanceBlowing\t";
+
+            return legend;
+        }
+
+        private string SetTextfileLegend_OPCWrite(string legend)
+        {
             legend = legend + "Slope Angle\t";
 
             legend = legend + "CAM1_MaxTemp\t";
@@ -1226,28 +1258,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             legend = legend + "CAM1_ROI09Temp\t";
             legend = legend + "CAM1_ROI10Temp\t";
 
-            legend = legend + "CAM1_ROI01_Warning\t";
-            legend = legend + "CAM1_ROI02_Warning\t";
-            legend = legend + "CAM1_ROI03_Warning\t";
-            legend = legend + "CAM1_ROI04_Warning\t";
-            legend = legend + "CAM1_ROI05_Warning\t";
-            legend = legend + "CAM1_ROI06_Warning\t";
-            legend = legend + "CAM1_ROI07_Warning\t";
-            legend = legend + "CAM1_ROI08_Warning\t";
-            legend = legend + "CAM1_ROI09_Warning\t";
-            legend = legend + "CAM1_ROI10_Warning\t";
-
-            legend = legend + "CAM1_ROI01_Alarm\t";
-            legend = legend + "CAM1_ROI02_Alarm\t";
-            legend = legend + "CAM1_ROI03_Alarm\t";
-            legend = legend + "CAM1_ROI04_Alarm\t";
-            legend = legend + "CAM1_ROI05_Alarm\t";
-            legend = legend + "CAM1_ROI06_Alarm\t";
-            legend = legend + "CAM1_ROI07_Alarm\t";
-            legend = legend + "CAM1_ROI08_Alarm\t";
-            legend = legend + "CAM1_ROI09_Alarm\t";
-            legend = legend + "CAM1_ROI10_Alarm\t";
-
             legend = legend + "CAM2_MaxTemp\t";
 
             legend = legend + "CAM2_Threshold01\t";
@@ -1259,8 +1269,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             legend = legend + "CAM2_Threshold07\t";
             legend = legend + "CAM2_Threshold08\t";
             legend = legend + "CAM2_Threshold09\t";
-            legend = legend + "CAM2_Threshold10\t";        
-                
+            legend = legend + "CAM2_Threshold10\t";
+
             legend = legend + "CAM2_ROI01Temp\t";
             legend = legend + "CAM2_ROI02Temp\t";
             legend = legend + "CAM2_ROI03Temp\t";
@@ -1272,6 +1282,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             legend = legend + "CAM2_ROI09Temp\t";
             legend = legend + "CAM2_ROI10Temp\t";
 
+            legend = legend + "CAM1_ROI01_Warning\t";
+            legend = legend + "CAM1_ROI02_Warning\t";
+            legend = legend + "CAM1_ROI03_Warning\t";
+            legend = legend + "CAM1_ROI04_Warning\t";
+            legend = legend + "CAM1_ROI05_Warning\t";
+            legend = legend + "CAM1_ROI06_Warning\t";
+            legend = legend + "CAM1_ROI07_Warning\t";
+            legend = legend + "CAM1_ROI08_Warning\t";
+            legend = legend + "CAM1_ROI09_Warning\t";
+            legend = legend + "CAM1_ROI10_Warning\t";
+
             legend = legend + "CAM2_ROI01_Warning\t";
             legend = legend + "CAM2_ROI02_Warning\t";
             legend = legend + "CAM2_ROI03_Warning\t";
@@ -1282,6 +1303,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             legend = legend + "CAM2_ROI08_Warning\t";
             legend = legend + "CAM2_ROI09_Warning\t";
             legend = legend + "CAM2_ROI10_Warning\t";
+
+            legend = legend + "CAM1_ROI01_Alarm\t";
+            legend = legend + "CAM1_ROI02_Alarm\t";
+            legend = legend + "CAM1_ROI03_Alarm\t";
+            legend = legend + "CAM1_ROI04_Alarm\t";
+            legend = legend + "CAM1_ROI05_Alarm\t";
+            legend = legend + "CAM1_ROI06_Alarm\t";
+            legend = legend + "CAM1_ROI07_Alarm\t";
+            legend = legend + "CAM1_ROI08_Alarm\t";
+            legend = legend + "CAM1_ROI09_Alarm\t";
+            legend = legend + "CAM1_ROI10_Alarm\t";
 
             legend = legend + "CAM2_ROI01_Alarm\t";
             legend = legend + "CAM2_ROI02_Alarm\t";
@@ -1297,41 +1329,69 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             return legend;
         }
 
-        private string SetTextfileLegend_OPCWrite(string legend)
+        private string PutText_OPCRead(string str)
         {
-            legend = legend + "SteelNo\t";
-            legend = legend + "Slope Angle\t";
-            legend = legend + "Charging1\t";
-            legend = legend + "Melting1\t";
-            legend = legend + "Charging2\t";
-            legend = legend + "Melting2\t";
-            legend = legend + "Charging3\t";
-            legend = legend + "Melting3\t";
-            legend = legend + "StandSteel\t";
-            legend = legend + "Tapping\t";
-            legend = legend + "O2LanceBlowing\t";
+            str = str + opc.CurrentSteelNo.ToString() + "\t";
+            str = str + opc.CurrentAngle.ToString() + "\t";
+            str = str + opc.ChargingStatus[0].ToString() + "\t";
+            str = str + opc.ChargingStatus[1].ToString() + "\t";
+            str = str + opc.ChargingStatus[2].ToString() + "\t";
+            str = str + opc.ChargingStatus[3].ToString() + "\t";
+            str = str + opc.ChargingStatus[4].ToString() + "\t";
+            str = str + opc.ChargingStatus[5].ToString() + "\t";
+            str = str + opc.ChargingStatus[6].ToString() + "\t";
+            str = str + opc.ChargingStatus[7].ToString() + "\t";
+            str = str + opc.O2LanceResult.ToString() + "\t";
 
-            return legend;
+            return str;
+        }
+
+        private string PutText_OPCWrite(string str)
+        {
+            object[] valueArray = new object[opc.WriteTagCount];
+
+            for(int k=0; k<opc.WriteTagCount; k++)
+            {
+                valueArray[k] = opc.Write_itemValues[k].Value;
+            }
+
+            for (int k = 0; k < opc.WriteTagCount; k++)
+            {
+                str = str + valueArray[k].ToString() + "\t";
+            }
+
+            return str;
         }
 
         private void T_Tick(object sender, EventArgs e)
         {
+            DateTime currentTime = DateTime.Now;
+            if(time.Date != currentTime.Date)
+            {
+                DeviceLoggingStop();
+                DeviceLoggingStart();
+            }
             //string test = "TEXT WRITING TEST: RawData\n";
-            string test2 = "";
+            string data = "";
 
             // 어떤 데이터를 Append해서 텍스트파일에 쓸 것인지 써주면 됨
             // index    poi #   temp    poi #   temp    ...
-            test2 = tickCount.ToString();
+            data = tickCount.ToString();
             for (int i = 0; i < imgView.CAM1_POICount; i++)
             {
-                test2 = test2 + "\t\t" + imgView.CAM1_TemperatureArr[i];
+                data = data + "\t\t" + imgView.CAM1_TemperatureArr[i].ToString("N2");
             }
-            outputFile_Result.WriteLine(test2);
+            outputFile_Result.WriteLine(data);
 
             // Write OPC_READ data
-            //test2 = tickCount.ToString();
+            data = tickCount.ToString()+"\t";
+            data = PutText_OPCRead(data);
+            outputFile_OPCRead.WriteLine(data);
 
-
+            // Write OPC_WRITE data
+            data = tickCount.ToString()+"\t";
+            data = PutText_OPCWrite(data);
+            outputFile_OPCWrite.WriteLine(data);
 
             if (irdxHandle_write == IntPtr.Zero) // write용 irdxHandle이 없으면 새로 만들고
                 DIASDAQ.DDAQ_IRDX_FILE_OPEN_WRITE(NewIRDXFileName, true, ref irdxHandle_write);
@@ -1341,24 +1401,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // 카메라가 두대 붙어있으면 똑같이 더하면 됨
             if (pIRDX_Array[1] != IntPtr.Zero)
             {
-                test2 = tickCount.ToString();
+                data = tickCount.ToString();
                 for (int i = 0; i < imgView.CAM2_POICount; i++)
                 {
-                    test2 = test2 + "\t\t" + imgView.CAM2_TemperatureArr[i];
+                    data = data + "\t\t" + imgView.CAM2_TemperatureArr[i];
                 }
-                c2_outputFile_Result.WriteLine(test2);
+                c2_outputFile_Result.WriteLine(data);
                 if (c2_irdxHandle_write == IntPtr.Zero)
                     DIASDAQ.DDAQ_IRDX_FILE_OPEN_WRITE(CAM2_NewIRDXFileName, true, ref c2_irdxHandle_write);
                 else if (c2_irdxHandle_write != IntPtr.Zero)
                     DIASDAQ.DDAQ_IRDX_FILE_ADD_IRDX(c2_irdxHandle_write, pIRDX_Array[1]);
             }
-
             tickCount++;
         }
 
         private void DeviceLoggingStop()
         {
             isLoggingRunning = false;
+
+            LogStart_toolStripButton.Enabled = true;
+            LogStop_toolStripButton.Enabled = false;
+
             LoggingTimer.Stop();    // tick timer 정지 시키고
             DIASDAQ.DDAQ_IRDX_FILE_CLOSE(irdxHandle_write); // 쓰고있던 irdx파일 닫고
             irdxHandle_write = IntPtr.Zero;     // 쓰기용 irdx handle 초기화
@@ -1374,6 +1437,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             outputFile_Result.Close();
             Text_RawData.Close();
             Text_ResultData.Close();
+
+            outputFile_OPCRead.Close();
+            outputFile_OPCWrite.Close();
             Text_OPCReadData.Close();
             Text_OPCWriteData.Close();
 
@@ -1524,10 +1590,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 opc.OPC_Read();
                 opc.OPC_Write();
             }
-            else
-            {
-                InitOPCTimer();
-            }
+            else InitOPCTimer();
 
             if (mThread.IsAlive)
             {
@@ -1537,6 +1600,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 c2_chartView.UpdateData();
             }
+
+            AutodelSequence();
         }
 
         public bool OPCTimerActivated = false;
@@ -1799,6 +1864,128 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #endregion
 
 
+        #region File/Folder AutoDelete
+        public void AutodelSequence()
+        {
+            string dirBase = ConfigurationManager.AppSettings["DataSaveBase"];
+            DriveInfo drive = new DriveInfo(dirBase);
+            long diskFreeSpace = drive.TotalFreeSpace;
+            long diskTotalSpace = drive.TotalSize;
+
+            if (diskFreeSpace < (diskTotalSpace * 0.1))    // 디스크 여유공간이 전체 공간의 10% 미만일때 동작
+            {
+                if (isLoggingRunning == true)   // 근데 데이터 로깅이 진행중이면
+                {
+                    DeviceLoggingStop();    // 로깅 먼저 중단시키자
+                    if(MessageBox.Show("디스크 용량이 부족합니다.\n데이터 자동 삭제 시퀀스를 시작 하시겠습니까?", "Capacity Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    {
+                        Delete_OldestFolder_Raw();
+                        Delete_OldestFolder_Result();
+                        MessageBox.Show("데이터 삭제가 완료되었습니다.\nData Logging을 재 시작합니다.", "Capacity Clear", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        DeviceLoggingStart();
+                    }
+                    else
+                    {
+                        MessageBox.Show("디스크 용량이 부족하여 Data Logging이 중단 되었습니다.\n디스크의 여유 공간을 수동으로 확보하십시오.", "Capacity Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+
+        }
+
+        private void Delete_OldestFolder_Raw()
+        {
+            string oldest_RawDir = customGrid.RawData_Location.ToString();
+            oldest_RawDir = oldest_RawDir + "RawData";
+            string deleteTarget = "";
+            DateTime deleteTargetTime;
+            DirectoryInfo dir = new DirectoryInfo(oldest_RawDir);
+
+            if (dir.GetDirectories().Length == 0) return;
+
+            string[] folderName = new string[dir.GetDirectories().Length];
+            DateTime[] folderCreationTime = new DateTime[dir.GetDirectories().Length];
+
+            int k = 0;
+            foreach (var item in dir.GetDirectories())
+            {
+                folderName[k] = item.Name;
+                folderCreationTime[k] = item.CreationTime;
+                k++;
+            }
+
+            deleteTarget = folderName[0];
+            deleteTargetTime = folderCreationTime[0];
+            for (int i = 0; i < dir.GetDirectories().Length; i++)
+            {
+                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)
+                {
+                    deleteTarget = folderName[i];
+                    deleteTargetTime = folderCreationTime[i];
+                }
+            }
+
+            string finalPath = oldest_RawDir + "\\" + deleteTarget;
+            if (Directory.Exists(finalPath))
+            {
+                string[] files = Directory.GetFiles(finalPath);
+                foreach (string s in files)
+                {
+                    string fileName = Path.GetFileName(s);
+                    string deleteFile = finalPath + "\\" + fileName;
+                    File.Delete(deleteFile);
+                }
+            }
+            Directory.Delete(finalPath);
+        }
+
+        private void Delete_OldestFolder_Result()
+        {
+            string oldest_ResultDir = customGrid.RawData_Location.ToString();
+            oldest_ResultDir = oldest_ResultDir + "ResultData";
+            string deleteTarget = "";
+            DateTime deleteTargetTime;
+            DirectoryInfo dir = new DirectoryInfo(oldest_ResultDir);
+
+            if (dir.GetDirectories().Length == 0) return;
+
+            string[] folderName = new string[dir.GetDirectories().Length];
+            DateTime[] folderCreationTime = new DateTime[dir.GetDirectories().Length];
+
+            int k = 0;
+            foreach (var item in dir.GetDirectories())
+            {
+                folderName[k] = item.Name;
+                folderCreationTime[k] = item.CreationTime;
+                k++;
+            }
+
+            deleteTarget = folderName[0];
+            deleteTargetTime = folderCreationTime[0];
+            for (int i = 0; i < dir.GetDirectories().Length; i++)
+            {
+                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)
+                {
+                    deleteTarget = folderName[i];
+                    deleteTargetTime = folderCreationTime[i];
+                }
+            }
+
+            string finalPath = oldest_ResultDir + "\\" + deleteTarget;
+            if (Directory.Exists(finalPath))
+            {
+                string[] files = Directory.GetFiles(finalPath);
+                foreach (string s in files)
+                {
+                    string fileName = Path.GetFileName(s);
+                    string deleteFile = finalPath + "\\" + fileName;
+                    File.Delete(deleteFile);
+                }
+            }
+            Directory.Delete(finalPath);
+        }
+        #endregion
+
         // IRDX Frame keepmoving timer
         private void InitTimerForPlayer()
         {
@@ -1811,30 +1998,43 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void OpenNewDevice()
         {
-            newDevice.DeviceDetection();
-            if (newDevice.isDetected == true)
+            if (newDevice.isConnectedDevices == true)
             {
-                if (newDevice.isDetected == false) return;
-                else
-                {
-                    Cursor.Current = Cursors.WaitCursor;
-                    newDevice.ReadyToRun();
-                    Cursor.Current = Cursors.Default;
-
-                    newDevice.ShowDialog();
-                }
+                MessageBox.Show("이미 탐지 되었거나 동작 중인 카메라가 있습니다.", "Detection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+            newDevice.DeviceDetection();
+            Cursor.Current = Cursors.WaitCursor;
+            newDevice.ReadyToRun();
+            Cursor.Current = Cursors.Default;
+
+            newDevice.ShowDialog();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //ShowMessageBox();
+            if (isLoggingRunning == true)   // 근데 데이터 로깅이 진행중이면
+            {
+                DeviceLoggingStop();    // 로깅 먼저 중단시키자
+                if (MessageBox.Show("디스크 용량이 부족합니다.\n데이터 자동 삭제 시퀀스를 시작 하시겠습니까?", "Capacity Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                {
+                    Delete_OldestFolder_Raw();
+                    Delete_OldestFolder_Result();
+                    MessageBox.Show("데이터 삭제가 완료되었습니다.\nData Logging을 재 시작합니다.", "Capacity Clear", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DeviceLoggingStart();
+                }
+                else
+                {
+                    MessageBox.Show("디스크 용량이 부족하여 Data Logging이 중단 되었습니다.\n디스크의 여유 공간을 수동으로 확보하십시오.", "Capacity Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void OpenAbout()
         {
             about.ShowDialog();
         }
+
 
     }
 

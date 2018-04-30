@@ -330,16 +330,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public int WriteTagCount;
 
         public int CurrentAngle;
+        public uint CurrentSteelNo;
 
         ResultView result;
         ImageView imgView;
 
         ItemIdentifier[] Read_itemIdentifiers;
         ItemIdentifier[] Write_itemIdentifiers;
-        ItemValue[] Write_itemValues;
+        public ItemValue[] Write_itemValues;
 
-        BitArray ChargingStatus;
-        bool O2LanceResult;
+        public BitArray ChargingStatus;
+        public bool O2LanceResult;
 
         public CustomOPC(MainForm _main)
         {
@@ -656,7 +657,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
 
             Write_itemValues[(int)WritingArrayNo.CurrentAngle].Value = CurrentAngle;
-            Write_itemValues[(int)WritingArrayNo.CAM1_MaxTemp].Value = main.FloatMaxTemp;
+            float preventCS = main.FloatMaxTemp;
+            Write_itemValues[(int)WritingArrayNo.CAM1_MaxTemp].Value = preventCS.ToString("N2");
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold01].Value = result.CAM1_ThresholdTemp[0];
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold02].Value = result.CAM1_ThresholdTemp[1];
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold03].Value = result.CAM1_ThresholdTemp[2];
@@ -667,18 +669,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold08].Value = result.CAM1_ThresholdTemp[7];
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold09].Value = result.CAM1_ThresholdTemp[8];
             Write_itemValues[(int)WritingArrayNo.CAM1_Threshold10].Value = result.CAM1_ThresholdTemp[9];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_Temp].Value = imgView.CAM1_TemperatureArr[0];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_Temp].Value = imgView.CAM1_TemperatureArr[1];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_Temp].Value = imgView.CAM1_TemperatureArr[2];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_Temp].Value = imgView.CAM1_TemperatureArr[3];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_Temp].Value = imgView.CAM1_TemperatureArr[4];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_Temp].Value = imgView.CAM1_TemperatureArr[5];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_Temp].Value = imgView.CAM1_TemperatureArr[6];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_Temp].Value = imgView.CAM1_TemperatureArr[7];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_Temp].Value = imgView.CAM1_TemperatureArr[8];
-            Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_Temp].Value = imgView.CAM1_TemperatureArr[9];
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_Temp].Value = imgView.CAM1_TemperatureArr[0].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_Temp].Value = imgView.CAM1_TemperatureArr[1].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI03_Temp].Value = imgView.CAM1_TemperatureArr[2].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI04_Temp].Value = imgView.CAM1_TemperatureArr[3].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI05_Temp].Value = imgView.CAM1_TemperatureArr[4].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI06_Temp].Value = imgView.CAM1_TemperatureArr[5].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI07_Temp].Value = imgView.CAM1_TemperatureArr[6].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI08_Temp].Value = imgView.CAM1_TemperatureArr[7].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI09_Temp].Value = imgView.CAM1_TemperatureArr[8].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM1_ROI10_Temp].Value = imgView.CAM1_TemperatureArr[9].ToString("N2");
 
-            Write_itemValues[(int)WritingArrayNo.CAM2_MaxTemp].Value = main.c2_FloatMaxTemp;
+            preventCS = main.c2_FloatMaxTemp;
+            Write_itemValues[(int)WritingArrayNo.CAM2_MaxTemp].Value = preventCS.ToString("N2");
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold01].Value = result.CAM2_ThresholdTemp[0];
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold02].Value = result.CAM2_ThresholdTemp[1];
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold03].Value = result.CAM2_ThresholdTemp[2];
@@ -689,16 +692,16 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold08].Value = result.CAM2_ThresholdTemp[7];
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold09].Value = result.CAM2_ThresholdTemp[8];
             Write_itemValues[(int)WritingArrayNo.CAM2_Threshold10].Value = result.CAM2_ThresholdTemp[9];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_Temp].Value = imgView.CAM2_TemperatureArr[0];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_Temp].Value = imgView.CAM2_TemperatureArr[1];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_Temp].Value = imgView.CAM2_TemperatureArr[2];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_Temp].Value = imgView.CAM2_TemperatureArr[3];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_Temp].Value = imgView.CAM2_TemperatureArr[4];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_Temp].Value = imgView.CAM2_TemperatureArr[5];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_Temp].Value = imgView.CAM2_TemperatureArr[6];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_Temp].Value = imgView.CAM2_TemperatureArr[7];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_Temp].Value = imgView.CAM2_TemperatureArr[8];
-            Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_Temp].Value = imgView.CAM2_TemperatureArr[9];
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI01_Temp].Value = imgView.CAM2_TemperatureArr[0].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI02_Temp].Value = imgView.CAM2_TemperatureArr[1].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI03_Temp].Value = imgView.CAM2_TemperatureArr[2].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI04_Temp].Value = imgView.CAM2_TemperatureArr[3].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI05_Temp].Value = imgView.CAM2_TemperatureArr[4].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI06_Temp].Value = imgView.CAM2_TemperatureArr[5].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI07_Temp].Value = imgView.CAM2_TemperatureArr[6].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI08_Temp].Value = imgView.CAM2_TemperatureArr[7].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI09_Temp].Value = imgView.CAM2_TemperatureArr[8].ToString("N2");
+            Write_itemValues[(int)WritingArrayNo.CAM2_ROI10_Temp].Value = imgView.CAM2_TemperatureArr[9].ToString("N2");
 
             Write_itemValues[(int)WritingArrayNo.CAM1_ROI01_WAR].Value = result.CAM1_isTempPM10[0];
             Write_itemValues[(int)WritingArrayNo.CAM1_ROI02_WAR].Value = result.CAM1_isTempPM10[1];
@@ -846,8 +849,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
                 else if (ReadingResult[i].GetType().ToString() == "System.UInt32")
                 {
+                    //CurrentSteelNo = (int)ReadingResult[i];
+                    CurrentSteelNo = Convert.ToUInt32(ReadingResult[i]);
                     main.textBox1.Text = ReadingResult[i].ToString();
                     main.textBox2.Text = ReadingResult[i].ToString();
+                    
                 }
                 else if (ReadingResult[i].GetType().ToString() == "System.Byte")
                 {
@@ -893,6 +899,5 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             return r.Next(MinNumber, MaxNumber);
         }
-
     }
 }
