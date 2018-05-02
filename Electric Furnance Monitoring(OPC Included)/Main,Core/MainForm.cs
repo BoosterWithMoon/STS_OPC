@@ -22,9 +22,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 {
     public partial class MainForm : Form
     {
-        //[DllImport("MFCLibrary1.dll")]
-        //private static extern void ShowMessageBox();
-
         #region ClassDeclare
         NewDeviceForm newDevice;
 
@@ -116,14 +113,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         public int IRDXFileCount;
 
-        //private static ushort DDAQ_MOTORFOCUS_CMD_EXIST = 0;    //< check if available
-        //private static ushort DDAQ_MOTORFOCUS_CMD_STOP = 1;     //< stop any motion
-        //private static ushort DDAQ_MOTORFOCUS_CMD_NEAR = 2;     //< move focus to near
-        //private static ushort DDAQ_MOTORFOCUS_CMD_FAR = 3;      //< move focus to far
         private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP = 4; //< move focus one step to near
         private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP = 5; //< move focus one step to far
-        //private static ushort DDAQ_MOTORFOCUS_CMD_NEAR_STEP_BIG = 6; //< move focus one big step to near
-        //private static ushort DDAQ_MOTORFOCUS_CMD_FAR_STEP_BIG = 7;   //< move focus one big step to far
 
         [DllImport("kernel32.dll")]
         public static extern void Beep(int frequency, int duration);
@@ -140,18 +131,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         System.Windows.Forms.Timer LoggingTimer;
         public DateTime time;
-        FileStream Text_RawData;
+        //FileStream Text_RawData;
         FileStream Text_ResultData;
         FileStream Text_OPCReadData;
         FileStream Text_OPCWriteData;
-        StreamWriter outputFile;
+        //StreamWriter outputFile;
         StreamWriter outputFile_Result;
         StreamWriter outputFile_OPCRead;
         StreamWriter outputFile_OPCWrite;
 
-        FileStream c2_Text_RawData;
+        //FileStream c2_Text_RawData;
         FileStream c2_Text_ResultData;
-        StreamWriter c2_outputFile;
+        //StreamWriter c2_outputFile;
         StreamWriter c2_outputFile_Result;
 
         IntPtr irdxHandle_write;
@@ -377,7 +368,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             Thread.Sleep(3);
 
-            // 스레드 둘중에 하나라도 돌고있으면 먼저 둘다 죽이고 시작하자
+            // 스레드 중에 하나라도 돌고있으면 우선 강제종료
             if (mThread.IsAlive || mThread_two.IsAlive || CAM1_DataView.IsAlive || CAM2_DataView.IsAlive)
             {
                 mThread.Abort();
@@ -395,11 +386,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
             }
 
-            //System.Threading.Thread.Sleep(100);
-
             c1_chartView.axTChart1.Dispose();
             c2_chartView.axTChart1.Dispose();
-
         }
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
@@ -447,10 +435,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // 전체 ImageView 영역 width 조정
             //split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
             //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width - 310;
-            if(this.Width - propertyGrid1.Width - 310 < 0)
+            if (this.Width - propertyGrid1.Width - 310 < 0)
             {
                 return;
-            }else
+            }
+            else
             {
                 split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
             }
@@ -567,7 +556,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         
 
         #region Thread
-
         private static EventWaitHandle ThreadOne_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
         private static EventWaitHandle ThreadTwo_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
         private void run()  // Current: 320L
@@ -597,7 +585,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(DetectedDevices, ref fTemp, ref bTemp);
                     CAM1_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
 
-                    //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                     //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
                     
@@ -606,15 +593,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     result.CAM1_DetectTemp_ForOPC();
 
                     VerifyOPC();
-                    //propertyGrid1.Invalidate();
-                    //customGrid.UpdateDataSet();
-                    //propertyGrid1.Refresh();
                     isDrawnCAM1Image = true;
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)             /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
 
-                    //ThreadOne_WFSO.Set();
+                    ThreadOne_WFSO.Set();
                 }
             }
 
@@ -649,21 +633,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(1, ref fTemp, ref bTemp);
                     CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
 
-
-                    //imgView.CalculateCurrentTemp(pIRDX_Array[1], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
-                    //imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1, imgView.CAM2_ClickedPosition, imgView.CAM2_POICount);
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
 
                     CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
                     result.CAM2_DetectTemp_ForOPC();
-                    //VerifyOPC();
 
                     isDrawnCAM2Image = true;
 
                     if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                         return;
 
-                    //ThreadTwo_WFSO.Set();
+                    ThreadTwo_WFSO.Set();
                 }
 
             }
@@ -674,7 +654,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
-                //ThreadOne_WFSO.WaitOne();
+                ThreadOne_WFSO.WaitOne();
 
                 if (!isDrawnCAM1Image)
                 {
@@ -695,7 +675,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
-                //ThreadTwo_WFSO.WaitOne();
+                ThreadTwo_WFSO.WaitOne();
 
                 if (!isDrawnCAM2Image)
                 {
@@ -709,7 +689,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
             }
         }
-
         #endregion
 
 
@@ -1033,64 +1012,55 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             bool isRawFolderExist = VerifyRawFolder.Exists;
             bool isResultFolderExist = VerifyResultFolder.Exists;
 
-            //bool isRawFolderExist = File.Exists(customGrid.RawData_Location);
-            //bool isResultFolderExist = File.Exists(customGrid.ResultData_Location);
-
-            if (!isRawFolderExist || !isResultFolderExist)
+            if (!isRawFolderExist)
             {
                 string appPath = Application.StartupPath;
-                switch (SaveType)
-                {
-                    case 0:
-                        customGrid.RawData_Location = appPath;
-                        customGrid.RawData_Location += "\\RawData";
-                        Directory.CreateDirectory(customGrid.RawData_Location);
-                        newRawDataFolderName = customGrid.RawData_Location + "\\" + currentTime_DateOnly;
-                        Directory.CreateDirectory(newRawDataFolderName);
-                        break;
-                    case 1:
-                        customGrid.RawData_Location = appPath;
-                        customGrid.RawData_Location += "\\RawData";
-                        Directory.CreateDirectory(customGrid.RawData_Location);
-                        newRawDataFolderName = customGrid.RawData_Location + "\\" + currentTime_DateOnly;
-                        Directory.CreateDirectory(newRawDataFolderName);
-                        break;
-                    case 2:
-                        customGrid.ResultData_Location = appPath;
-                        customGrid.ResultData_Location += "\\ResultData";
-                        Directory.CreateDirectory(customGrid.ResultData_Location);
-                        newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
-                        Directory.CreateDirectory(newResultDataFolderName);
-                        break;
-                    case 3:
-                        customGrid.ResultData_Location = appPath;
-                        customGrid.ResultData_Location += "\\ResultData";
-                        Directory.CreateDirectory(customGrid.ResultData_Location);
-                        newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
-                        Directory.CreateDirectory(newResultDataFolderName);
-                        break;
-                    case 4:
-                        customGrid.ResultData_Location = appPath;
-                        customGrid.ResultData_Location += "\\ResultData";
-                        Directory.CreateDirectory(customGrid.ResultData_Location);
-                        newResultDataFolderName = customGrid.ResultData_Location + "\\" + currentTime_DateOnly;
-                        Directory.CreateDirectory(newResultDataFolderName);
-                        break;
-                }
+
+                // RawData directory creation
+                customGrid.RawData_Location = appPath;
+                newRawDataFolderName = customGrid.RawData_Location + "\\RawData";
+                Directory.CreateDirectory(newRawDataFolderName);
+                newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
+                Directory.CreateDirectory(newRawDataFolderName);
+
+                string resetBase = newRawDataFolderName.Substring(0, 1);
+                config.AppSettings.Settings["DataSaveBase"].Value = resetBase;       // 데이터 저장 디스크 재설정
+                config.Save(ConfigurationSaveMode.Modified);            // update configuration xml file
+                ConfigurationManager.RefreshSection("appSettings");
+
+                // ResulData directory creation
+                customGrid.ResultData_Location = appPath;
+                newResultDataFolderName = customGrid.ResultData_Location + "\\ResultData";
+                Directory.CreateDirectory(newResultDataFolderName);
+                newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
+                Directory.CreateDirectory(newResultDataFolderName);
+
+                propertyGrid1.Invalidate();
             }
+
             if (isRawFolderExist)
             {
                 newRawDataFolderName = customGrid.RawData_Location + "\\RawData";
                 Directory.CreateDirectory(newRawDataFolderName);
                 newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newRawDataFolderName);
+
+                string resetBase = newRawDataFolderName.Substring(0, 1);
+                config.AppSettings.Settings["DataSaveBase"].Value = resetBase;
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+
+                propertyGrid1.Invalidate();
             }
+
             if (isResultFolderExist)
             {
                 newResultDataFolderName = customGrid.ResultData_Location + "\\ResultData";
                 Directory.CreateDirectory(newResultDataFolderName);
                 newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newResultDataFolderName);
+
+                propertyGrid1.Invalidate();
             }
 
             switch (SaveType)
@@ -1108,11 +1078,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     strFileName = newResultDataFolderName + "\\" + strFileName;
                     break;
                 case 3:
-                    strFileName = "[OPC_READ]" /*+ strFileName*/ + currentTime + ".txt";
+                    strFileName = "[OPC_READ]" + currentTime + ".txt";
                     strFileName = newResultDataFolderName + "\\" + strFileName;
                     break;
                 case 4:
-                    strFileName = "[OPC_WRITE]" /*+ strFileName*/ + currentTime + ".txt";
+                    strFileName = "[OPC_WRITE]" + currentTime + ".txt";
                     strFileName = newResultDataFolderName + "\\" + strFileName;
                     break;
             }
@@ -1146,10 +1116,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 newOPCReadDataFileName = GetNewDataFileName(OPCRead, pIRDX_Array[0]);
                 newOPCWriteDataFileName = GetNewDataFileName(OPCWrite, pIRDX_Array[0]);
 
-                Text_RawData = new FileStream(newRawDataFileName, FileMode.Append, FileAccess.Write);
+                //Text_RawData = new FileStream(newRawDataFileName, FileMode.Append, FileAccess.Write);
                 Text_ResultData = new FileStream(newResultDataFileName, FileMode.Append, FileAccess.Write);
 
-                outputFile = new StreamWriter(Text_RawData);
+                //outputFile = new StreamWriter(Text_RawData);
                 outputFile_Result = new StreamWriter(Text_ResultData);
 
                 //if (imageView.CAM1_POICount == 0)
@@ -1165,7 +1135,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     legend = legend + "POI #" + (k + 1).ToString() + "\tTemperature\t";
                 }
                 outputFile_Result.WriteLine(legend);
-
 
                 if (OPCActivated && OPCTimerActivated)
                 {
@@ -1193,10 +1162,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     CAM2_newRawDataFileName = GetNewDataFileName(RawData, pIRDX_Array[1]);
                     CAM2_newResultDataFileName = GetNewDataFileName(ResultData, pIRDX_Array[1]);
 
-                    c2_Text_RawData = new FileStream(CAM2_newRawDataFileName, FileMode.Append, FileAccess.Write);
+                    //c2_Text_RawData = new FileStream(CAM2_newRawDataFileName, FileMode.Append, FileAccess.Write);
                     c2_Text_ResultData = new FileStream(CAM2_newResultDataFileName, FileMode.Append, FileAccess.Write);
 
-                    c2_outputFile = new StreamWriter(c2_Text_RawData);
+                    //c2_outputFile = new StreamWriter(c2_Text_RawData);
                     c2_outputFile_Result = new StreamWriter(c2_Text_ResultData);
 
                     string legend2 = "Index\t";
@@ -1365,8 +1334,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void T_Tick(object sender, EventArgs e)
         {
+            AutodelSequence();      // 데이터 자동 삭제 SEQUENCE
+
             DateTime currentTime = DateTime.Now;
-            if(time.Date != currentTime.Date)
+            if (time.Date != currentTime.Date)
             {
                 DeviceLoggingStop();
                 DeviceLoggingStart();
@@ -1398,13 +1369,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             else if (irdxHandle_write != IntPtr.Zero)   // 이미 있으면 이어붙이면 됨
                 DIASDAQ.DDAQ_IRDX_FILE_ADD_IRDX(irdxHandle_write, pIRDX_Array[0]);
 
-            // 카메라가 두대 붙어있으면 똑같이 더하면 됨
+            // 카메라가 두대 붙어있으면 같은 로직 반복 실행
             if (pIRDX_Array[1] != IntPtr.Zero)
             {
                 data = tickCount.ToString();
                 for (int i = 0; i < imgView.CAM2_POICount; i++)
                 {
-                    data = data + "\t\t" + imgView.CAM2_TemperatureArr[i];
+                    data = data + "\t\t" + imgView.CAM2_TemperatureArr[i].ToString("N2");
                 }
                 c2_outputFile_Result.WriteLine(data);
                 if (c2_irdxHandle_write == IntPtr.Zero)
@@ -1433,9 +1404,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DeletePOI_toolStripButton.Enabled = true;   // Delete POI Enable
 
             // 텍스트파일 다 썼으니까 닫자
-            outputFile.Close();
             outputFile_Result.Close();
-            Text_RawData.Close();
             Text_ResultData.Close();
 
             outputFile_OPCRead.Close();
@@ -1447,9 +1416,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 DIASDAQ.DDAQ_IRDX_FILE_CLOSE(c2_irdxHandle_write);
                 c2_irdxHandle_write = IntPtr.Zero;
-                c2_outputFile.Close();
                 c2_outputFile_Result.Close();
-                c2_Text_RawData.Close();
                 c2_Text_ResultData.Close();
             }
         }
@@ -1457,7 +1424,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
 
         #region ConfigurationControl
-
         private void LoadConfiguration()
         {
             string value = "";
@@ -1601,7 +1567,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 c2_chartView.UpdateData();
             }
 
-            AutodelSequence();
+            
         }
 
         public bool OPCTimerActivated = false;
@@ -1727,6 +1693,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 imgView.DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
             }
+        }
+
+        private void InitTimerForPlayer()       // IRDX Frame keepmoving timer
+        {
+            dataplayerTimer.Interval = 10;  // ms
+            dataplayerTimer.Tick += new EventHandler(NextRecord_toolStripButton_Click);
+
+            dataplayerTimer.Start();
+            isTimerRunning = true;
         }
         #endregion
 
@@ -1865,6 +1840,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
 
         #region File/Folder AutoDelete
+        private short SequenceCount = 0;
         public void AutodelSequence()
         {
             string dirBase = ConfigurationManager.AppSettings["DataSaveBase"];
@@ -1872,21 +1848,32 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             long diskFreeSpace = drive.TotalFreeSpace;
             long diskTotalSpace = drive.TotalSize;
 
-            if (diskFreeSpace < (diskTotalSpace * 0.1))    // 디스크 여유공간이 전체 공간의 10% 미만일때 동작
+            // if (diskFreeSpace < 1073741824)      // 디스크 여유 공간이 1GB 미만일때 동작
+            if(diskFreeSpace < (diskTotalSpace * 0.1))      // 디스크 여유공간이 전체 공간의 10% 미만일때 동작
             {
-                if (isLoggingRunning == true)   // 근데 데이터 로깅이 진행중이면
+                if (isLoggingRunning == true && SequenceCount < 3)  // 안물어보고 우선 자동삭제
                 {
-                    DeviceLoggingStop();    // 로깅 먼저 중단시키자
-                    if(MessageBox.Show("디스크 용량이 부족합니다.\n데이터 자동 삭제 시퀀스를 시작 하시겠습니까?", "Capacity Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    DeviceLoggingStop();
+                    Delete_OldestFolder_Raw();
+                    Delete_OldestFolder_Result();
+                    DeviceLoggingStart();
+                    SequenceCount++;
+                }
+                else if(isLoggingRunning==true && SequenceCount >= 3)
+                {
+                    DeviceLoggingStop();
+                    if (MessageBox.Show("디스크 용량이 부족합니다.\n데이터 자동 삭제 시퀀스를 시작 하시겠습니까?", "Capacity Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
                         Delete_OldestFolder_Raw();
                         Delete_OldestFolder_Result();
                         MessageBox.Show("데이터 삭제가 완료되었습니다.\nData Logging을 재 시작합니다.", "Capacity Clear", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        SequenceCount = 0;
                         DeviceLoggingStart();
                     }
                     else
                     {
-                        MessageBox.Show("디스크 용량이 부족하여 Data Logging이 중단 되었습니다.\n디스크의 여유 공간을 수동으로 확보하십시오.", "Capacity Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("디스크 용량이 부족하여 Data Logging이 중단 되었습니다.\n디스크의 여유 공간을 확보 후 재시도 하십시오.", "Capacity Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        SequenceCount = 0;
                     }
                 }
             }
@@ -1907,7 +1894,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DateTime[] folderCreationTime = new DateTime[dir.GetDirectories().Length];
 
             int k = 0;
-            foreach (var item in dir.GetDirectories())
+            foreach (var item in dir.GetDirectories())  // dir에 있는 모든 디렉토리의 정보를 가져옴
             {
                 folderName[k] = item.Name;
                 folderCreationTime[k] = item.CreationTime;
@@ -1918,7 +1905,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             deleteTargetTime = folderCreationTime[0];
             for (int i = 0; i < dir.GetDirectories().Length; i++)
             {
-                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)
+                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)       // 가장 먼저 생성된(오래된) 폴더 검증
                 {
                     deleteTarget = folderName[i];
                     deleteTargetTime = folderCreationTime[i];
@@ -1929,14 +1916,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (Directory.Exists(finalPath))
             {
                 string[] files = Directory.GetFiles(finalPath);
-                foreach (string s in files)
+                foreach (string s in files)         // 최종 path 디렉토리의 모든 파일 삭제
                 {
                     string fileName = Path.GetFileName(s);
                     string deleteFile = finalPath + "\\" + fileName;
                     File.Delete(deleteFile);
                 }
             }
-            Directory.Delete(finalPath);
+            Directory.Delete(finalPath);        // 최종 path 디렉토리 삭제
         }
 
         private void Delete_OldestFolder_Result()
@@ -1985,17 +1972,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Directory.Delete(finalPath);
         }
         #endregion
-
-        // IRDX Frame keepmoving timer
-        private void InitTimerForPlayer()
-        {
-            dataplayerTimer.Interval = 10;  // ms
-            dataplayerTimer.Tick += new EventHandler(NextRecord_toolStripButton_Click);
-
-            dataplayerTimer.Start();
-            isTimerRunning = true;
-        }
-
+             
         private void OpenNewDevice()
         {
             if (newDevice.isConnectedDevices == true)
@@ -2009,25 +1986,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             Cursor.Current = Cursors.Default;
 
             newDevice.ShowDialog();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (isLoggingRunning == true)   // 근데 데이터 로깅이 진행중이면
-            {
-                DeviceLoggingStop();    // 로깅 먼저 중단시키자
-                if (MessageBox.Show("디스크 용량이 부족합니다.\n데이터 자동 삭제 시퀀스를 시작 하시겠습니까?", "Capacity Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-                {
-                    Delete_OldestFolder_Raw();
-                    Delete_OldestFolder_Result();
-                    MessageBox.Show("데이터 삭제가 완료되었습니다.\nData Logging을 재 시작합니다.", "Capacity Clear", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    DeviceLoggingStart();
-                }
-                else
-                {
-                    MessageBox.Show("디스크 용량이 부족하여 Data Logging이 중단 되었습니다.\n디스크의 여유 공간을 수동으로 확보하십시오.", "Capacity Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
         }
 
         private void OpenAbout()

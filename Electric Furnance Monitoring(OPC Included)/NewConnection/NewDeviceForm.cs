@@ -210,7 +210,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             GetDeviceID(1, main.pIRDX_Array[1]);
         }
 
-        // Accept
+        // Accept Button
         private void button1_Click(object sender, EventArgs e)
         {
             // Configuration 검증
@@ -228,10 +228,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 Close();
                 return;
             }
-
-            //if (!(CAM1_SerialNo == main.POSCO_CAM1_SERIAL && CAM2_SerialNo == main.POSCO_CAM2_SERIAL) ||
-            //    !(CAM1_SerialNo == main.POSCO_CAM2_SERIAL && CAM2_SerialNo == main.POSCO_CAM1_SERIAL))
-            if (false)
+            // 실제 카메라 시리얼과 비교
+            //else if (!(CAM1_SerialNo == main.POSCO_CAM1_SERIAL && CAM2_SerialNo == main.POSCO_CAM2_SERIAL) ||
+            //        !(CAM1_SerialNo == main.POSCO_CAM2_SERIAL && CAM2_SerialNo == main.POSCO_CAM1_SERIAL))
+            else if (false)
             {
                 MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices + "개의 장비 중 적어도 한 개 이상의 장비가\n연결이 성립될 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
