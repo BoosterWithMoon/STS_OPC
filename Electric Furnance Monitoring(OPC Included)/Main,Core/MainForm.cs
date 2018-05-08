@@ -1667,11 +1667,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DrawPOI_toolStripButton.Visible = true;
                 MovePOI_toolStripButton.Visible = true;
                 DeletePOI_toolStripButton.Visible = true;
+                drawROIToolStripMenuItem.Enabled = true;
+                moveROIToolStripMenuItem.Enabled = true;
+                deleteROIToolStripMenuItem.Enabled = true;
 
-                LogStart_toolStripButton.Visible = true;
-                LogStop_toolStripButton.Enabled = false;
-                LogStop_toolStripButton.Visible = true;
-                LogStop_toolStripButton.Enabled = false;
+                //LogStart_toolStripButton.Visible = true;
+                //LogStop_toolStripButton.Visible = true;
+                //LogStop_toolStripButton.Enabled = false;
+                //LogStop_toolStripButton.Enabled = false;
 
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
@@ -1781,10 +1784,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1);
             DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(2);
 
-            //customGrid.GetAttributesInfo();
-            //propertyGrid1.Refresh();
-            //button1.Visible = false;
-
             label_Progress.Text = "Simulation Mode";
             groupBox_SlopeAngle.Visible = false;
             groupBox_Charging1.Visible = false;
@@ -1824,15 +1823,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             MovePOI_toolStripButton.Visible = true;
             DeletePOI_toolStripButton.Visible = true;
 
-            customGrid.GetAttributesInfo(pIRDX_Array[0]);
-
             mThread.Start();
             mThread_two.Start();
 
             CAM1_DataView.Start();
             CAM2_DataView.Start();
-
-            InitOPCTimer();
 
             newDevice.GetDeviceID(1, pIRDX_Array[0]);
         }
@@ -1981,11 +1976,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 return;
             }
             newDevice.DeviceDetection();
-            Cursor.Current = Cursors.WaitCursor;
-            newDevice.ReadyToRun();
-            Cursor.Current = Cursors.Default;
+            if (newDevice.isDetected == false) return;
+            else
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                newDevice.ReadyToRun();
+                Cursor.Current = Cursors.Default;
 
-            newDevice.ShowDialog();
+                newDevice.ShowDialog();
+            }
         }
 
         private void OpenAbout()
