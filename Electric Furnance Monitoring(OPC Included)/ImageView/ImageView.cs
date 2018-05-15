@@ -528,5 +528,44 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 return null; // failure
             }
         }
+
+        private static Bitmap GET_SCALE(IntPtr hIRDX, PictureBox pb)
+        {
+            IntPtr pbitsImage = new IntPtr();
+            IntPtr bmiImage = new IntPtr();
+            ushort width = (ushort)pb.Width, height = (ushort)pb.Height;
+            //if (DIASDAQ.DDAQ_IRDX_IMAGE_GET_BITMAP(hIRDX, ref width, ref height, out pbitsImage, out bmiImage) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            if(DIASDAQ.DDAQ_IRDX_PALLET_GET_BITMAPSCALE(hIRDX, width, height, out pbitsImage, out bmiImage) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            {
+                return null; // failure
+            }
+
+            MethodInfo mi = typeof(Bitmap).GetMethod("FromGDIplus", BindingFlags.Static | BindingFlags.NonPublic);
+
+            if (mi == null)
+            {
+                return null; // permission problem 
+            }
+
+            IntPtr pBmp = IntPtr.Zero;
+            int status = DIASDAQ.GDIPLUS_GdipCreateBitmapFromGdiDib(bmiImage, pbitsImage, out pBmp);
+
+            if ((status == 0) && (pBmp != IntPtr.Zero))
+            {
+                return (Bitmap)mi.Invoke(null, new object[] { pBmp }); // success 
+            }
+            else
+            {
+                return null; // failure
+            }
+        }
+
+        public void DrawScaleBar(IntPtr irdxHandle, PictureBox pb)
+        {
+            Bitmap scaleBMP = GET_SCALE(irdxHandle, main.pictureBox_ScaleBar);
+
+            Graphics g = pb.CreateGraphics();
+            g.DrawImage(scaleBMP, 0, 0, main.pictureBox_ScaleBar.Width, main.pictureBox_ScaleBar.Height);
+        }
     }
 }

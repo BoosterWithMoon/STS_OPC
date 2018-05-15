@@ -654,13 +654,13 @@
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.OPCActiveAlarm);
-            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox6.Location = new System.Drawing.Point(139, 0);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(127, 137);
             this.groupBox6.TabIndex = 3;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "OPC Activated";
+            this.groupBox6.Text = "OPC Vitalization";
             // 
             // OPCActiveAlarm
             // 
@@ -675,7 +675,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.OPCConnectAlarm);
-            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox5.Location = new System.Drawing.Point(3, 0);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(127, 137);

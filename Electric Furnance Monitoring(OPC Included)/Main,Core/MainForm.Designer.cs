@@ -137,6 +137,10 @@
             this.CAM1_CameraTemp = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.panel_ScaleBar = new System.Windows.Forms.Panel();
+            this.textBox_ScaleMin = new System.Windows.Forms.TextBox();
+            this.textBox_ScaleMax = new System.Windows.Forms.TextBox();
+            this.pictureBox_ScaleBar = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.split_ViewToInfo)).BeginInit();
@@ -179,6 +183,8 @@
             this.groupBox_CamInfo.SuspendLayout();
             this.groupBox_CameraInfo_2.SuspendLayout();
             this.groupBox_CameraInfo_1.SuspendLayout();
+            this.panel_ScaleBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ScaleBar)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -600,7 +606,7 @@
             // 
             this.propertyGrid1.Location = new System.Drawing.Point(0, 356);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(244, 660);
+            this.propertyGrid1.Size = new System.Drawing.Size(193, 660);
             this.propertyGrid1.TabIndex = 7;
             // 
             // split_ViewToInfo
@@ -715,7 +721,7 @@
             // groupBox_Charging2
             // 
             this.groupBox_Charging2.Controls.Add(this.label_Charging2);
-            this.groupBox_Charging2.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Charging2.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Charging2.Location = new System.Drawing.Point(590, 6);
             this.groupBox_Charging2.Name = "groupBox_Charging2";
             this.groupBox_Charging2.Size = new System.Drawing.Size(90, 90);
@@ -737,7 +743,7 @@
             // groupBox_Melting1
             // 
             this.groupBox_Melting1.Controls.Add(this.label_Melting1);
-            this.groupBox_Melting1.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Melting1.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Melting1.Location = new System.Drawing.Point(479, 6);
             this.groupBox_Melting1.Name = "groupBox_Melting1";
             this.groupBox_Melting1.Size = new System.Drawing.Size(90, 90);
@@ -759,7 +765,7 @@
             // groupBox_Charging1
             // 
             this.groupBox_Charging1.Controls.Add(this.label_Charging1);
-            this.groupBox_Charging1.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Charging1.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Charging1.Location = new System.Drawing.Point(371, 6);
             this.groupBox_Charging1.Name = "groupBox_Charging1";
             this.groupBox_Charging1.Size = new System.Drawing.Size(90, 90);
@@ -889,7 +895,7 @@
             // groupBox_Melting2
             // 
             this.groupBox_Melting2.Controls.Add(this.label_Melting2);
-            this.groupBox_Melting2.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Melting2.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Melting2.Location = new System.Drawing.Point(10, 6);
             this.groupBox_Melting2.Name = "groupBox_Melting2";
             this.groupBox_Melting2.Size = new System.Drawing.Size(90, 90);
@@ -911,7 +917,7 @@
             // groupBox_Charging3
             // 
             this.groupBox_Charging3.Controls.Add(this.label_Charging3);
-            this.groupBox_Charging3.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Charging3.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Charging3.Location = new System.Drawing.Point(122, 6);
             this.groupBox_Charging3.Name = "groupBox_Charging3";
             this.groupBox_Charging3.Size = new System.Drawing.Size(90, 90);
@@ -933,7 +939,7 @@
             // groupBox_Melting3
             // 
             this.groupBox_Melting3.Controls.Add(this.label_Melting3);
-            this.groupBox_Melting3.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Melting3.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Melting3.Location = new System.Drawing.Point(240, 6);
             this.groupBox_Melting3.Name = "groupBox_Melting3";
             this.groupBox_Melting3.Size = new System.Drawing.Size(90, 90);
@@ -955,7 +961,7 @@
             // groupBox_StandSteel
             // 
             this.groupBox_StandSteel.Controls.Add(this.label_StandSteel);
-            this.groupBox_StandSteel.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_StandSteel.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_StandSteel.Location = new System.Drawing.Point(352, 6);
             this.groupBox_StandSteel.Name = "groupBox_StandSteel";
             this.groupBox_StandSteel.Size = new System.Drawing.Size(90, 90);
@@ -977,7 +983,7 @@
             // groupBox_O2Lance
             // 
             this.groupBox_O2Lance.Controls.Add(this.label_O2Lance);
-            this.groupBox_O2Lance.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_O2Lance.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_O2Lance.Location = new System.Drawing.Point(575, 6);
             this.groupBox_O2Lance.Name = "groupBox_O2Lance";
             this.groupBox_O2Lance.Size = new System.Drawing.Size(90, 90);
@@ -999,7 +1005,7 @@
             // groupBox_Tapping
             // 
             this.groupBox_Tapping.Controls.Add(this.label_Tapping);
-            this.groupBox_Tapping.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
+            this.groupBox_Tapping.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox_Tapping.Location = new System.Drawing.Point(463, 6);
             this.groupBox_Tapping.Name = "groupBox_Tapping";
             this.groupBox_Tapping.Size = new System.Drawing.Size(90, 90);
@@ -1310,11 +1316,53 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "Type";
             // 
+            // panel_ScaleBar
+            // 
+            this.panel_ScaleBar.Controls.Add(this.textBox_ScaleMin);
+            this.panel_ScaleBar.Controls.Add(this.textBox_ScaleMax);
+            this.panel_ScaleBar.Controls.Add(this.pictureBox_ScaleBar);
+            this.panel_ScaleBar.Location = new System.Drawing.Point(199, 356);
+            this.panel_ScaleBar.Name = "panel_ScaleBar";
+            this.panel_ScaleBar.Size = new System.Drawing.Size(45, 660);
+            this.panel_ScaleBar.TabIndex = 12;
+            // 
+            // textBox_ScaleMin
+            // 
+            this.textBox_ScaleMin.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_ScaleMin.Font = new System.Drawing.Font("굴림", 10F);
+            this.textBox_ScaleMin.Location = new System.Drawing.Point(3, 637);
+            this.textBox_ScaleMin.Name = "textBox_ScaleMin";
+            this.textBox_ScaleMin.ReadOnly = true;
+            this.textBox_ScaleMin.Size = new System.Drawing.Size(39, 16);
+            this.textBox_ScaleMin.TabIndex = 2;
+            this.textBox_ScaleMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBox_ScaleMax
+            // 
+            this.textBox_ScaleMax.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_ScaleMax.Font = new System.Drawing.Font("굴림", 10F);
+            this.textBox_ScaleMax.Location = new System.Drawing.Point(3, 7);
+            this.textBox_ScaleMax.Name = "textBox_ScaleMax";
+            this.textBox_ScaleMax.ReadOnly = true;
+            this.textBox_ScaleMax.Size = new System.Drawing.Size(39, 16);
+            this.textBox_ScaleMax.TabIndex = 1;
+            this.textBox_ScaleMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // pictureBox_ScaleBar
+            // 
+            this.pictureBox_ScaleBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox_ScaleBar.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox_ScaleBar.Name = "pictureBox_ScaleBar";
+            this.pictureBox_ScaleBar.Size = new System.Drawing.Size(45, 660);
+            this.pictureBox_ScaleBar.TabIndex = 0;
+            this.pictureBox_ScaleBar.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.panel_ScaleBar);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.split_ViewToInfo);
             this.Controls.Add(this.propertyGrid1);
@@ -1387,6 +1435,9 @@
             this.groupBox_CameraInfo_2.PerformLayout();
             this.groupBox_CameraInfo_1.ResumeLayout(false);
             this.groupBox_CameraInfo_1.PerformLayout();
+            this.panel_ScaleBar.ResumeLayout(false);
+            this.panel_ScaleBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_ScaleBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1500,6 +1551,10 @@
         public System.Windows.Forms.Label label_Progress;
         private System.Windows.Forms.GroupBox groupBox_SlopeAngle;
         public System.Windows.Forms.TextBox textBox_SlopeAngle;
+        public System.Windows.Forms.Panel panel_ScaleBar;
+        public System.Windows.Forms.PictureBox pictureBox_ScaleBar;
+        public System.Windows.Forms.TextBox textBox_ScaleMax;
+        public System.Windows.Forms.TextBox textBox_ScaleMin;
     }
 }
 

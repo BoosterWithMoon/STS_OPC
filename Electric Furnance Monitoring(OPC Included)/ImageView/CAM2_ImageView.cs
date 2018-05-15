@@ -174,12 +174,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             imgView.isCAM1Focused = false;
             imgView.isCAM2Focused = true;
 
+            main.split_CAM2Info.Panel2.BackColor = Color.Black;
+            main.split_CAM2Info.Panel2.Padding = new Padding { All = 5 };
+            main.split_CAM1Info.Panel2.BackColor = Color.Transparent;
+
             if (e.X > imgView.c2_m_bmp_ofs_x && e.Y > imgView.c2_m_bmp_ofs_y &&
                 e.X < (imgView.c2_m_bmp_ofs_x + imgView.c2_m_bmp_size_x) && e.Y < (imgView.c2_m_bmp_ofs_y + imgView.c2_m_bmp_size_x))
             {
                 CAM2_isMouseButtonDown = false;
                 CAM2_POIClicked = false;
             }
+
             if (CAM2_PointMoveFlag)
             {
                 CAM2_PointMoveFlag = false;
@@ -187,6 +192,5 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_clickedPoint.Y = 0;
             }
         }
-
     }
 }

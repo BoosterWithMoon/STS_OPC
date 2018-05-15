@@ -163,7 +163,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-
+            
             #region ClassAllocation
             newDevice = new NewDeviceForm(this);
 
@@ -208,7 +208,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             cMaxTemp = 0;
             cMinTemp = 0;
-            Scale_MaxTemp = 0;
+            Scale_MaxTemp = 500;
             Scale_MinTemp = 0;
 
             NumOfDataRecord = 0;
@@ -333,6 +333,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //groupBox_CamTemp.Visible = false;
             //groupBox_DetectorTemp.Visible = false;
             panel1.Visible = false;
+            panel_ScaleBar.Visible = false;
 
             propertyGrid1.Visible = false;
 
@@ -441,7 +442,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             else
             {
-                split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
+                split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 315 - panel_ScaleBar.Width;
             }
 
             //split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
@@ -453,7 +454,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             // CAM #1 영역 Height 조정
             split_CAM1Info.SplitterDistance = 140;
-            split_CAM1ChartGrid.SplitterDistance = 265;
+            split_CAM1ChartGrid.SplitterDistance = 255;
 
             split_CAM2Info.SplitterDistance = split_CAM1Info.Panel1.Height;
             split_CAM2ChartGrid.SplitterDistance = split_CAM1ChartGrid.Panel1.Height;
@@ -565,6 +566,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
+
+                if(pictureBox_ScaleBar.Image == null)
+                {
+                    imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
+                }
 
                 if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(DetectedDevices, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)/// 카메라가 새로운 데이터를 받을 준비가 되었을 시
                 {
@@ -812,11 +818,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void DrawPOI_toolStripButton_Click(object sender, EventArgs e)
         {
             Activate_DrawPOI = true;
+            //DrawPOI_toolStripButton.CheckOnClick = true;
+            DrawPOI_toolStripButton.Checked = true;
+            MovePOI_toolStripButton.Checked = false;
+            DeletePOI_toolStripButton.Checked = false;
         }
 
         private void MovePOI_toolStripButton_Click(object sender, EventArgs e)
         {
             Activate_DrawPOI = false;
+            DrawPOI_toolStripButton.Checked = false;
+            //MovePOI_toolStripButton.CheckOnClick = true;
+            MovePOI_toolStripButton.Checked = true;
+            DeletePOI_toolStripButton.Checked = false;
         }
 
         private void DeletePOI_toolStripButton_Click(object sender, EventArgs e)
@@ -1006,8 +1020,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             string currentTime_DateOnly = time.ToString("yyMMdd");
             strFileName = "[" + id.ToString() + "]";
 
-            DirectoryInfo VerifyRawFolder = new DirectoryInfo(customGrid.RawData_Location);
-            DirectoryInfo VerifyResultFolder = new DirectoryInfo(customGrid.ResultData_Location);
+            DirectoryInfo VerifyRawFolder = new DirectoryInfo(customGrid.RawData);
+            DirectoryInfo VerifyResultFolder = new DirectoryInfo(customGrid.ResultData);
 
             bool isRawFolderExist = VerifyRawFolder.Exists;
             bool isResultFolderExist = VerifyResultFolder.Exists;
@@ -1017,8 +1031,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 string appPath = Application.StartupPath;
 
                 // RawData directory creation
-                customGrid.RawData_Location = appPath;
-                newRawDataFolderName = customGrid.RawData_Location + "\\RawData";
+                customGrid.RawData= appPath;
+                newRawDataFolderName = customGrid.RawData+ "\\RawData";
                 Directory.CreateDirectory(newRawDataFolderName);
                 newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newRawDataFolderName);
@@ -1029,8 +1043,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 ConfigurationManager.RefreshSection("appSettings");
 
                 // ResulData directory creation
-                customGrid.ResultData_Location = appPath;
-                newResultDataFolderName = customGrid.ResultData_Location + "\\ResultData";
+                customGrid.ResultData= appPath;
+                newResultDataFolderName = customGrid.ResultData+ "\\ResultData";
                 Directory.CreateDirectory(newResultDataFolderName);
                 newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newResultDataFolderName);
@@ -1040,7 +1054,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             if (isRawFolderExist)
             {
-                newRawDataFolderName = customGrid.RawData_Location + "\\RawData";
+                newRawDataFolderName = customGrid.RawData+ "\\RawData";
                 Directory.CreateDirectory(newRawDataFolderName);
                 newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newRawDataFolderName);
@@ -1055,7 +1069,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             if (isResultFolderExist)
             {
-                newResultDataFolderName = customGrid.ResultData_Location + "\\ResultData";
+                newResultDataFolderName = customGrid.ResultData+ "\\ResultData";
                 Directory.CreateDirectory(newResultDataFolderName);
                 newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
                 Directory.CreateDirectory(newResultDataFolderName);
@@ -1445,9 +1459,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             cMinTemp = Convert.ToSingle(value);
 
             value = ConfigurationManager.AppSettings["RawData_Location"];
-            customGrid.RawData_Location = value;
+            customGrid.RawData= value;
             value = ConfigurationManager.AppSettings["ResultData_Location"];
-            customGrid.ResultData_Location = value;
+            customGrid.ResultData= value;
         }
 
         private void SaveConfiguration()
@@ -1458,11 +1472,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             config.AppSettings.Settings["AmbientTemp"].Value = customGrid.AmbientTemperature.ToString();
             config.AppSettings.Settings["Maximum"].Value = customGrid.Maximum.ToString();
             config.AppSettings.Settings["Minimum"].Value = customGrid.Minimun.ToString();
-            config.AppSettings.Settings["RawData_Location"].Value = customGrid.RawData_Location;
-            config.AppSettings.Settings["ResultData_Location"].Value = customGrid.ResultData_Location;
-            //config.AppSettings.Settings["Threshold"].Value = customGrid.Threshold.ToString();
+            config.AppSettings.Settings["RawData_Location"].Value = customGrid.RawData;
+            config.AppSettings.Settings["ResultData_Location"].Value = customGrid.ResultData;
 
-            // Saving POI Temperature
+            // Saving POI Threshold Temperature
             string appSettingValue = "";
             for (int i = 0; i < 10; i++)
             {
@@ -1476,7 +1489,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             config.AppSettings.Settings["OPC_Device"].Value = opc.Device;
             config.AppSettings.Settings["OPC_Endpoint"].Value = opc.nodeName;
 
-            config.Save(ConfigurationSaveMode.Modified);
+            //config.Save(ConfigurationSaveMode.Modified);
+            config.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("appSettings");
         }
         #endregion
@@ -1683,6 +1697,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 result.OPCConnectAlarm.ForeColor = result.NotConnected;
                 result.OPCActiveAlarm.ForeColor = result.NotConnected;
+
+                //OPCSettingToolStripMenuItem.Enabled = true;
+
+                //groupBox_SlopeAngle.Visible = true;
+                //groupBox_Charging1.Visible = true;
+                //groupBox_Melting1.Visible = true;
+                //groupBox_Charging2.Visible = true;
+                //groupBox_Melting2.Visible = true;
+                //groupBox_Charging3.Visible = true;
+                //groupBox_Melting3.Visible = true;
+                //groupBox_StandSteel.Visible = true;
+                //groupBox_Tapping.Visible = true;
+                //groupBox_O2Lance.Visible = true;
             }
             else if (IRDXFileCount == 2)
             {
@@ -1877,7 +1904,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void Delete_OldestFolder_Raw()
         {
-            string oldest_RawDir = customGrid.RawData_Location.ToString();
+            string oldest_RawDir = customGrid.RawData.ToString();
             oldest_RawDir = oldest_RawDir + "RawData";
             string deleteTarget = "";
             DateTime deleteTargetTime;
@@ -1923,7 +1950,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void Delete_OldestFolder_Result()
         {
-            string oldest_ResultDir = customGrid.RawData_Location.ToString();
+            string oldest_ResultDir = customGrid.RawData.ToString();
             oldest_ResultDir = oldest_ResultDir + "ResultData";
             string deleteTarget = "";
             DateTime deleteTargetTime;

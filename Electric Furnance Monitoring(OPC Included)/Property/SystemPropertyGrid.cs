@@ -56,7 +56,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         // [Scaling]
         private string Scale_ColorBar = "";
-        private ushort Scale_DColorBar = 0;
+        private ushort Scale_DColorBar = 6;     // HOTMETAL
         private string Scale_NumberOfColor = "";
         private ushort Scale_DNumberofColor = 0;
         //private uint Scale_NumberOfColor = 0;
@@ -430,7 +430,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     if (main.DetectedDevices != 0 || main.currentOpenMode == MainForm.OpenMode.IRDX)
                     {
                         ColorBarData._datas = colorBar_list.Split(',');
-                        Scale_ColorBar = ColorBarData._datas[0];
+                        Scale_ColorBar = ColorBarData._datas[6];    // HOTMETAL
                     }
 
                     tmpstr = "";
@@ -464,6 +464,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 for (int i = 0; i < main.DetectedDevices; i++)
                     DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
                 //DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, (ushort)NumberOfColors);
+
+                ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+                imgView.DrawScaleBar(main.pIRDX_Array[0], main.pictureBox_ScaleBar);
             }
         }
 
@@ -507,9 +510,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
                     }
                 }
-
+                
                 for (int i = 0; i < main.DetectedDevices; i++)
                     DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
+
+                ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+                imgView.DrawScaleBar(main.pIRDX_Array[0], main.pictureBox_ScaleBar);
             }
         }
 
@@ -522,6 +528,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     Scale_Maximum = main.cMaxTemp;
                 else
                     Scale_Maximum = 0.0f;
+
+                main.textBox_ScaleMax.Text = Scale_Maximum.ToString() + "˚C";
 
                 return Scale_Maximum;
             }
@@ -536,10 +544,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else
                     main.cMaxTemp = fVal;
 
-                //for (int i = 0; i < main.DetectedDevices; i++)
-                //    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], main.cMinTemp, main.cMaxTemp);
-                DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[0], main.cMinTemp, main.cMaxTemp);      // for test
-                DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[1], main.cMinTemp, main.cMaxTemp);
+                for (int i = 0; i < main.DetectedDevices; i++)
+                {
+                    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], main.cMinTemp, main.cMaxTemp);
+                }
+                ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+                imgView.DrawScaleBar(main.pIRDX_Array[0], main.pictureBox_ScaleBar);
             }
         }
 
@@ -553,6 +563,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else
                     Scale_Minimun = 0.0f;
 
+                main.textBox_ScaleMin.Text = Scale_Minimun.ToString() + "˚C";
                 return Scale_Minimun;
             }
             set
@@ -566,10 +577,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 else
                     main.cMinTemp = fVal;
 
-                //for (int i = 0; i < main.DetectedDevices; i++)
-                //    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i],  main.cMinTemp, main.cMaxTemp);
-                DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[0], main.cMinTemp, main.cMaxTemp);      // for test
-                DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[1], main.cMinTemp, main.cMaxTemp);
+                for (int i = 0; i < main.DetectedDevices; i++)
+                {
+                    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], main.cMinTemp, main.cMaxTemp);
+                }
+                ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+                imgView.DrawScaleBar(main.pIRDX_Array[0], main.pictureBox_ScaleBar);
             }
         }
 
@@ -789,15 +802,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        [Category("Data Logging"), Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-        public string RawData_Location
+        [Category("Data Logging Path"), Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+        public string RawData
         {
             get { return DataLog_RawDataLocation; }
             set { DataLog_RawDataLocation = value; }
         }
 
-        [Category("Data Logging"), Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-        public string ResultData_Location
+        [Category("Data Logging Path"), Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+        public string ResultData
         {
             get { return DataLog_ResultDataLocation; }
             set { DataLog_ResultDataLocation = value; }

@@ -191,6 +191,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             imgView.isCAM1Focused = true;
             imgView.isCAM2Focused = false;
 
+            main.split_CAM1Info.Panel2.BackColor = Color.Black;
+            main.split_CAM1Info.Panel2.Padding = new Padding { All = 5 };
+            main.split_CAM2Info.Panel2.BackColor = Color.Transparent;
+
             if (e.X > imgView.m_bmp_ofs_x && e.Y > imgView.m_bmp_ofs_y &&
                 e.X < (imgView.m_bmp_ofs_x + imgView.m_bmp_size_x) && e.Y < (imgView.m_bmp_ofs_y + imgView.m_bmp_size_x))
             {

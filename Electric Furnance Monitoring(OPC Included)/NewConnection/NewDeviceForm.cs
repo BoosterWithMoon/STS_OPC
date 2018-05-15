@@ -28,6 +28,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private string CAM1_SerialNo = "";
         private string CAM2_SerialNo = "";
 
+        private string ErrorCode = "";
+        private ushort ErrorLine = 0;
+
         public NewDeviceForm(MainForm _main)
         {
             this.main = _main;
@@ -132,7 +135,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             StringBuilder s = new StringBuilder(64);
             byte[] tempDeviceID = new byte[64];
             char[] ch_tempDeviceID = new char[64];
-            
+
             s.Clear();
             DIASDAQ.DDAQ_DEVICE_GET_IDSTRING(DeviceNo, tempDeviceID, 64);
             for (int i = 0; i < 64; i++)
@@ -210,38 +213,63 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             GetDeviceID(1, main.pIRDX_Array[1]);
         }
 
+        private bool VerifyingCamSerial()
+        {
+            // XML Configuration 정보 검증
+            if (main.POSCO_CAM1_SERIAL == "" || main.POSCO_CAM2_SERIAL == "")
+            {
+                ErrorCode = "Cannot find the serial number in configuration.";
+                ErrorLine = 219;
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
+                main.pIRDX_Array[0] = IntPtr.Zero;
+                main.pIRDX_Array[1] = IntPtr.Zero;
+                return false;
+            }
+            else if (NDF_DetectedDevices == 2 &&
+                (CAM1_SerialNo != main.POSCO_CAM1_SERIAL && CAM1_SerialNo != main.POSCO_CAM2_SERIAL) ||
+                (CAM2_SerialNo != main.POSCO_CAM1_SERIAL && CAM2_SerialNo != main.POSCO_CAM2_SERIAL)
+                )
+            {
+                ErrorCode = "Serial number comparison failed.";
+                ErrorLine = 233;
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
+                main.pIRDX_Array[0] = IntPtr.Zero;
+                main.pIRDX_Array[1] = IntPtr.Zero;
+                return false;
+            }
+            else if (NDF_DetectedDevices == 1 &&
+                (CAM1_SerialNo != main.POSCO_CAM1_SERIAL) || (CAM1_SerialNo != main.POSCO_CAM2_SERIAL))
+            {
+                ErrorCode = "Serial number comparison failed.";
+                ErrorLine = 250;
+                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
+                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
+                main.pIRDX_Array[0] = IntPtr.Zero;
+                return false;
+            }
+            return true;
+        }
+
         // Accept Button
         private void button1_Click(object sender, EventArgs e)
         {
-            // Configuration 검증
-            if (main.POSCO_CAM1_SERIAL == "" || main.POSCO_CAM2_SERIAL == "")
+            bool result = VerifyingCamSerial();
+
+            if (result == false)
             {
-                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\nSerial Number 정보를 확인할 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
-                main.DetectedDevices = 0;
-                NDF_DetectedDevices = 0;
-                main.pIRDX_Array[0] = IntPtr.Zero;
-                main.pIRDX_Array[1] = IntPtr.Zero;
-                Close();
-                return;
-            }
-            // 실제 카메라 시리얼과 비교
-            //else if (!(CAM1_SerialNo == main.POSCO_CAM1_SERIAL && CAM2_SerialNo == main.POSCO_CAM2_SERIAL) ||
-            //        !(CAM1_SerialNo == main.POSCO_CAM2_SERIAL && CAM2_SerialNo == main.POSCO_CAM1_SERIAL))
-            else if (false)
-            {
-                MessageBox.Show("프로그램을 시작할 수 없습니다. \n\n감지된 " + NDF_DetectedDevices + "개의 장비 중 적어도 한 개 이상의 장비가\n연결이 성립될 수 없습니다.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(NDF_DetectedDevices);
-                DIASDAQ.DDAQ_DEVICE_DO_CLOSE(NDF_DetectedDevices);
-                main.DetectedDevices = 0;
-                NDF_DetectedDevices = 0;
-                main.pIRDX_Array[0] = IntPtr.Zero;
-                main.pIRDX_Array[1] = IntPtr.Zero;
+                MessageBox.Show("프로그램을 시작할 수 없습니다.\n\nReason: " + ErrorCode + "\nLine: " + ErrorLine, "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
                 return;
             }
@@ -258,28 +286,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 float min = 0, max = 0;
                 DIASDAQ.DDAQ_IRDX_OBJECT_SET_EMISSIVITY(main.pIRDX_Array[i], main.currentEmissivity);
                 DIASDAQ.DDAQ_IRDX_OBJECT_SET_TRANSMISSION(main.pIRDX_Array[i], main.currentTransmittance);
-                DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], 0, 256);
+                DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], DIASDAQ.DDAQ_PALLET.HOTMETAL, 256);
                 DIASDAQ.DDAQ_IRDX_SCALE_GET_MINMAX(main.pIRDX_Array[i], ref min, ref max);
                 DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], min, max);
                 DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(main.pIRDX_Array[i], ref avg);
             }
 
             // CAMERA #1 Thread ID Registering
-            /// Get 기본 Thread ID Value
-            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;
-            /// Throw Thread ID                    
-            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(NDF_DetectedDevices, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;        /// Get 기본 Thread ID Value
+            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(NDF_DetectedDevices, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// Throw Thread ID
                 return;
-            /// Default Frequency
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)     /// Default Frequency
                 return;
-            /// Device do start
-            if (DIASDAQ.DDAQ_DEVICE_DO_START(NDF_DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            if (DIASDAQ.DDAQ_DEVICE_DO_START(NDF_DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// Device do start
                 return;
 
             if (NDF_DetectedDevices != 1)
             {
-                // CAMERA #2 thread id registering
+                // CAMERA #2 Thread ID Registering
                 uint nThreadID_two = (uint)Thread.CurrentThread.ManagedThreadId;
                 if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(1, nThreadID_two) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
                     return;
@@ -325,6 +349,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.moveToFarStepToolStripMenuItem.Enabled = true;
             main.moveToNearStepToolStripMenuItem.Enabled = true;
 
+            main.dataRecordToolStripMenuItem.Visible = false;
+
             main.OPCSettingToolStripMenuItem.Enabled = true;
 
             main.toolStripSeparator3.Visible = true;
@@ -335,6 +361,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             //main.groupBox_CamTemp.Visible = true;
             //main.groupBox_DetectorTemp.Visible = true;
             main.panel1.Visible = true;
+            main.panel_ScaleBar.Visible = true;
 
             main.propertyGrid1.Visible = true;
 
@@ -369,7 +396,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 main.OPCActivated = true;
                 main.InitOPCTimer();
             }
-
             this.Close();
         }
 
