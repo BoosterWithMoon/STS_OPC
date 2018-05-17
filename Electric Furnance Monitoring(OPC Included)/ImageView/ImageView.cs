@@ -30,10 +30,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public Graphics CAM2_g;
         public Graphics CAM2_g_backbuffer;
         
-        public ushort m_bmp_isize_x = 512;    // real bmp image x
-        public ushort m_bmp_isize_y = 384;    // real bmp image y
-        public ushort c2_m_bmp_isize_x = 320;
-        public ushort c2_m_bmp_isize_y = 240;
+        public ushort m_bmp_isize_x = 0;    // real bmp image x
+        public ushort m_bmp_isize_y = 0;    // real bmp image y
+        public ushort c2_m_bmp_isize_x = 0;
+        public ushort c2_m_bmp_isize_y = 0;
 
         public int m_bmp_size_x = 0;        // stretched bmp image x
         public int m_bmp_size_y = 0;        // stretched bmp image y
@@ -136,26 +136,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (hIRDX == IntPtr.Zero) return;
             else
             {
-                #region Calculate ImageZoom
                 float[] bmpInfo = new float[5];
-                bmpInfo = cal.GetStretchedImg(hIRDX, pb);
-                m_bmp_zoom = bmpInfo[0];
-                m_bmp_size_x = Convert.ToInt32(bmpInfo[1]);
-                m_bmp_size_y = Convert.ToInt32(bmpInfo[2]);
-                m_bmp_ofs_x = Convert.ToInt32(bmpInfo[3]);
-                m_bmp_ofs_y = Convert.ToInt32(bmpInfo[4]);
-                #endregion
+                bmpInfo = cal.GetStretchedImg(hIRDX, pb, ref m_bmp_isize_x, ref m_bmp_isize_y, ref m_bmp_zoom, ref m_bmp_size_x, ref m_bmp_size_y, ref m_bmp_ofs_x, ref m_bmp_ofs_y);
 
                 bmp = draw.GetBitmap(hIRDX);
                 g = pb.CreateGraphics();
 
                 Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
-
                 g_backbuffer = Graphics.FromImage(Stretched_bmp);
+
                 DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref g_backbuffer);
 
                 Point MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-
                 draw.DrawMouseString(bmpInfo, m_bmp_isize_x, m_bmp_isize_y, MousePosTemp, POI_XLimit, POI_YLimit, pointTemperatureData, g_backbuffer);
 
                 g.DrawImage((Image)Stretched_bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
@@ -172,6 +164,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public void DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, int poiCount, ref Graphics g)
         {
             c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
+
             cal.CalculateCurrentTemp(irdxHandle, CAM1_POICount, CAM1_ClickedPosition, CAM1_TemperatureArr);
             draw.DrawPoint(position, m_bmp_zoom, poiCount, g);
             draw.DrawPointString(position, m_bmp_zoom, poiCount, g, POI_XLimit, POI_YLimit, POI_TemperatureBox_X, POI_TemperatureBox_Y, CAM1_TemperatureArr);
@@ -182,16 +175,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (irdxHandle == IntPtr.Zero) return;
             else
             {
-                #region CAM2_Calculate ImageZoom
-                /// CalculateImageZoom
                 float[] c2_bmpInfo = new float[5];
-                c2_bmpInfo = cal.GetStretchedImg(irdxHandle, pb);
-                c2_m_bmp_zoom = c2_bmpInfo[0];
-                c2_m_bmp_size_x = Convert.ToInt32(c2_bmpInfo[1]);
-                c2_m_bmp_size_y = Convert.ToInt32(c2_bmpInfo[2]);
-                c2_m_bmp_ofs_x = Convert.ToInt32(c2_bmpInfo[3]);
-                c2_m_bmp_ofs_y = Convert.ToInt32(c2_bmpInfo[4]);
-                #endregion
+                c2_bmpInfo = cal.GetStretchedImg(irdxHandle, pb, ref c2_m_bmp_isize_x, ref c2_m_bmp_isize_y, ref c2_m_bmp_zoom, ref c2_m_bmp_size_x, ref c2_m_bmp_size_y, ref c2_m_bmp_ofs_x, ref c2_m_bmp_ofs_y);
 
                 CAM2_bmp = draw.GetBitmap(irdxHandle);
                 CAM2_g = pb.CreateGraphics();
@@ -214,9 +199,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
 
-        public void CAM2_DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, /*float[] temp, */int poiCount, ref Graphics g)
+        public void CAM2_DrawPOI(IntPtr irdxHandle, PictureBox pb, Point[] position, int poiCount, ref Graphics g)
         {
             c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
+
             cal.CalculateCurrentTemp(irdxHandle, CAM2_POICount, CAM2_ClickedPosition, CAM2_TemperatureArr);
             draw.DrawPoint(position, c2_m_bmp_zoom, poiCount, g);
             draw.DrawPointString(position, c2_m_bmp_zoom, poiCount, g, POI_XLimit, POI_YLimit, POI_TemperatureBox_X, POI_TemperatureBox_Y, CAM2_TemperatureArr);

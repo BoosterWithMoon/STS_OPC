@@ -572,40 +572,25 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
                 }
 
-                if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(DetectedDevices, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)/// 카메라가 새로운 데이터를 받을 준비가 되었을 시
-                {
-                    DIASDAQ.DDAQ_DEVICE_DO_STOP(DetectedDevices);
-                    return;
-                }
+                core.DoTransfer(newDataReady, isClosing, DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
 
-                if (newDataReady && !isClosing)
-                {
-                    if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                 /// 새로운 데이터가 있으며 종료의 명령이 없을 시
-                        return;                                                                                                /// UpDate Data !!
+                //if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(DetectedDevices, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)/// 카메라가 새로운 데이터를 받을 준비가 되었을 시
+                //{
+                //    DIASDAQ.DDAQ_DEVICE_DO_STOP(DetectedDevices);
+                //    return;
+                //}
 
-                    float fTemp = 0.0f;
-                    bool bTemp = false;
-                    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(DetectedDevices, ref fTemp, ref bTemp);
-                    CAM1_CameraTemp.Text = fTemp.ToString("N1") + "℃";
-
-                    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(DetectedDevices, ref fTemp, ref bTemp);
-                    CAM1_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
-
+                //if (newDataReady && !isClosing)
+                //{
+                    //core.DoTransfer(DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
                     imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
-                    //if (img != null) img.Dispose();                                                                            /// 메모리 관리를 위하여 Dispose.
-                    
-                    acq_index++;
                     CompareMaxTemperature(imgView.CAM1_TemperatureArr);
                     result.CAM1_DetectTemp_ForOPC();
-
                     VerifyOPC();
                     isDrawnCAM1Image = true;
 
-                    if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)             /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
-                        return;
-
                     ThreadOne_WFSO.Set();
-                }
+                //}
             }
 
 
@@ -619,25 +604,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Thread.Sleep(10);
 
-                if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(1, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// 카메라가 새로운 데이터를 받을 준비가 되었을 시
-                {
-                    DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-                    return;
-                }
-                if (newDataReady && !isClosing)
-                {
-                    if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                        /// 새로운 데이터가 있으며 종료의 명령이 없을 시
-                        return;                                                                                     /// UpDate Data !!
+                core.DoTransfer(newDataReady, isClosing, 1, CAM2_CameraTemp, CAM2_DetectorTemp);
 
-                    //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
+                //if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(1, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// 카메라가 새로운 데이터를 받을 준비가 되었을 시
+                //{
+                //    DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
+                //    return;
+                //}
+                //if (newDataReady && !isClosing)
+                //{
+                //    if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                        /// 새로운 데이터가 있으며 종료의 명령이 없을 시
+                //        return;                                                                                     /// UpDate Data !!
 
-                    float fTemp = 0.0f;
-                    bool bTemp = false;
-                    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(1, ref fTemp, ref bTemp);
-                    CAM2_CameraTemp.Text = fTemp.ToString("N1") + "℃";
+                //    //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
 
-                    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(1, ref fTemp, ref bTemp);
-                    CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
+                //    float fTemp = 0.0f;
+                //    bool bTemp = false;
+                //    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(1, ref fTemp, ref bTemp);
+                //    CAM2_CameraTemp.Text = fTemp.ToString("N1") + "℃";
+
+                //    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(1, ref fTemp, ref bTemp);
+                //    CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
 
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
 
@@ -646,11 +633,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     isDrawnCAM2Image = true;
 
-                    if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
-                        return;
+                    //if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
+                    //    return;
 
                     ThreadTwo_WFSO.Set();
-                }
+                //}
 
             }
         }

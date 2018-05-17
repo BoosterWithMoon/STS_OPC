@@ -67,26 +67,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CurrentAngle,
         [StringValue(".R_CurrentSteelKind")]
         CurrentSteelKind,
-        //[StringValue(".R_Charging1_Progress")]
-        //Charging1_Progress,
-        //[StringValue(".R_Melting1_Progress")]
-        //Melting1_Progress,
-        //[StringValue(".R_Charging2_Progress")]
-        //Charging2_Progress,
-        //[StringValue(".R_Melting2_Progress")]
-        //Melting2_Progress,
-        //[StringValue(".R_Charging3_Progress")]
-        //Charging3_Progress,
-        //[StringValue(".R_Melting3_Progress")]
-        //Melting3_Progress,
-        //[StringValue(".R_Stand_Steel_Progress")]
-        //StandSteelProgress,
-        //[StringValue(".R_Tapping_Progress")]
-        //TappingProgress,
-        //[StringValue(".R_O2_Lance_Blowing")]
-        //O2LanceBlowing
-        //[StringValue(".R_BoolArray")]
-        //BooleanArray
         [StringValue(".R_Progress")]
         RunningProcess,
         [StringValue(".R_O2_Lance_Blowing")]

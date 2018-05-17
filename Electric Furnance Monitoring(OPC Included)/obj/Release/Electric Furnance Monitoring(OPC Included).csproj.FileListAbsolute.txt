@@ -30,3 +30,4 @@ E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OP
 E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric Furnance Monitoring(OPC Included).pdb
 E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.AboutForm.resources
 E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\obj\Release\Electric_Furnance_Monitoring_OPC_Included_.OPCSetting.resources
+E:\Documents\Visual Studio 2015\Projects\STS_OPC\Electric Furnance Monitoring(OPC Included)\bin\Release\STS.Core.dll

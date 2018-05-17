@@ -102,7 +102,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public void CAM1_AlarmInitialize()
         {
             #region CAM1Alarm
-
             CAM1_LabelArray[0] = c1_poi1;
             CAM1_LabelArray[1] = c1_poi2;
             CAM1_LabelArray[2] = c1_poi3;
@@ -121,17 +120,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM1_verify[i] = false;
                 CAM1_isTempPM10[i] = false;
                 CAM1_isTempUpper10[i] = false;
-                CAM2_isTempPM10[i] = false;
-                CAM2_isTempUpper10[i] = false;
             }
-
             #endregion
         }
 
         public void CAM2_AlarmInitialize()
         {
             #region CAM2Alarm
-
             CAM2_LabelArray[0] = c2_poi1;
             CAM2_LabelArray[1] = c2_poi2;
             CAM2_LabelArray[2] = c2_poi3;
@@ -148,27 +143,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 CAM2_LabelArray[i].ForeColor = NotConnected;
                 CAM2_verify[i] = false;
+                CAM2_isTempPM10[i] = false;
+                CAM2_isTempUpper10[i] = false;
             }
-
             #endregion
         }
 
         public void CAM1_DetectTempThreshold()
         {
-            //VerifyOPC();
-
             if (imgView.CAM1_POICount != 0)
             {
                 #region POIAlarm Control
                 for (int i = 0; i < imgView.CAM1_POICount; i++)
                 {
-                    //if (imgView.CAM1_TemperatureArr[i] >= property.Threshold)
                     if (imgView.CAM1_TemperatureArr[i] >= CAM1_ThresholdTemp[i])
                     {
                         CAM1_verify[i] = true;
                         CAM1_LabelArray[i].ForeColor = Connected_Warning;
                     }
-                    //else if (imgView.CAM1_TemperatureArr[i] < property.Threshold ||
                     else if (imgView.CAM1_TemperatureArr[i] < CAM1_ThresholdTemp[i] ||
                         imgView.CAM1_TemperatureArr[i] == 0)
                     {
@@ -176,13 +168,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                         CAM1_LabelArray[i].ForeColor = Connected_NoWarning;
                     }
                 }
-
                 for (int i = imgView.CAM1_POICount; i < 10; i++)
                 {
                     CAM1_verify[i] = false;
                     CAM1_LabelArray[i].ForeColor = NotConnected;
                 }
-
                 #endregion
 
                 #region MainAlarm Control
@@ -212,13 +202,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 for (int i = 0; i < imgView.CAM2_POICount; i++)
                 {
-                    //if (imgView.CAM2_TemperatureArr[i] >= property.Threshold)
                     if (imgView.CAM2_TemperatureArr[i] >= CAM2_ThresholdTemp[i])
                     {
                         CAM2_verify[i] = true;
                         CAM2_LabelArray[i].ForeColor = Connected_Warning;
                     }
-                    //else if (imgView.CAM2_TemperatureArr[i] < property.Threshold ||
                     else if (imgView.CAM2_TemperatureArr[i] < CAM2_ThresholdTemp[i] ||
                         imgView.CAM2_TemperatureArr[i] == 0)
                     {
@@ -240,11 +228,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 {
                     c2_MainAlarm.ForeColor = Connected_Warning;
                 }
-
             }
             else if (imgView.CAM2_POICount == 0)
             {
-                CAM2_AlarmInitialize();
+                 CAM2_AlarmInitialize();
             }
         }
 
