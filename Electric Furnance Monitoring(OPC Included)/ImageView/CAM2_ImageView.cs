@@ -13,6 +13,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         ImageView imgView;
+        STS.Core.Calculation cal = new STS.Core.Calculation();
 
         public Point CAM2_clickedPoint;
         public bool CAM2_isMouseButtonDown = false;
@@ -33,42 +34,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Point temp;
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            //if (main.currentOpenMode == MainForm.OpenMode.IRDX)
-            //{
-            //    return;
-            //}
-
-            //CAM2_isImageInPoint = false;
-
             float DataPoint = 0.0f;
             imgView = (ImageView)main.ImageView_forPublicRef();
 
             if (imgView.c2_m_bmp_zoom == 0) return;
+
             temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
             float currentZoom = imgView.c2_m_bmp_zoom;
 
-            float fx = (float)temp.X - (float)imgView.c2_m_bmp_ofs_x;
-            float fy = (float)temp.Y - (float)imgView.c2_m_bmp_ofs_y;
+            float[] calculatePos = cal.MousePosZoom(main.pIRDX_Array[1], temp, imgView.c2_m_bmp_ofs_x, imgView.c2_m_bmp_ofs_y, currentZoom);
 
-            if (fx <= 0) fx = 0;
-            if (fy <= 0) fy = 0;
-
-            fx /= currentZoom;
-            fy /= currentZoom;
-
-            DIASDAQ.DDAQ_ZMODE zoomMode = (ushort)DIASDAQ.DDAQ_ZMODE.DIRECT;
-            float zoom = 1.0f;
-
-            DIASDAQ.DDAQ_IRDX_IMAGE_GET_ZOOM(main.pIRDX_Array[1], ref zoomMode, ref zoom);
-            if (zoomMode > DIASDAQ.DDAQ_ZMODE.DIRECT)
+            if ((calculatePos[0] >= 0.0f) && (calculatePos[1] >= 0.0f))
             {
-                fx /= zoom; fy /= zoom;
-            }
-
-            if ((fx >= 0.0f) && (fy >= 0.0f))
-            {
-                ushort ux = Convert.ToUInt16((ushort)fx + 1);
-                ushort uy = Convert.ToUInt16((ushort)fy + 1);
+                ushort ux = Convert.ToUInt16((ushort)calculatePos[0] + 1);
+                ushort uy = Convert.ToUInt16((ushort)calculatePos[1] + 1);
 
                 ushort sizex = 0, sizey = 0;
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(main.pIRDX_Array[1], ref sizex, ref sizey);
@@ -85,25 +64,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     if (CAM2_PointMoveFlag)
                     {
-                        int tempX, tempY;
-
-                        tempX = imgView.CAM2_ClickedPosition[CAM2_pointIdx].X - (CAM2_clickedPoint.X - ux);
-                        tempY = imgView.CAM2_ClickedPosition[CAM2_pointIdx].Y - (CAM2_clickedPoint.Y - uy);
-
-                        if (tempX > 0 && tempX <= imgView.c2_m_bmp_isize_x &&
-                            tempY > 0 && tempY <= imgView.c2_m_bmp_isize_y)
-                        {
-                            imgView.CAM2_ClickedPosition[CAM2_pointIdx].X -= (CAM2_clickedPoint.X - ux);
-                            imgView.CAM2_ClickedPosition[CAM2_pointIdx].Y -= (CAM2_clickedPoint.Y - uy);
-                        }
-                        CAM2_clickedPoint.X = ux;
-                        CAM2_clickedPoint.Y = uy;
+                        CAM2_clickedPoint = cal.MovePoint(imgView.CAM2_ClickedPosition, CAM2_clickedPoint, CAM2_pointIdx, ux, uy, imgView.c2_m_bmp_isize_x, imgView.c2_m_bmp_isize_y);
                     }
                 }
-                //else
-                //{
-                //    CAM2_isImageInPoint = false;
-                //}
             }
         }
 
@@ -115,10 +78,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             // 좌클릭 이외에 다른 버튼을 클릭 했을 때에는 아무것도 안함
             if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Middle) { return; }
 
-            //imgView.isCAM2Focused = pictureBox1.Focused;
             CAM2_clickedPoint = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
-            //MessageBox.Show(CAM2_clickedPoint.X.ToString() + ", " + CAM2_clickedPoint.Y.ToString());
-            imgView.CalculatePoint(main.pIRDX_Array[1], CAM2_clickedPoint);
+            cal.CalculatePoint(main.pIRDX_Array[1], CAM2_clickedPoint, imgView.c2_m_bmp_ofs_x, imgView.c2_m_bmp_ofs_y, imgView.c2_m_bmp_zoom, ref imgView.c2_ux, ref imgView.c2_uy);
 
             if (main.Activate_DrawPOI == true && imgView.CAM2_POICount < 10 &&
                 (CAM2_clickedPoint.X > imgView.c2_m_bmp_ofs_x && CAM2_clickedPoint.Y > imgView.c2_m_bmp_ofs_y &&
@@ -143,7 +104,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_isMouseButtonDown = true;
                 CAM2_PointMoveFlag = true;
                 CAM2_POIClicked = true;
-
             }
             else if (imgView.CAM2_POICount > 0)
             {

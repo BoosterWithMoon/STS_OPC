@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using Kepware.ClientAce.OpcDaClient;
 using Kepware.ClientAce.OpcCmn;
 using System.Collections;
+using STS.Core;
 
 namespace Electric_Furnance_Monitoring_OPC_Included_
 {
@@ -52,6 +53,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         Thread CAM2_DataView;
 
         AboutForm about;
+
+        STS.Core.Calculation cal = new Calculation();
+        STS.Core.Drawing draw = new Drawing();
+        STS.Core.CoreLibrary core = new CoreLibrary();
         #endregion
 
         #region VariablesDeclare
@@ -151,8 +156,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         System.Configuration.Configuration config;
 
-        public string POSCO_CAM1_SERIAL;
-        public string POSCO_CAM2_SERIAL;
+        //public string POSCO_CAM1_SERIAL;
+        //public string POSCO_CAM2_SERIAL;
+        public string[] POSCO_SERIAL = new string[2];
 
         public float FloatMaxTemp;
         public float c2_FloatMaxTemp;
@@ -434,8 +440,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void ViewAdjust()
         {
             // 전체 ImageView 영역 width 조정
-            //split_ViewToInfo.SplitterDistance = 1920 - propertyGrid1.Width - 310;
-            //split_ViewToInfo.SplitterDistance = Screen.PrimaryScreen.Bounds.Width - propertyGrid1.Width - 310;
             if (this.Width - propertyGrid1.Width - 310 < 0)
             {
                 return;
@@ -444,10 +448,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 315 - panel_ScaleBar.Width;
             }
-
-            //split_ViewToInfo.SplitterDistance = this.Width - propertyGrid1.Width - 310;
-            
-
 
             // 카메라별 ImageView 영역 Width 조정
             split_CamToCam.Width = split_ViewToInfo.Panel1.Width / 2;
@@ -733,7 +733,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             uint bufferSize = 0;
             DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
 
-            //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
             imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
             customGrid.GetAttributesInfo(pIRDX_Array[0]);
@@ -744,7 +743,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DIASDAQ.DDAQ_IRDX_FILE_GET_NUMDATASETS(pIRDX_Array[0], ref numDataSet);
 
             DIASDAQ.DDAQ_IRDX_FILE_GET_CURDATASET(pIRDX_Array[0], ref position);
-            //MessageBox.Show(position.ToString());
 
             if (position + 1 == numDataSet)
             {
@@ -756,10 +754,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 uint bufferSize = 0;
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
 
-                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
-                imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+                cal.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
+
                 c1_chartView.UpdateData();
                 c1_gridView.RefreshGrid();
                 result.CAM1_DetectTempThreshold();
@@ -777,24 +775,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 uint bufferSize = 0;
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_DATA(pIRDX_Array[0], ref pData, bufferSize);
 
-                //imgView.DrawImage(pIRDX_Array[0], c2_imgView.pictureBox1);
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+                cal.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
 
-                imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
                 c1_chartView.UpdateData();
                 c1_gridView.RefreshGrid();
                 result.CAM1_DetectTempThreshold();
 
                 for (int i = 0; i < imgView.CAM1_POICount; i++)
                 {
-                    //imageView.CAM1_ClickedPosition[i] = imageView.CAM2_ClickedPosition[i];
                     imgView.CAM2_ClickedPosition[i] = imgView.CAM1_ClickedPosition[i];
                 }
-                //imgView.CAM2_POICount = imgView.CAM1_POICount;
-                //imgView.CalculateCurrentTemp(pIRDX_Array[0], imgView.CAM2_POICount, imgView.CAM2_ClickedPosition, imgView.CAM2_TemperatureArr);
-                //c2_chartView.UpdateData();
-                //c2_gridView.CAM2_RefreshGrid();
-                //result.CAM2_DetectTempThreshold();
 
                 customGrid.GetAttributesInfo(pIRDX_Array[0]);
             }
@@ -818,7 +809,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void DrawPOI_toolStripButton_Click(object sender, EventArgs e)
         {
             Activate_DrawPOI = true;
-            //DrawPOI_toolStripButton.CheckOnClick = true;
             DrawPOI_toolStripButton.Checked = true;
             MovePOI_toolStripButton.Checked = false;
             DeletePOI_toolStripButton.Checked = false;
@@ -828,7 +818,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             Activate_DrawPOI = false;
             DrawPOI_toolStripButton.Checked = false;
-            //MovePOI_toolStripButton.CheckOnClick = true;
             MovePOI_toolStripButton.Checked = true;
             DeletePOI_toolStripButton.Checked = false;
         }
@@ -1007,100 +996,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         #region DataLoggingControl
         private string GetNewDataFileName(int SaveType, IntPtr irdxHandle)
         {
-            string newRawDataFolderName = "";
-            string newResultDataFolderName = "";
-            string strFileName = "";
-            uint id = 0;
-            DIASDAQ.DDAQ_DEVICE_TYPE type = DIASDAQ.DDAQ_DEVICE_TYPE.NO;
-
-            DIASDAQ.DDAQ_IRDX_DEVICE_GET_ID(irdxHandle, ref id, ref type);
-
             time = DateTime.Now;
-            string currentTime = time.ToString("yyMMdd_HHmmss");
-            string currentTime_DateOnly = time.ToString("yyMMdd");
-            strFileName = "[" + id.ToString() + "]";
-
-            DirectoryInfo VerifyRawFolder = new DirectoryInfo(customGrid.RawData);
-            DirectoryInfo VerifyResultFolder = new DirectoryInfo(customGrid.ResultData);
-
-            bool isRawFolderExist = VerifyRawFolder.Exists;
-            bool isResultFolderExist = VerifyResultFolder.Exists;
-
-            if (!isRawFolderExist)
-            {
-                string appPath = Application.StartupPath;
-
-                // RawData directory creation
-                customGrid.RawData= appPath;
-                newRawDataFolderName = customGrid.RawData+ "\\RawData";
-                Directory.CreateDirectory(newRawDataFolderName);
-                newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
-                Directory.CreateDirectory(newRawDataFolderName);
-
-                string resetBase = newRawDataFolderName.Substring(0, 1);
-                config.AppSettings.Settings["DataSaveBase"].Value = resetBase;       // 데이터 저장 디스크 재설정
-                config.Save(ConfigurationSaveMode.Modified);            // update configuration xml file
-                ConfigurationManager.RefreshSection("appSettings");
-
-                // ResulData directory creation
-                customGrid.ResultData= appPath;
-                newResultDataFolderName = customGrid.ResultData+ "\\ResultData";
-                Directory.CreateDirectory(newResultDataFolderName);
-                newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
-                Directory.CreateDirectory(newResultDataFolderName);
-
-                propertyGrid1.Invalidate();
-            }
-
-            if (isRawFolderExist)
-            {
-                newRawDataFolderName = customGrid.RawData+ "\\RawData";
-                Directory.CreateDirectory(newRawDataFolderName);
-                newRawDataFolderName = newRawDataFolderName + "\\" + currentTime_DateOnly;
-                Directory.CreateDirectory(newRawDataFolderName);
-
-                string resetBase = newRawDataFolderName.Substring(0, 1);
-                config.AppSettings.Settings["DataSaveBase"].Value = resetBase;
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
-
-                propertyGrid1.Invalidate();
-            }
-
-            if (isResultFolderExist)
-            {
-                newResultDataFolderName = customGrid.ResultData+ "\\ResultData";
-                Directory.CreateDirectory(newResultDataFolderName);
-                newResultDataFolderName = newResultDataFolderName + "\\" + currentTime_DateOnly;
-                Directory.CreateDirectory(newResultDataFolderName);
-
-                propertyGrid1.Invalidate();
-            }
-
-            switch (SaveType)
-            {
-                case 0:
-                    strFileName = strFileName + currentTime + ".irdx";
-                    strFileName = newRawDataFolderName + "\\" + strFileName;
-                    break;
-                case 1:
-                    strFileName = strFileName + currentTime + ".txt";
-                    strFileName = newRawDataFolderName + "\\" + strFileName;
-                    break;
-                case 2:
-                    strFileName = strFileName + currentTime + ".txt";
-                    strFileName = newResultDataFolderName + "\\" + strFileName;
-                    break;
-                case 3:
-                    strFileName = "[OPC_READ]" + currentTime + ".txt";
-                    strFileName = newResultDataFolderName + "\\" + strFileName;
-                    break;
-                case 4:
-                    strFileName = "[OPC_WRITE]" + currentTime + ".txt";
-                    strFileName = newResultDataFolderName + "\\" + strFileName;
-                    break;
-            }
-            return strFileName;
+            string path = core.GetNewDataFileName(time, SaveType, irdxHandle, customGrid.RawData, customGrid.ResultData, config, propertyGrid1);
+            return path;
         }
 
         private void DeviceLoggingStart()
@@ -1130,18 +1028,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 newOPCReadDataFileName = GetNewDataFileName(OPCRead, pIRDX_Array[0]);
                 newOPCWriteDataFileName = GetNewDataFileName(OPCWrite, pIRDX_Array[0]);
 
-                //Text_RawData = new FileStream(newRawDataFileName, FileMode.Append, FileAccess.Write);
                 Text_ResultData = new FileStream(newResultDataFileName, FileMode.Append, FileAccess.Write);
-
-                //outputFile = new StreamWriter(Text_RawData);
                 outputFile_Result = new StreamWriter(Text_ResultData);
-
-                //if (imageView.CAM1_POICount == 0)
-                //{
-                //    MessageBox.Show("저장할 데이터를 확인하세요.\n저장 프로세스가 시작되지 않았습니다.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //    DeviceLoggingStop();
-                //    return;
-                //}
 
                 string legend = "Index\t";
                 for (int k = 0; k < imgView.CAM1_POICount; k++)
@@ -1176,10 +1064,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     CAM2_newRawDataFileName = GetNewDataFileName(RawData, pIRDX_Array[1]);
                     CAM2_newResultDataFileName = GetNewDataFileName(ResultData, pIRDX_Array[1]);
 
-                    //c2_Text_RawData = new FileStream(CAM2_newRawDataFileName, FileMode.Append, FileAccess.Write);
                     c2_Text_ResultData = new FileStream(CAM2_newResultDataFileName, FileMode.Append, FileAccess.Write);
-
-                    //c2_outputFile = new StreamWriter(c2_Text_RawData);
                     c2_outputFile_Result = new StreamWriter(c2_Text_ResultData);
 
                     string legend2 = "Index\t";
@@ -1351,11 +1236,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             AutodelSequence();      // 데이터 자동 삭제 SEQUENCE
 
             DateTime currentTime = DateTime.Now;
-            if (time.Date != currentTime.Date)
+            if (time.Day != currentTime.Day)
             {
                 DeviceLoggingStop();
                 DeviceLoggingStart();
             }
+
             //string test = "TEXT WRITING TEST: RawData\n";
             string data = "";
 
@@ -1442,9 +1328,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             string value = "";
             value = ConfigurationManager.AppSettings["Serial1"];
-            POSCO_CAM1_SERIAL = value;
+            //POSCO_CAM1_SERIAL = value;
+            POSCO_SERIAL[0] = value;
             value = ConfigurationManager.AppSettings["Serial2"];
-            POSCO_CAM2_SERIAL = value;
+            //POSCO_CAM2_SERIAL = value;
+            POSCO_SERIAL[1] = value;
 
             value = ConfigurationManager.AppSettings["Emissivity"];
             customGrid.Emissivity = Convert.ToSingle(value);
@@ -1489,7 +1377,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             config.AppSettings.Settings["OPC_Device"].Value = opc.Device;
             config.AppSettings.Settings["OPC_Endpoint"].Value = opc.nodeName;
 
-            //config.Save(ConfigurationSaveMode.Modified);
             config.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("appSettings");
         }
@@ -1501,8 +1388,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             FloatMaxTemp = 0.0f;
             string MaxTemp = "";
-            //if (imageView.CAM1_TemperatureArr)
-            //for(int i=0; i<TemperatureArray.Length-1; i++)
             if (imgView.CAM1_POICount == 0)
             {
                 FloatMaxTemp = 0.0f;
@@ -1685,11 +1570,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 moveROIToolStripMenuItem.Enabled = true;
                 deleteROIToolStripMenuItem.Enabled = true;
 
-                //LogStart_toolStripButton.Visible = true;
-                //LogStop_toolStripButton.Visible = true;
-                //LogStop_toolStripButton.Enabled = false;
-                //LogStop_toolStripButton.Enabled = false;
-
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
 
                 customGrid.GetAttributesInfo(pIRDX_Array[0]);
@@ -1697,19 +1577,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 result.OPCConnectAlarm.ForeColor = result.NotConnected;
                 result.OPCActiveAlarm.ForeColor = result.NotConnected;
-
-                //OPCSettingToolStripMenuItem.Enabled = true;
-
-                //groupBox_SlopeAngle.Visible = true;
-                //groupBox_Charging1.Visible = true;
-                //groupBox_Melting1.Visible = true;
-                //groupBox_Charging2.Visible = true;
-                //groupBox_Melting2.Visible = true;
-                //groupBox_Charging3.Visible = true;
-                //groupBox_Melting3.Visible = true;
-                //groupBox_StandSteel.Visible = true;
-                //groupBox_Tapping.Visible = true;
-                //groupBox_O2Lance.Visible = true;
             }
             else if (IRDXFileCount == 2)
             {
@@ -1906,92 +1773,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             string oldest_RawDir = customGrid.RawData.ToString();
             oldest_RawDir = oldest_RawDir + "RawData";
-            string deleteTarget = "";
-            DateTime deleteTargetTime;
-            DirectoryInfo dir = new DirectoryInfo(oldest_RawDir);
-
-            if (dir.GetDirectories().Length == 0) return;
-
-            string[] folderName = new string[dir.GetDirectories().Length];
-            DateTime[] folderCreationTime = new DateTime[dir.GetDirectories().Length];
-
-            int k = 0;
-            foreach (var item in dir.GetDirectories())  // dir에 있는 모든 디렉토리의 정보를 가져옴
-            {
-                folderName[k] = item.Name;
-                folderCreationTime[k] = item.CreationTime;
-                k++;
-            }
-
-            deleteTarget = folderName[0];
-            deleteTargetTime = folderCreationTime[0];
-            for (int i = 0; i < dir.GetDirectories().Length; i++)
-            {
-                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)       // 가장 먼저 생성된(오래된) 폴더 검증
-                {
-                    deleteTarget = folderName[i];
-                    deleteTargetTime = folderCreationTime[i];
-                }
-            }
-
-            string finalPath = oldest_RawDir + "\\" + deleteTarget;
-            if (Directory.Exists(finalPath))
-            {
-                string[] files = Directory.GetFiles(finalPath);
-                foreach (string s in files)         // 최종 path 디렉토리의 모든 파일 삭제
-                {
-                    string fileName = Path.GetFileName(s);
-                    string deleteFile = finalPath + "\\" + fileName;
-                    File.Delete(deleteFile);
-                }
-            }
-            Directory.Delete(finalPath);        // 최종 path 디렉토리 삭제
+            core.DeleteOldestFolder(oldest_RawDir);
         }
 
         private void Delete_OldestFolder_Result()
         {
             string oldest_ResultDir = customGrid.RawData.ToString();
             oldest_ResultDir = oldest_ResultDir + "ResultData";
-            string deleteTarget = "";
-            DateTime deleteTargetTime;
-            DirectoryInfo dir = new DirectoryInfo(oldest_ResultDir);
-
-            if (dir.GetDirectories().Length == 0) return;
-
-            string[] folderName = new string[dir.GetDirectories().Length];
-            DateTime[] folderCreationTime = new DateTime[dir.GetDirectories().Length];
-
-            int k = 0;
-            foreach (var item in dir.GetDirectories())
-            {
-                folderName[k] = item.Name;
-                folderCreationTime[k] = item.CreationTime;
-                k++;
-            }
-
-            deleteTarget = folderName[0];
-            deleteTargetTime = folderCreationTime[0];
-            for (int i = 0; i < dir.GetDirectories().Length; i++)
-            {
-                if (deleteTargetTime.Ticks > folderCreationTime[i].Ticks)
-                {
-                    deleteTarget = folderName[i];
-                    deleteTargetTime = folderCreationTime[i];
-                }
-            }
-
-            string finalPath = oldest_ResultDir + "\\" + deleteTarget;
-            if (Directory.Exists(finalPath))
-            {
-                string[] files = Directory.GetFiles(finalPath);
-                foreach (string s in files)
-                {
-                    string fileName = Path.GetFileName(s);
-                    string deleteFile = finalPath + "\\" + fileName;
-                    File.Delete(deleteFile);
-                }
-            }
-            Directory.Delete(finalPath);
+            core.DeleteOldestFolder(oldest_ResultDir);
         }
         #endregion
              

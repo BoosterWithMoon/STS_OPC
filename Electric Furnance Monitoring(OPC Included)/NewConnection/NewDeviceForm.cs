@@ -15,26 +15,27 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         MainForm main;
         SystemPropertyGrid grid;
         CustomOPC opc;
+        STS.Core.CoreLibrary core;
 
         Thread thr1, thr2;
         Thread support_thr1;
         Thread support_thr2;
-
         public bool isDetected = false;
         public bool isConnectedDevices = false;
         public string[] DeviceID;
         uint NDF_DetectedDevices;           // CS1690 Warning
-
-        private string CAM1_SerialNo = "";
-        private string CAM2_SerialNo = "";
-
-        private string ErrorCode = "";
-        private ushort ErrorLine = 0;
+        private string[] DetectedSerialNo;
 
         public NewDeviceForm(MainForm _main)
         {
             this.main = _main;
+
             InitializeComponent();
+
+            core = new STS.Core.CoreLibrary();
+            isDetected = false;
+            isConnectedDevices = false;
+            DetectedSerialNo = new string[2];
         }
 
         private void NewDeviceForm_Load(object sender, EventArgs e)
@@ -44,12 +45,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
         private void NewDeviceForm_KeyDown(object sender, KeyEventArgs e)
         {
-            //esc키를 누르면
             if (e.KeyCode == Keys.Escape)
             {
                 this.Close();   // 그냥 닫음
             }
-            // enter키를 누르면...
             else if (e.KeyCode == Keys.Enter)
             {
                 button1_Click(sender, e);
@@ -60,7 +59,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             Cursor.Current = Cursors.WaitCursor;
             NDF_DetectedDevices = DIASDAQ.DDAQ_DEVICE_DO_DETECTION();
-            //Cursor.Current = Cursors.Default;
 
             if (NDF_DetectedDevices == 0)
             {
@@ -74,7 +72,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 MessageBox.Show(NDF_DetectedDevices.ToString() + "개의 카메라가 감지 되었습니다.", "New Device Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 isDetected = true;
             }
-
         }
 
         public void GetDeviceType(uint DeviceNo, IntPtr irdxHandle)
@@ -148,13 +145,13 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             int serialTemp = result.IndexOf("C");
             if (irdxHandle == main.pIRDX_Array[0])
             {
-                CAM1_SerialNo = result.Substring(serialTemp, 8);
-                main.CAM1_Serial.Text = CAM1_SerialNo.ToString();
+                DetectedSerialNo[0] = result.Substring(serialTemp, 8);
+                main.CAM1_Serial.Text = DetectedSerialNo[0].ToString();
             }
             else
             {
-                CAM2_SerialNo = result.Substring(serialTemp, 8);
-                main.CAM2_Serial.Text = CAM2_SerialNo.ToString();
+                DetectedSerialNo[1] = result.Substring(serialTemp, 8);
+                main.CAM2_Serial.Text = DetectedSerialNo[1].ToString();
             }
         }
 
@@ -213,7 +210,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             GetDeviceID(1, main.pIRDX_Array[1]);
         }
 
-        private bool VerifyingCamSerial()
+        /*private bool VerifyingCamSerial()
         {
             // XML Configuration 정보 검증
             if (main.POSCO_CAM1_SERIAL == "" || main.POSCO_CAM2_SERIAL == "")
@@ -260,16 +257,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 return false;
             }
             return true;
-        }
+        }*/
 
         // Accept Button
         private void button1_Click(object sender, EventArgs e)
         {
-            bool result = VerifyingCamSerial();
+            object[] received = core.VerifyingCamSerial(main.pIRDX_Array, main.POSCO_SERIAL, NDF_DetectedDevices, DetectedSerialNo);
 
-            if (result == false)
+            if (Convert.ToBoolean(received[1]) == false)
             {
-                MessageBox.Show("프로그램을 시작할 수 없습니다.\n\nReason: " + ErrorCode + "\nLine: " + ErrorLine, "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("프로그램을 시작할 수 없습니다.\n\nReason: " + received[0].ToString(), "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                main.DetectedDevices = 0;
+                NDF_DetectedDevices = 0;
                 Close();
                 return;
             }
@@ -292,25 +291,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(main.pIRDX_Array[i], ref avg);
             }
 
-            // CAMERA #1 Thread ID Registering
-            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;        /// Get 기본 Thread ID Value
-            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(NDF_DetectedDevices, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// Throw Thread ID
-                return;
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)     /// Default Frequency
-                return;
-            if (DIASDAQ.DDAQ_DEVICE_DO_START(NDF_DetectedDevices) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// Device do start
-                return;
+            ///Thread ID Registering
+            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;        /// Get Thread ID Value
+            core.RegisterThread(main.pIRDX_Array[0], NDF_DetectedDevices, nThreadID);
 
             if (NDF_DetectedDevices != 1)
             {
-                // CAMERA #2 Thread ID Registering
                 uint nThreadID_two = (uint)Thread.CurrentThread.ManagedThreadId;
-                if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(1, nThreadID_two) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                    return;
-                if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[1], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                    return;
-                if (DIASDAQ.DDAQ_DEVICE_DO_START(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                    return;
+                core.RegisterThread(main.pIRDX_Array[1], 1, nThreadID_two);
             }
 
             main.currentOpenMode = MainForm.OpenMode.Online;
@@ -358,8 +346,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             main.toolStripSeparator5.Visible = true;
             main.toolStripSeparator6.Visible = true;
 
-            //main.groupBox_CamTemp.Visible = true;
-            //main.groupBox_DetectorTemp.Visible = true;
             main.panel1.Visible = true;
             main.panel_ScaleBar.Visible = true;
 
@@ -390,7 +376,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             opc = (CustomOPC)main.CustomOPC_forPublicRef();
 
             if (opc.connectFailed == false)
-            //if(opc.connectFailed==true)
             {
                 // OPC 데이터 송수신 활성화
                 main.OPCActivated = true;

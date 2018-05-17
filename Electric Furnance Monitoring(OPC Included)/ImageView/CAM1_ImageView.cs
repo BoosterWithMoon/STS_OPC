@@ -18,6 +18,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CAM1_ChartView c1_chart;
         CAM1_DataGridView c1_grid;
         ResultView result;
+        STS.Core.Calculation cal = new STS.Core.Calculation();
+
         public Point clickedPoint;
         public Point clickedAfterUp;
         public bool CAM1_isMouseButtonDown = false;
@@ -44,34 +46,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             imgView = (ImageView)main.ImageView_forPublicRef();
 
             if (imgView.m_bmp_zoom == 0) return;
-            /*Point */
+
             temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
             float currentZoom = imgView.m_bmp_zoom;
 
             // MousePosition에 대해 CalculatePoint
-            float fx = (float)temp.X - (float)imgView.m_bmp_ofs_x;
-            float fy = (float)temp.Y - (float)imgView.m_bmp_ofs_y;
+            float[] calculatePos = cal.MousePosZoom(main.pIRDX_Array[0], temp, imgView.m_bmp_ofs_x, imgView.m_bmp_ofs_y, currentZoom);
 
-            if (fx <= 0) fx = 0;
-            if (fy <= 0) fy = 0;
-
-            fx /= currentZoom;
-            fy /= currentZoom;
-
-            DIASDAQ.DDAQ_ZMODE zoomMode = (ushort)DIASDAQ.DDAQ_ZMODE.DIRECT;
-            float zoom = 1.0f;
-
-            DIASDAQ.DDAQ_IRDX_IMAGE_GET_ZOOM(main.pIRDX_Array[0], ref zoomMode, ref zoom);
-            if (zoomMode > DIASDAQ.DDAQ_ZMODE.DIRECT)
+            if ((calculatePos[0] >= 0.0f) && (calculatePos[1] >= 0.0f))
             {
-                fx /= zoom;
-                fy /= zoom;
-            }
-
-            if ((fx >= 0.0f) && (fy >= 0.0f))
-            {
-                ushort ux = Convert.ToUInt16((ushort)fx + 1);
-                ushort uy = Convert.ToUInt16((ushort)fy + 1);
+                ushort ux = Convert.ToUInt16((ushort)calculatePos[0] + 1);
+                ushort uy = Convert.ToUInt16((ushort)calculatePos[1] + 1);
 
                 ushort sizex = 0, sizey = 0;
                 DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(main.pIRDX_Array[0], ref sizex, ref sizey);
@@ -88,19 +73,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     if (CAM1_PointMoveFlag)
                     {
-                        int tempX, tempY;
-
-                        tempX = imgView.CAM1_ClickedPosition[CAM1_pointIdx].X - (clickedPoint.X - ux);
-                        tempY = imgView.CAM1_ClickedPosition[CAM1_pointIdx].Y - (clickedPoint.Y - uy);
-
-                        if (tempX > 0 && tempX <= imgView.m_bmp_isize_x &&
-                            tempY > 0 && tempY <= imgView.m_bmp_isize_y)
-                        {
-                            imgView.CAM1_ClickedPosition[CAM1_pointIdx].X -= (clickedPoint.X - ux);
-                            imgView.CAM1_ClickedPosition[CAM1_pointIdx].Y -= (clickedPoint.Y - uy);
-                        }
-                        clickedPoint.X = ux;
-                        clickedPoint.Y = uy;
+                        clickedPoint = cal.MovePoint(imgView.CAM1_ClickedPosition, clickedPoint, CAM1_pointIdx, ux, uy, imgView.m_bmp_isize_x, imgView.m_bmp_isize_y);
                     }
                 }
             }
@@ -115,8 +88,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Middle) { return; }
 
             clickedPoint = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
-            //MessageBox.Show(clickedPoint.X.ToString() + ", " + clickedPoint.Y.ToString());
-            imgView.CalculatePoint(main.pIRDX_Array[0], clickedPoint);
+            cal.CalculatePoint(main.pIRDX_Array[0], clickedPoint, imgView.m_bmp_ofs_x, imgView.m_bmp_ofs_y, imgView.m_bmp_zoom, ref imgView.ux, ref imgView.uy);
 
             if (main.Activate_DrawPOI == true && imgView.CAM1_POICount < 10 &&
                 clickedPoint.X > imgView.m_bmp_ofs_x && clickedPoint.Y > imgView.m_bmp_ofs_y &&
@@ -137,10 +109,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 imgView.CAM1_POICount++;
 
                 imgView.CAM1_POICheckFlag = true;
-                //if (main.currentOpenMode == MainForm.OpenMode.IRDX)
-                //{
-                //    imgView.CAM2_POICheckFlag = true;
-                //}
 
                 CAM1_isMouseButtonDown = true;
                 CAM1_PointMoveFlag = true;
@@ -167,17 +135,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
                 if (!hit)
                     CAM1_POIClicked = false;
-            }
-            //MessageBox.Show(CAM1_POIClicked.ToString());
-            if (main.currentOpenMode == MainForm.OpenMode.IRDX)
-            {
-                //c1_chart = (CAM1_ChartView)main.CAM1_ChartView_forPublicRef();
-                //c1_grid = (CAM1_DataGridView)main.CAM1_GridView_forPublicRef();
-                //result = (ResultView)main.ResultView_forPublicRef();
-                //imgView.CalculateCurrentTemp(main.pIRDX_Array[0], imgView.CAM1_POICount, imgView.CAM1_ClickedPosition, imgView.CAM1_TemperatureArr);
-                //c1_chart.UpdateData();
-                //c1_grid.RefreshGrid();
-                //result.CAM1_DetectTempThreshold();
             }
         }
 
@@ -208,11 +165,5 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 clickedPoint.Y = 0;
             }
         }
-
-        //private void pictureBox1_Click(object sender, EventArgs e)
-        //{
-        //    Point temp = pictureBox1.PointToClient(new Point(MousePosition.X, MousePosition.Y));
-        //    MessageBox.Show(temp.X + ", " + temp.Y /*+ "\n"+imgView.MousePosTemp.X+", "+imgView.MousePosTemp.Y*/);
-        //}
     }
 }
