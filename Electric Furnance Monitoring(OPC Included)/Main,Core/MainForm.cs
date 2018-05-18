@@ -567,7 +567,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Thread.Sleep(10);
 
-                if(pictureBox_ScaleBar.Image == null)
+                if (currentOpenMode == OpenMode.Online && pictureBox_ScaleBar.Image == null)
                 {
                     imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
                 }
@@ -582,14 +582,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 //if (newDataReady && !isClosing)
                 //{
-                    //core.DoTransfer(DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
-                    imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
-                    CompareMaxTemperature(imgView.CAM1_TemperatureArr);
-                    result.CAM1_DetectTemp_ForOPC();
-                    VerifyOPC();
-                    isDrawnCAM1Image = true;
+                //core.DoTransfer(DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
+                imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+                CompareMaxTemperature(imgView.CAM1_TemperatureArr);
+                result.CAM1_DetectTemp_ForOPC();
+                VerifyOPC();
 
-                    ThreadOne_WFSO.Set();
+                isDrawnCAM1Image = true;
+
+
+
+                ThreadOne_WFSO.Set();
                 //}
             }
 
@@ -628,10 +631,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                     imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
 
-                    CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
-                    result.CAM2_DetectTemp_ForOPC();
+                CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
+                result.CAM2_DetectTemp_ForOPC();
+       
 
-                    isDrawnCAM2Image = true;
+                isDrawnCAM2Image = true;
 
                     //if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
                     //    return;
@@ -1612,58 +1616,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             DetectedDevices = 2;
 
-            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(1, fileFullName);  
-            DIASDAQ.DDAQ_DEVICE_DO_OPENSIMULATION(2, fileFullName);  
-
-            // IRDX handle 받아오기
-            DIASDAQ.DDAQ_DEVICE_GET_IRDX(1, ref pIRDX_Array[0]); // 512
-            DIASDAQ.DDAQ_DEVICE_GET_IRDX(2, ref pIRDX_Array[1]); // 320
-
-            if (DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[0], ref sizeX, ref sizeY) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                return;
-            if (DIASDAQ.DDAQ_IRDX_PIXEL_GET_SIZE(pIRDX_Array[1], ref sizeX_2, ref sizeY_2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                return;
-
-            DIASDAQ.COLORREF color = new DIASDAQ.COLORREF();
-            color.Red = 0; color.Blue = 0; color.Green = 0;
-            //-----------------------------------------
-            DIASDAQ.DDAQ_SET_TEMPPRECISION(0);
-            ushort avg = 0;
-            DIASDAQ.DDAQ_IRDX_OBJECT_SET_EMISSIVITY(pIRDX_Array[0], currentEmissivity);                          /// 두번째 카메라 핵심 프로퍼티 설정
-            DIASDAQ.DDAQ_IRDX_OBJECT_SET_TRANSMISSION(pIRDX_Array[0], currentTransmittance);
-            DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(pIRDX_Array[0], 0, 256);
-            DIASDAQ.DDAQ_IRDX_SCALE_GET_MINMAX(pIRDX_Array[0], ref min, ref max);
-            DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(pIRDX_Array[0], min, max);
-            DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(pIRDX_Array[0], ref avg);
-
-            DIASDAQ.DDAQ_IRDX_OBJECT_SET_EMISSIVITY(pIRDX_Array[1], currentEmissivity);                          /// 두번째 카메라 핵심 프로퍼티 설정
-            DIASDAQ.DDAQ_IRDX_OBJECT_SET_TRANSMISSION(pIRDX_Array[1], currentTransmittance);
-            DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(pIRDX_Array[1], 0, 256);
-            DIASDAQ.DDAQ_IRDX_SCALE_GET_MINMAX(pIRDX_Array[1], ref min, ref max);
-            DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(pIRDX_Array[1], min, max);
-            DIASDAQ.DDAQ_IRDX_ACQUISITION_GET_AVERAGING(pIRDX_Array[1], ref avg);
-
-            uint nThreadID = (uint)Thread.CurrentThread.ManagedThreadId;                        /// 기본 Thread ID Value get
-            uint nThreadID2 = (uint)Thread.CurrentThread.ManagedThreadId;
-
-            // THROW THREADS ID
-            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(1, nThreadID) != DIASDAQ.DDAQ_ERROR.NO_ERROR)   /// 스레드 ID 등록
-                return;
-            if (DIASDAQ.DDAQ_DEVICE_SET_MSGTHREAD(2, nThreadID2) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                return;
-
-            // SET ACQUISITION FREQUENCY
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[0], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)               /// Default ACQ_Frequency 8 으로 설정
-                return;
-            if (DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(pIRDX_Array[1], 1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
-                return;
-
-            if (DIASDAQ.DDAQ_DEVICE_DO_START(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                   /// 각 카메라 Do Start!!
-                return;
-            if (DIASDAQ.DDAQ_DEVICE_DO_START(2) != DIASDAQ.DDAQ_ERROR.NO_ERROR) return;
-
-            DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1);
-            DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(2);
+            core.GetReadyForSimulator(1, fileFullName, currentEmissivity, currentTransmittance, ref pIRDX_Array[0], ref sizeX, ref sizeY, ref min, ref max);
+            core.GetReadyForSimulator(2, fileFullName, currentEmissivity, currentTransmittance, ref pIRDX_Array[1], ref sizeX_2, ref sizeY_2, ref min, ref max);
 
             label_Progress.Text = "Simulation Mode";
             groupBox_SlopeAngle.Visible = false;
@@ -1703,6 +1657,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DrawPOI_toolStripButton.Visible = true;
             MovePOI_toolStripButton.Visible = true;
             DeletePOI_toolStripButton.Visible = true;
+
+            panel_ScaleBar.Visible = true;
 
             mThread.Start();
             mThread_two.Start();

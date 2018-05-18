@@ -50,7 +50,7 @@
       <HintPath>..\..\..\..\..\Program Files (x86)\Kepware Technologies\ClientAce\V4.0\Kepware.ClientAce.OpcClient.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="STS.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="STS.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\STS.Core\STS.Core\bin\Debug\STS.Core.dll</HintPath>
     </Reference>

@@ -142,8 +142,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 bmp = draw.GetBitmap(hIRDX);
                 g = pb.CreateGraphics();
 
-                Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
-                g_backbuffer = Graphics.FromImage(Stretched_bmp);
+                draw.AllocationGraphics(bmp, m_bmp_size_x, m_bmp_size_y, ref Stretched_bmp, ref g_backbuffer);
+                //Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
+                //g_backbuffer = Graphics.FromImage(Stretched_bmp);
 
                 DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref g_backbuffer);
 
@@ -152,11 +153,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 g.DrawImage((Image)Stretched_bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
 
-                if (bmp != null) bmp.Dispose();
-                if (Stretched_bmp != null) Stretched_bmp.Dispose();
+                draw.ReleaseGraphics(bmp, Stretched_bmp, g, g_backbuffer);
+                //if (bmp != null) bmp.Dispose();
+                //if (Stretched_bmp != null) Stretched_bmp.Dispose();
 
-                g_backbuffer.Dispose();
-                g.Dispose();
+                //g_backbuffer.Dispose();
+                //g.Dispose();
             }
         }
 
@@ -181,8 +183,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_bmp = draw.GetBitmap(irdxHandle);
                 CAM2_g = pb.CreateGraphics();
 
-                CAM2_Stretched_bmp = new Bitmap(CAM2_bmp, new Size(c2_m_bmp_size_x, c2_m_bmp_size_y));
-                CAM2_g_backbuffer = Graphics.FromImage(CAM2_Stretched_bmp);
+                draw.AllocationGraphics(CAM2_bmp, c2_m_bmp_size_x, c2_m_bmp_size_y, ref CAM2_Stretched_bmp, ref CAM2_g_backbuffer);
+                //CAM2_Stretched_bmp = new Bitmap(CAM2_bmp, new Size(c2_m_bmp_size_x, c2_m_bmp_size_y));
+                //CAM2_g_backbuffer = Graphics.FromImage(CAM2_Stretched_bmp);
 
                 CAM2_DrawPOI(irdxHandle, pb, CAM2_ClickedPosition, CAM2_POICount, ref CAM2_g_backbuffer);
 
@@ -191,11 +194,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 CAM2_g.DrawImage((Image)CAM2_Stretched_bmp, c2_m_bmp_ofs_x, c2_m_bmp_ofs_y, c2_m_bmp_size_x, c2_m_bmp_size_y);
 
-                if (CAM2_bmp!= null) CAM2_bmp.Dispose();
-                if (CAM2_Stretched_bmp != null) CAM2_Stretched_bmp.Dispose();
+                draw.ReleaseGraphics(CAM2_bmp, CAM2_Stretched_bmp, CAM2_g, CAM2_g_backbuffer);
+                //if (CAM2_bmp != null) CAM2_bmp.Dispose();
+                //if (CAM2_Stretched_bmp != null) CAM2_Stretched_bmp.Dispose();
 
-                CAM2_g.Dispose();
-                CAM2_g_backbuffer.Dispose();
+                //CAM2_g_backbuffer.Dispose();
+                //CAM2_g.Dispose();
             }
         }
 
