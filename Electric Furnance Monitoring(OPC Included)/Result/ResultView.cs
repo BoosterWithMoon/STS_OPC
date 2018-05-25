@@ -16,6 +16,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         ImageView imgView;
         SystemPropertyGrid property;
         SetThreshold thresholdForm;
+        CustomOPC opc;
         System.Configuration.Configuration config;
 
         public Label[] CAM1_LabelArray;
@@ -294,5 +295,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             thresholdForm.ShowDialog();
         }
 
+        private void checkBox_OPCEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            opc = (CustomOPC)main.CustomOPC_forPublicRef();
+
+            if (checkBox_OPCEnable.Checked)
+            {
+                opc.ServerDetection();
+                opc.ServerConnection();
+                main.InitOPCTimer();
+                main.OPCActivated = true;
+            }
+            else
+            {
+                main.OPCTimer.Stop();
+                main.OPCTimerActivated = false;
+                main.OPCActivated = false;
+                opc.ServerDisconnection();
+            }
+        }
     }
 }

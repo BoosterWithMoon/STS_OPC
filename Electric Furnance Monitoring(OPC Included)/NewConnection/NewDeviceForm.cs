@@ -373,14 +373,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 support_thr2.Start();
             }
 
-            opc = (CustomOPC)main.CustomOPC_forPublicRef();
+            main.InitGraphTimer();
 
-            if (opc.connectFailed == false)
-            {
-                // OPC 데이터 송수신 활성화
-                main.OPCActivated = true;
-                main.InitOPCTimer();
-            }
+            LoadPOIData();
+
             this.Close();
         }
 
@@ -391,6 +387,28 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             DIASDAQ.DDAQ_DEVICE_DO_CLOSE(1);
             DIASDAQ.DDAQ_DEVICE_DO_CLOSE(2);
             Close();
+        }
+
+        private void LoadPOIData()
+        {
+            ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+
+            string[] arrX = System.Configuration.ConfigurationManager.AppSettings["CAM1_pointX"].Split(',');
+            string[] arrY = System.Configuration.ConfigurationManager.AppSettings["CAM1_pointY"].Split(',');
+            int pointCount=0;
+            if (arrX.Count() > arrY.Count()) pointCount = arrX.Count();
+            else if (arrX.Count() < arrY.Count()) pointCount = arrY.Count();
+            else if (arrX.Count() == arrY.Count()) pointCount = arrX.Count();
+            imgView.CAM1_POICount = pointCount;
+
+            for(int i=0; i<arrX.Count(); i++)
+            {
+                imgView.CAM1_ClickedPosition[i].X = Convert.ToInt32(arrX[i]);
+            }
+            for(int i=0; i<arrY.Count(); i++)
+            {
+                imgView.CAM1_ClickedPosition[i].Y = Convert.ToInt32(arrY[i]);
+            }
         }
 
     }

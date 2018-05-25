@@ -106,8 +106,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         string newOPCReadDataFileName;
         string newOPCWriteDataFileName;
         public bool isLoggingRunning;
-        System.Windows.Forms.Timer dataplayerTimer;
 
+        public System.Windows.Forms.Timer GraphUpdateTimer;
+        public System.Windows.Forms.Timer dataplayerTimer;
         public System.Windows.Forms.Timer OPCTimer;
         public bool OPCActivated;
 
@@ -248,6 +249,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             CAM2_newResultDataFileName = "";
             isLoggingRunning = false;
 
+            GraphUpdateTimer = new System.Windows.Forms.Timer();
             dataplayerTimer = new System.Windows.Forms.Timer();
             OPCTimer = new System.Windows.Forms.Timer();
 
@@ -345,8 +347,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             ViewAdjust();
 
-            opc.ServerDetection();
-            opc.ServerConnection();
+            //opc.ServerDetection();
+            //opc.ServerConnection();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -567,6 +569,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Thread.Sleep(10);
 
+                VerifyOPC();
                 if (currentOpenMode == OpenMode.Online && pictureBox_ScaleBar.Image == null)
                 {
                     imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
@@ -574,29 +577,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 core.DoTransfer(newDataReady, isClosing, DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
 
-                //if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(DetectedDevices, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)/// 카메라가 새로운 데이터를 받을 준비가 되었을 시
-                //{
-                //    DIASDAQ.DDAQ_DEVICE_DO_STOP(DetectedDevices);
-                //    return;
-                //}
-
-                //if (newDataReady && !isClosing)
-                //{
-                //core.DoTransfer(DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
                 CompareMaxTemperature(imgView.CAM1_TemperatureArr);
                 result.CAM1_DetectTemp_ForOPC();
-                VerifyOPC();
 
                 isDrawnCAM1Image = true;
 
-
-
                 ThreadOne_WFSO.Set();
-                //}
             }
-
-
         }
 
         private void run_two()  // Current: 512N
@@ -1341,6 +1329,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             customGrid.RawData= value;
             value = ConfigurationManager.AppSettings["ResultData_Location"];
             customGrid.ResultData= value;
+
+            
         }
 
         private void SaveConfiguration()
@@ -1350,7 +1340,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             config.AppSettings.Settings["Transmission"].Value = customGrid.Transmission.ToString();
             config.AppSettings.Settings["AmbientTemp"].Value = customGrid.AmbientTemperature.ToString();
             config.AppSettings.Settings["Maximum"].Value = customGrid.Maximum.ToString();
-            config.AppSettings.Settings["Minimum"].Value = customGrid.Minimun.ToString();
+            config.AppSettings.Settings["Minimum"].Value = customGrid.Minimum.ToString();
             config.AppSettings.Settings["RawData_Location"].Value = customGrid.RawData;
             config.AppSettings.Settings["ResultData_Location"].Value = customGrid.ResultData;
 
@@ -1446,8 +1436,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 opc.OPC_Read();
                 opc.OPC_Write();
             }
-            else InitOPCTimer();
+            //else InitOPCTimer();
+        }
 
+        public void InitGraphTimer()
+        {
+            GraphUpdateTimer.Interval = 1000;
+            GraphUpdateTimer.Tick += new EventHandler(GraphUpdateTimer_Tick);
+            GraphUpdateTimer.Start();
+        }
+
+        private void GraphUpdateTimer_Tick(object sender, EventArgs e)
+        {
             if (mThread.IsAlive)
             {
                 c1_chartView.UpdateData();
@@ -1456,8 +1456,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 c2_chartView.UpdateData();
             }
-
-            
         }
 
         public bool OPCTimerActivated = false;

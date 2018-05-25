@@ -463,7 +463,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
                 for (int i = 0; i < main.DetectedDevices; i++)
                     DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, Scale_DNumberofColor);
-                //DIASDAQ.DDAQ_IRDX_PALLET_SET_BAR(main.pIRDX_Array[i], (DIASDAQ.DDAQ_PALLET)Scale_DColorBar, (ushort)NumberOfColors);
 
                 ImageView imgView = (ImageView)main.ImageView_forPublicRef();
                 imgView.DrawScaleBar(main.pIRDX_Array[0], main.pictureBox_ScaleBar);
@@ -530,7 +529,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     Scale_Maximum = 0.0f;
 
                 main.textBox_ScaleMax.Text = Scale_Maximum.ToString() + "˚C";
-
+                for(int i=0; i<main.DetectedDevices; i++)
+                {
+                    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], main.cMinTemp, Scale_Maximum);
+                }
                 return Scale_Maximum;
             }
             set
@@ -554,7 +556,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         }
 
         [CategoryAttribute("\t\tScaling")]
-        public float Minimun
+        public float Minimum
         {
             get
             {
@@ -564,6 +566,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     Scale_Minimun = 0.0f;
 
                 main.textBox_ScaleMin.Text = Scale_Minimun.ToString() + "˚C";
+                for (int i = 0; i < main.DetectedDevices; i++)
+                {
+                    DIASDAQ.DDAQ_IRDX_SCALE_SET_MINMAX(main.pIRDX_Array[i], Scale_Minimun, main.cMaxTemp);
+                }
                 return Scale_Minimun;
             }
             set

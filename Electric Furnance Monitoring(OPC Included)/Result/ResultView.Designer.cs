@@ -82,6 +82,7 @@
             this.OPCActiveAlarm = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OPCConnectAlarm = new System.Windows.Forms.Label();
+            this.checkBox_OPCEnable = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.AlertToConnection)).BeginInit();
             this.AlertToConnection.Panel1.SuspendLayout();
             this.AlertToConnection.Panel2.SuspendLayout();
@@ -110,6 +111,7 @@
             // 
             // AlertToConnection.Panel2
             // 
+            this.AlertToConnection.Panel2.Controls.Add(this.checkBox_OPCEnable);
             this.AlertToConnection.Panel2.Controls.Add(this.groupBox6);
             this.AlertToConnection.Panel2.Controls.Add(this.groupBox5);
             this.AlertToConnection.Size = new System.Drawing.Size(269, 945);
@@ -655,7 +657,7 @@
             // 
             this.groupBox6.Controls.Add(this.OPCActiveAlarm);
             this.groupBox6.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.groupBox6.Location = new System.Drawing.Point(139, 0);
+            this.groupBox6.Location = new System.Drawing.Point(139, 31);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(127, 137);
             this.groupBox6.TabIndex = 3;
@@ -676,12 +678,12 @@
             // 
             this.groupBox5.Controls.Add(this.OPCConnectAlarm);
             this.groupBox5.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.groupBox5.Location = new System.Drawing.Point(3, 0);
+            this.groupBox5.Location = new System.Drawing.Point(3, 31);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(127, 137);
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "OPC Connection";
+            this.groupBox5.Text = "OPC Detected";
             // 
             // OPCConnectAlarm
             // 
@@ -692,6 +694,18 @@
             this.OPCConnectAlarm.Size = new System.Drawing.Size(102, 78);
             this.OPCConnectAlarm.TabIndex = 2;
             this.OPCConnectAlarm.Text = "■";
+            // 
+            // checkBox_OPCEnable
+            // 
+            this.checkBox_OPCEnable.AutoSize = true;
+            this.checkBox_OPCEnable.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.checkBox_OPCEnable.Location = new System.Drawing.Point(12, 7);
+            this.checkBox_OPCEnable.Name = "checkBox_OPCEnable";
+            this.checkBox_OPCEnable.Size = new System.Drawing.Size(155, 21);
+            this.checkBox_OPCEnable.TabIndex = 4;
+            this.checkBox_OPCEnable.Text = "OPC Transfer Enable";
+            this.checkBox_OPCEnable.UseVisualStyleBackColor = true;
+            this.checkBox_OPCEnable.CheckedChanged += new System.EventHandler(this.checkBox_OPCEnable_CheckedChanged);
             // 
             // ResultView
             // 
@@ -705,6 +719,7 @@
             this.Text = "ResultView";
             this.AlertToConnection.Panel1.ResumeLayout(false);
             this.AlertToConnection.Panel2.ResumeLayout(false);
+            this.AlertToConnection.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AlertToConnection)).EndInit();
             this.AlertToConnection.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
@@ -781,5 +796,6 @@
         public System.Windows.Forms.Label OPCActiveAlarm;
         private System.Windows.Forms.GroupBox groupBox7;
         public System.Windows.Forms.TextBox textBox_CurrentSteelKind;
+        private System.Windows.Forms.CheckBox checkBox_OPCEnable;
     }
 }
