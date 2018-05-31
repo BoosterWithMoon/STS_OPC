@@ -273,21 +273,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 Acq_Frq_Value = DataAcq_AcquisitionFrequency.Remove(Acq_Num);   // Avg를 얻기 위해 첫 공백 뒤 부터 Remove
                 ushort.TryParse(Acq_Frq_Value, out avg);                        // 16비트 부호 없는 정수로 변환
 
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(main.DetectedDevices);      // 카메라 두대 전부 정지
-                DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-
-                DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[0], avg);      // Frequency 조정
-                DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[1], avg);
-
-                DIASDAQ.DDAQ_DEVICE_DO_START(main.DetectedDevices);     // 재시작
-                DIASDAQ.DDAQ_DEVICE_DO_START(1);
-
-                //for(uint i=0; i<main.DetectedDevices; i++)
-                //{
-                //    DIASDAQ.DDAQ_DEVICE_DO_STOP(i);
-                //    DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[i], avg);
-                //    DIASDAQ.DDAQ_DEVICE_DO_START(i);
-                //}
+                for (uint i = 0; i < main.DetectedDevices; i++)
+                {
+                    DIASDAQ.DDAQ_DEVICE_DO_STOP(i + 1);
+                    DIASDAQ.DDAQ_IRDX_ACQUISITION_SET_AVERAGING(main.pIRDX_Array[i], avg);
+                    DIASDAQ.DDAQ_DEVICE_DO_START(i + 1);
+                }
             }
         }
         #endregion

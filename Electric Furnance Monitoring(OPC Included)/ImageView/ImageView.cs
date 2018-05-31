@@ -147,8 +147,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 //g_backbuffer = Graphics.FromImage(Stretched_bmp);
 
                 DrawPOI(hIRDX, pb, CAM1_ClickedPosition, CAM1_POICount, ref g_backbuffer);
-
-                Point MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                Point MousePosTemp = new Point();
+                c1_imgView.Invoke(new MethodInvoker(delegate ()
+                {
+                    MousePosTemp = c1_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                }));
                 draw.DrawMouseString(bmpInfo, m_bmp_isize_x, m_bmp_isize_y, MousePosTemp, POI_XLimit, POI_YLimit, pointTemperatureData, g_backbuffer);
 
                 g.DrawImage((Image)Stretched_bmp, m_bmp_ofs_x, m_bmp_ofs_y, m_bmp_size_x, m_bmp_size_y);
@@ -189,7 +192,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
                 CAM2_DrawPOI(irdxHandle, pb, CAM2_ClickedPosition, CAM2_POICount, ref CAM2_g_backbuffer);
 
-                Point MousePosTemp = c2_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                Point MousePosTemp = new Point();
+                c2_imgView.Invoke(new MethodInvoker(delegate ()
+                {
+                    MousePosTemp = c2_imgView.pictureBox1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                }));
+
                 draw.DrawMouseString(c2_bmpInfo, c2_m_bmp_isize_x, c2_m_bmp_isize_y, MousePosTemp, POI_XLimit, POI_YLimit, CAM2_pointTemperatureData, CAM2_g_backbuffer);
 
                 CAM2_g.DrawImage((Image)CAM2_Stretched_bmp, c2_m_bmp_ofs_x, c2_m_bmp_ofs_y, c2_m_bmp_size_x, c2_m_bmp_size_y);

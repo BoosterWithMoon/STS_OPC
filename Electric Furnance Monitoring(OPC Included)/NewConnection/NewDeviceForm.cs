@@ -359,7 +359,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
 
             isConnectedDevices = true;
 
-            if (NDF_DetectedDevices != 1)
+            if (NDF_DetectedDevices == 2)
             {
                 main.label2.Visible = true;
                 main.label4.Visible = true;
@@ -373,9 +373,12 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 support_thr2.Start();
             }
 
-            main.InitGraphTimer();
-
             LoadPOIData();
+
+            ImageView imgView = (ImageView)main.ImageView_forPublicRef();
+            imgView.CAM1_POICheckFlag = true;
+            imgView.CAM2_POICheckFlag = true;
+            main.InitGraphTimer();
 
             this.Close();
         }
@@ -396,20 +399,40 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             string[] arrX = System.Configuration.ConfigurationManager.AppSettings["CAM1_pointX"].Split(',');
             string[] arrY = System.Configuration.ConfigurationManager.AppSettings["CAM1_pointY"].Split(',');
             int pointCount=0;
-            if (arrX.Count() > arrY.Count()) pointCount = arrX.Count();
-            else if (arrX.Count() < arrY.Count()) pointCount = arrY.Count();
-            else if (arrX.Count() == arrY.Count()) pointCount = arrX.Count();
+            for (int i = 0; i < arrX.Count(); i++)
+            {
+                if (Convert.ToInt32(arrX[i]) != 0)
+                {
+                    pointCount++;
+                }
+            }
             imgView.CAM1_POICount = pointCount;
 
-            for(int i=0; i<arrX.Count(); i++)
+            for (int i = 0; i < imgView.CAM1_POICount; i++)
             {
                 imgView.CAM1_ClickedPosition[i].X = Convert.ToInt32(arrX[i]);
-            }
-            for(int i=0; i<arrY.Count(); i++)
-            {
                 imgView.CAM1_ClickedPosition[i].Y = Convert.ToInt32(arrY[i]);
             }
-        }
 
+            if (NDF_DetectedDevices == 2)
+            {
+                pointCount = 0;
+                arrX = System.Configuration.ConfigurationManager.AppSettings["CAM2_pointX"].Split(',');
+                arrY = System.Configuration.ConfigurationManager.AppSettings["CAM2_pointY"].Split(',');
+                for(int i=0; i<arrX.Count(); i++)
+                {
+                    if (Convert.ToInt32(arrX[i])!=0)
+                    {
+                        pointCount++;
+                    }
+                }
+                imgView.CAM2_POICount = pointCount;
+                for(int i=0; i<imgView.CAM2_POICount; i++)
+                {
+                    imgView.CAM2_ClickedPosition[i].X = Convert.ToInt32(arrX[i]);
+                    imgView.CAM2_ClickedPosition[i].Y = Convert.ToInt32(arrY[i]);
+                }
+            }
+        }
     }
 }

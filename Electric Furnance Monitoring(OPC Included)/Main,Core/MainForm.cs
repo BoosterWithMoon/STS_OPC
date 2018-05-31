@@ -169,7 +169,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         public MainForm()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false;
+            //CheckForIllegalCrossThreadCalls = false;
             
             #region ClassAllocation
             newDevice = new NewDeviceForm(this);
@@ -369,9 +369,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 OPCTimer.Stop();
                 OPCActivated = false;
+                opc.ServerDisconnection();
             }
 
-            opc.ServerDisconnection();
 
             isClosing = true;
 
@@ -556,11 +556,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
         }
         #endregion
-        
+
 
         #region Thread
-        private static EventWaitHandle ThreadOne_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
-        private static EventWaitHandle ThreadTwo_WFSO = new EventWaitHandle(false, EventResetMode.AutoReset);
+        public AutoResetEvent ThreadOne_WFSO = new AutoResetEvent(false);
+        public AutoResetEvent ThreadTwo_WFSO = new AutoResetEvent(false);
         private void run()  // Current: 320L
         {
             bool newDataReady = false;
@@ -575,14 +575,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                     imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
                 }
 
-                core.DoTransfer(newDataReady, isClosing, DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
-
+                core.DoTransfer(this, newDataReady, isClosing, DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
-                CompareMaxTemperature(imgView.CAM1_TemperatureArr);
-                result.CAM1_DetectTemp_ForOPC();
-
                 isDrawnCAM1Image = true;
-
                 ThreadOne_WFSO.Set();
             }
         }
@@ -595,42 +590,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 Thread.Sleep(10);
 
-                core.DoTransfer(newDataReady, isClosing, 1, CAM2_CameraTemp, CAM2_DetectorTemp);
-
-                //if (DIASDAQ.DDAQ_DEVICE_GET_NEWDATAREADY(1, ref newDataReady) != DIASDAQ.DDAQ_ERROR.NO_ERROR)       /// 카메라가 새로운 데이터를 받을 준비가 되었을 시
-                //{
-                //    DIASDAQ.DDAQ_DEVICE_DO_STOP(1);
-                //    return;
-                //}
-                //if (newDataReady && !isClosing)
-                //{
-                //    if (DIASDAQ.DDAQ_DEVICE_DO_UPDATEDATA(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                        /// 새로운 데이터가 있으며 종료의 명령이 없을 시
-                //        return;                                                                                     /// UpDate Data !!
-
-                //    //if (img != null) img.Dispose();                                                                 /// 메모리 관리를 위하여 Dispose.
-
-                //    float fTemp = 0.0f;
-                //    bool bTemp = false;
-                //    DIASDAQ.DDAQ_DEVICE_GET_CAMERATEMP(1, ref fTemp, ref bTemp);
-                //    CAM2_CameraTemp.Text = fTemp.ToString("N1") + "℃";
-
-                //    DIASDAQ.DDAQ_DEVICE_GET_DETECTORTEMP(1, ref fTemp, ref bTemp);
-                //    CAM2_DetectorTemp.Text = fTemp.ToString("N1") + "℃";
-
-                    imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
-
-                CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
-                result.CAM2_DetectTemp_ForOPC();
-       
-
+                core.DoTransfer(this, newDataReady, isClosing, 1, CAM2_CameraTemp, CAM2_DetectorTemp);
+                imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
                 isDrawnCAM2Image = true;
-
-                    //if (DIASDAQ.DDAQ_DEVICE_DO_ENABLE_NEXTMSG(1) != DIASDAQ.DDAQ_ERROR.NO_ERROR)                    /// 카메라가 새로운 데이터를 받을 수 있도록 Do Enable
-                    //    return;
-
-                    ThreadTwo_WFSO.Set();
-                //}
-
+                ThreadTwo_WFSO.Set();
             }
         }
 
@@ -638,20 +601,25 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             while (true)
             {
-                Thread.Sleep(10);
                 ThreadOne_WFSO.WaitOne();
 
                 if (!isDrawnCAM1Image)
                 {
                     continue;
                 }
-
                 else if (isDrawnCAM1Image)
                 {
-                    c1_gridView.RefreshGrid();
-                    result.CAM1_DetectTempThreshold();
+                    Invoke(new MethodInvoker(delegate ()
+                    {
+                        CompareMaxTemperature(imgView.CAM1_TemperatureArr);
+                        result.CAM1_DetectTemp_ForOPC();
+                        c1_gridView.RefreshGrid();
+                        result.CAM1_DetectTempThreshold();
+                        Update();
+                    }));
                     isDrawnCAM1Image = false;
                 }
+                
             }
         }
 
@@ -659,7 +627,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         {
             while (true)
             {
-                Thread.Sleep(10);
                 ThreadTwo_WFSO.WaitOne();
 
                 if (!isDrawnCAM2Image)
@@ -668,10 +635,17 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
                 else if (isDrawnCAM2Image)
                 {
-                    c2_gridView.CAM2_RefreshGrid();
-                    result.CAM2_DetectTempThreshold();
+                    Invoke(new MethodInvoker(delegate ()
+                    {
+                        CAM2_CompareMaxTemperature(imgView.CAM2_TemperatureArr);
+                        result.CAM2_DetectTemp_ForOPC();
+                        c2_gridView.CAM2_RefreshGrid();
+                        result.CAM2_DetectTempThreshold();
+                        Update();
+                    }));
                     isDrawnCAM2Image = false;
                 }
+                
             }
         }
         #endregion
@@ -1354,10 +1328,45 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 config.AppSettings.Settings[appSettingValue].Value = result.CAM2_ThresholdTemp[i].ToString();
             }
 
+            // Saving OPC connection information
             config.AppSettings.Settings["OPC_Channel"].Value = opc.Channel;
             config.AppSettings.Settings["OPC_Device"].Value = opc.Device;
             config.AppSettings.Settings["OPC_Endpoint"].Value = opc.nodeName;
 
+            // Saving POI positions
+            config.AppSettings.Settings["CAM1_pointX"].Value = null;
+            config.AppSettings.Settings["CAM1_pointY"].Value = null;
+            for (int i = 0; i < imgView.CAM1_POICount; i++)
+            {
+                config.AppSettings.Settings["CAM1_pointX"].Value += imgView.CAM1_ClickedPosition[i].X.ToString()+',';
+                config.AppSettings.Settings["CAM1_pointY"].Value += imgView.CAM1_ClickedPosition[i].Y.ToString()+',';
+            }
+            for(int i=imgView.CAM1_POICount; i<10; i++)
+            {
+                config.AppSettings.Settings["CAM1_pointX"].Value += "0,";
+                config.AppSettings.Settings["CAM1_pointY"].Value += "0,";
+            }
+            config.AppSettings.Settings["CAM1_pointX"].Value = config.AppSettings.Settings["CAM1_pointX"].Value.Substring(0, config.AppSettings.Settings["CAM1_pointX"].Value.Length - 1);
+            config.AppSettings.Settings["CAM1_pointY"].Value = config.AppSettings.Settings["CAM1_pointY"].Value.Substring(0, config.AppSettings.Settings["CAM1_pointY"].Value.Length - 1);
+
+            if (DetectedDevices == 2)
+            {
+                config.AppSettings.Settings["CAM2_pointX"].Value = null;
+                config.AppSettings.Settings["CAM2_pointY"].Value = null;
+                for (int i = 0; i < imgView.CAM2_POICount; i++)
+                {
+                    config.AppSettings.Settings["CAM2_pointX"].Value += imgView.CAM2_ClickedPosition[i].X.ToString() + ',';
+                    config.AppSettings.Settings["CAM2_pointY"].Value += imgView.CAM2_ClickedPosition[i].Y.ToString() + ',';
+                }
+                for (int i = imgView.CAM2_POICount; i < 10; i++)
+                {
+                    config.AppSettings.Settings["CAM2_pointX"].Value += "0,";
+                    config.AppSettings.Settings["CAM2_pointY"].Value += "0,";
+                }
+                config.AppSettings.Settings["CAM2_pointX"].Value = config.AppSettings.Settings["CAM2_pointX"].Value.Substring(0, config.AppSettings.Settings["CAM2_pointX"].Value.Length - 1);
+                config.AppSettings.Settings["CAM2_pointY"].Value = config.AppSettings.Settings["CAM2_pointY"].Value.Substring(0, config.AppSettings.Settings["CAM2_pointY"].Value.Length - 1);
+
+            }
             config.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("appSettings");
         }
@@ -1373,7 +1382,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 FloatMaxTemp = 0.0f;
                 MaxTemp = FloatMaxTemp.ToString("N1") + "℃";
-                textBox3.Text = MaxTemp;
+                //textBox3.Text = MaxTemp;
+                Invoke(new MethodInvoker(delegate ()
+                {
+                    textBox3.Text = MaxTemp;
+                }));
                 return;
             }
 
@@ -1385,7 +1398,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
             }
             MaxTemp = FloatMaxTemp.ToString("N1") + "℃";
-            textBox3.Text = MaxTemp;
+            //textBox3.Text = MaxTemp;
+            Invoke(new MethodInvoker(delegate ()
+            {
+                textBox3.Text = MaxTemp;
+            }));
         }
 
         public void CAM2_CompareMaxTemperature(float[] TemperatureArray)
@@ -1397,7 +1414,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             {
                 c2_FloatMaxTemp = 0.0f;
                 MaxTemp = c2_FloatMaxTemp.ToString("N1") + "℃";
-                textBox4.Text = MaxTemp;
+                Invoke(new MethodInvoker(delegate ()
+                {
+                    textBox4.Text = MaxTemp;
+                }));
+                
                 return;
             }
 
@@ -1409,7 +1430,11 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 }
             }
             MaxTemp = c2_FloatMaxTemp.ToString("N1") + "℃";
-            textBox4.Text = MaxTemp;
+            //textBox4.Text = MaxTemp;
+            Invoke(new MethodInvoker(delegate ()
+            {
+                textBox4.Text = MaxTemp;
+            }));
         }
         #endregion
 
