@@ -14,7 +14,7 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         SystemPropertyGrid grid;
-        CustomOPC opc;
+        //CustomOPC opc;
         STS.Core.CoreLibrary core;
 
         Thread thr1, thr2;

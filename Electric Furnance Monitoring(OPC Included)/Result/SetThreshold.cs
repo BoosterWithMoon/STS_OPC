@@ -36,14 +36,6 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM1_Threshold[i].Text = result.CAM1_ThresholdTemp[i].ToString();
                 CAM2_Threshold[i].Text = result.CAM2_ThresholdTemp[i].ToString();
             }
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    CAM1_Threshold[i].Enabled = false;
-            //    CAM2_Threshold[i].Enabled = false;
-            //}
-            for(int i=0; i<imgView.CAM1_POICount; i++) { CAM1_Threshold[i].Enabled = true; }
-            for(int i=0; i<imgView.CAM2_POICount; i++) { CAM2_Threshold[i].Enabled = true; }
         }
 
         private void ConnectionTextbox()

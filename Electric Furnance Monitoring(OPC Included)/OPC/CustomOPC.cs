@@ -373,7 +373,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 serverEnum.EnumComServer(nodeName, returnAllServers, serverCategories, out availableOPCServers);
                 if (availableOPCServers.GetLength(0) > 0)
                 {
-                    for(int i=0; i<availableOPCServers.GetLength(0); i++)
+                    int idLength = availableOPCServers.GetLength(0);
+                    for(int i=0; i<idLength; i++)
                     {
                         //if (availableOPCServers[i].ProgID == "Kepware.KEPServerEX.V6")
                         if (availableOPCServers[i].ProgID == "Kepware.KEPServerEX.V5")
@@ -826,7 +827,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         private void ReadCompleted(int transactionHandle, bool allQualitiesGood, bool noErrors, ItemValueCallback[] itemValues)
         {
             object[] ReadingResult = new object[itemValues.Length];
-            for (int i = 0; i < itemValues.Length; i++)
+            int valueLength = itemValues.Length;
+            for (int i = 0; i < valueLength; i++)
             {
                 string target = itemValues[i].ClientHandle.ToString();
                 switch (target)
