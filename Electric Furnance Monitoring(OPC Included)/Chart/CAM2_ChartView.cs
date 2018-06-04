@@ -13,13 +13,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         ImageView imgView;
-        int axisX_Count = 0;
+        int axisX_Count/* = 0*/;
 
         public CAM2_ChartView(MainForm _main)
         {
             this.main = _main;
             InitializeComponent();
             imgView = (ImageView)main.ImageView_forPublicRef();
+            axisX_Count = 0;
         }
 
         public void UpdateData()

@@ -338,6 +338,9 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             detected = false;
             detectedIndex = 0;
 
+            CurrentAngle = 0;
+            CurrentSteelNo = 0;
+
             ChargingStatus = new BitArray(8, false);
             O2LanceResult = false;
 

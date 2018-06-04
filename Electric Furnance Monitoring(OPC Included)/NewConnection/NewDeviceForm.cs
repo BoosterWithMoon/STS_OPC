@@ -166,6 +166,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             StringBuilder result = new StringBuilder(45);
 
             // CAMERA #1 (320L)
+            //if(DIASDAQ.DDAQ_DEVICE_DO_OPEN(NDF_DetectedDevices, null) != DIASDAQ.DDAQ_ERROR.NO_ERROR)
+            //{
+            //    return;
+            //}
             DIASDAQ.DDAQ_DEVICE_DO_OPEN(NDF_DetectedDevices, null);
             DIASDAQ.DDAQ_DEVICE_GET_IRDX(NDF_DetectedDevices, ref main.pIRDX_Array[0]);
 

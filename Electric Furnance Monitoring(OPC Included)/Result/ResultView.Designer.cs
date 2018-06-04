@@ -796,6 +796,6 @@
         public System.Windows.Forms.Label OPCActiveAlarm;
         private System.Windows.Forms.GroupBox groupBox7;
         public System.Windows.Forms.TextBox textBox_CurrentSteelKind;
-        private System.Windows.Forms.CheckBox checkBox_OPCEnable;
+        public System.Windows.Forms.CheckBox checkBox_OPCEnable;
     }
 }

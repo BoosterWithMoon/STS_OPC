@@ -14,8 +14,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         MainForm main;
         CAM1_ImageView c1_imgView;
         CAM2_ImageView c2_imgView;
-        STS.Core.Calculation cal = new STS.Core.Calculation();
-        STS.Core.Drawing draw = new STS.Core.Drawing();
+        STS.Core.Calculation cal;
+        STS.Core.Drawing draw;
 
         #region Variables
         public Bitmap bmp;
@@ -83,6 +83,20 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             this.main = _main;
             c1_imgView = (CAM1_ImageView)main.CAM1_ImageView_forPublicRef();
             c2_imgView = (CAM2_ImageView)main.CAM2_ImageView_forPublicRef();
+            cal = new STS.Core.Calculation();
+            draw = new STS.Core.Drawing();
+
+            #region Variables Allocation
+            bmp = new Bitmap(1, 1);
+            Stretched_bmp = new Bitmap(1, 1);
+            CAM2_bmp = new Bitmap(1, 1);
+            CAM2_Stretched_bmp = new Bitmap(1, 1);
+            pointTemperatureData = "";
+            CAM2_pointTemperatureData = "";
+
+            
+
+            #endregion
         }
 
         /*public void CalculatePoint(IntPtr irdxHandle, Point p)
@@ -143,6 +157,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 g = pb.CreateGraphics();
 
                 draw.AllocationGraphics(bmp, m_bmp_size_x, m_bmp_size_y, ref Stretched_bmp, ref g_backbuffer);
+                //g_backbuffer = draw.AllocationGraphics(bmp, m_bmp_size_x, m_bmp_size_y, g_backbuffer, ref Stretched_bmp);
+
                 //Stretched_bmp = new Bitmap(bmp, new Size(m_bmp_size_x, m_bmp_size_y));
                 //g_backbuffer = Graphics.FromImage(Stretched_bmp);
 
@@ -187,6 +203,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM2_g = pb.CreateGraphics();
 
                 draw.AllocationGraphics(CAM2_bmp, c2_m_bmp_size_x, c2_m_bmp_size_y, ref CAM2_Stretched_bmp, ref CAM2_g_backbuffer);
+                //CAM2_g_backbuffer = draw.AllocationGraphics(CAM2_bmp, c2_m_bmp_size_x,  c2_m_bmp_size_y, CAM2_g_backbuffer, ref CAM2_Stretched_bmp);
+
                 //CAM2_Stretched_bmp = new Bitmap(CAM2_bmp, new Size(c2_m_bmp_size_x, c2_m_bmp_size_y));
                 //CAM2_g_backbuffer = Graphics.FromImage(CAM2_Stretched_bmp);
 

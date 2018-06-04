@@ -18,15 +18,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
         CAM1_ChartView c1_chart;
         CAM1_DataGridView c1_grid;
         ResultView result;
-        STS.Core.Calculation cal = new STS.Core.Calculation();
+        STS.Core.Calculation cal/* = new STS.Core.Calculation();*/;
 
         public Point clickedPoint;
         public Point clickedAfterUp;
-        public bool CAM1_isMouseButtonDown = false;
-        public bool CAM1_PointMoveFlag = false;
-        public bool CAM1_clicked = false;
-        public bool CAM1_POIClicked = false;
-        public int CAM1_pointIdx = 0;
+        public bool CAM1_isMouseButtonDown;
+        public bool CAM1_PointMoveFlag;
+        public bool CAM1_clicked;
+        public bool CAM1_POIClicked;
+        public int CAM1_pointIdx;
         //bool c1focused = false;
 
         public CAM1_ImageView(MainForm _main)
@@ -37,6 +37,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             c1_chart = (CAM1_ChartView)main.CAM1_ChartView_forPublicRef();
             c1_grid = (CAM1_DataGridView)main.CAM1_GridView_forPublicRef();
             result = (ResultView)main.ResultView_forPublicRef();
+            cal = new STS.Core.Calculation();
+
+            clickedPoint = new Point();
+            clickedAfterUp = new Point();
+            CAM1_isMouseButtonDown = false;
+            CAM1_PointMoveFlag = false;
+            CAM1_clicked = false;
+            CAM1_POIClicked = false;
+            CAM1_pointIdx = 0;
         }
 
         Point temp;

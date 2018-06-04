@@ -36,6 +36,24 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM1_Threshold[i].Text = result.CAM1_ThresholdTemp[i].ToString();
                 CAM2_Threshold[i].Text = result.CAM2_ThresholdTemp[i].ToString();
             }
+
+            for (int i = 0; i < 10; i++)
+            {
+                CAM1_Threshold[i].Enabled = false;
+                CAM2_Threshold[i].Enabled = false;
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (imgView.CAM1_TemperatureArr[i] != 0)
+                {
+                    CAM1_Threshold[i].Enabled = true;
+                }
+                if (imgView.CAM2_TemperatureArr[i] != 0)
+                {
+                    CAM2_Threshold[i].Enabled = true;
+                }
+            }
         }
 
         private void ConnectionTextbox()
@@ -68,8 +86,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 CAM1_Threshold[k].TextAlign = HorizontalAlignment.Center;
                 CAM2_Threshold[k].TextAlign = HorizontalAlignment.Center;
 
-                CAM1_Threshold[k].Enabled = false;
-                CAM2_Threshold[k].Enabled = false;
+                //CAM1_Threshold[k].Enabled = false;
+                //CAM2_Threshold[k].Enabled = false;
             }
         }
 

@@ -570,13 +570,15 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 Thread.Sleep(10);
 
                 VerifyOPC();
-                if (currentOpenMode == OpenMode.Online && pictureBox_ScaleBar.Image == null)
-                {
-                    imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
-                }
+                //if (currentOpenMode == OpenMode.Online && pictureBox_ScaleBar.Image == null)
+                //{
+                //    imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
+                //}
 
                 core.DoTransfer(this, newDataReady, isClosing, DetectedDevices, CAM1_CameraTemp, CAM1_DetectorTemp);
                 imgView.DrawImage(pIRDX_Array[0], c1_imgView.pictureBox1);
+                imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
+
                 isDrawnCAM1Image = true;
                 ThreadOne_WFSO.Set();
             }
@@ -589,7 +591,10 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             while (true)
             {
                 Thread.Sleep(10);
-
+                //if (currentOpenMode == OpenMode.Online && pictureBox_ScaleBar.Image == null)
+                //{
+                //    imgView.DrawScaleBar(pIRDX_Array[0], pictureBox_ScaleBar);
+                //}
                 core.DoTransfer(this, newDataReady, isClosing, 1, CAM2_CameraTemp, CAM2_DetectorTemp);
                 imgView.CAM2_DrawImage(pIRDX_Array[1], c2_imgView.pictureBox1);
                 isDrawnCAM2Image = true;
@@ -973,6 +978,8 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
                 MovePOI_toolStripButton.Enabled = false;   // Move POI Disable
                 DeletePOI_toolStripButton.Enabled = false;   // Delete POI Disable
 
+                result.checkBox_OPCEnable.Enabled = false;
+
                 int IRDX = 0, RawData = 1, ResultData = 2, OPCRead = 3, OPCWrite = 4;
 
                 NewIRDXFileName = GetNewDataFileName(IRDX, pIRDX_Array[0]);
@@ -1207,15 +1214,18 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             }
             outputFile_Result.WriteLine(data);
 
-            // Write OPC_READ data
-            data = tickCount.ToString()+"\t";
-            data = PutText_OPCRead(data);
-            outputFile_OPCRead.WriteLine(data);
+            if(result.checkBox_OPCEnable.Checked)
+            {
+                // Write OPC_READ data
+                data = tickCount.ToString() + "\t";
+                data = PutText_OPCRead(data);
+                outputFile_OPCRead.WriteLine(data);
 
-            // Write OPC_WRITE data
-            data = tickCount.ToString()+"\t";
-            data = PutText_OPCWrite(data);
-            outputFile_OPCWrite.WriteLine(data);
+                // Write OPC_WRITE data
+                data = tickCount.ToString() + "\t";
+                data = PutText_OPCWrite(data);
+                outputFile_OPCWrite.WriteLine(data);
+            }
 
             if (irdxHandle_write == IntPtr.Zero) // write용 irdxHandle이 없으면 새로 만들고
                 DIASDAQ.DDAQ_IRDX_FILE_OPEN_WRITE(NewIRDXFileName, true, ref irdxHandle_write);
@@ -1256,14 +1266,19 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             MovePOI_toolStripButton.Enabled = true;   // Mobe POI Enable
             DeletePOI_toolStripButton.Enabled = true;   // Delete POI Enable
 
+            result.checkBox_OPCEnable.Enabled = true;
+
             // 텍스트파일 다 썼으니까 닫자
             outputFile_Result.Close();
             Text_ResultData.Close();
 
-            outputFile_OPCRead.Close();
-            outputFile_OPCWrite.Close();
-            Text_OPCReadData.Close();
-            Text_OPCWriteData.Close();
+            if (result.checkBox_OPCEnable.Checked)
+            {
+                outputFile_OPCRead.Close();
+                outputFile_OPCWrite.Close();
+                Text_OPCReadData.Close();
+                Text_OPCWriteData.Close();
+            }
 
             if (DetectedDevices == 2)
             {

@@ -13,14 +13,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
     {
         MainForm main;
         ImageView imgView;
-        STS.Core.Calculation cal = new STS.Core.Calculation();
+        STS.Core.Calculation cal;
 
         public Point CAM2_clickedPoint;
-        public bool CAM2_isMouseButtonDown = false;
-        public bool CAM2_PointMoveFlag = false;
-        public bool CAM2_clicked = false;
-        public bool CAM2_POIClicked = false;
-        public int CAM2_pointIdx = 0;
+        public bool CAM2_isMouseButtonDown;
+        public bool CAM2_PointMoveFlag;
+        public bool CAM2_clicked;
+        public bool CAM2_POIClicked;
+        public int CAM2_pointIdx;
 
         public bool CAM2_isImageInPoint = false;
 
@@ -29,6 +29,14 @@ namespace Electric_Furnance_Monitoring_OPC_Included_
             this.main = _main;
             InitializeComponent();
             imgView = (ImageView)main.ImageView_forPublicRef();
+            cal = new STS.Core.Calculation();
+
+            CAM2_clickedPoint = new Point();
+            CAM2_isMouseButtonDown = false;
+            CAM2_PointMoveFlag = false;
+            CAM2_clicked = false;
+            CAM2_POIClicked = false;
+            CAM2_pointIdx = 0;
         }
 
         Point temp;
